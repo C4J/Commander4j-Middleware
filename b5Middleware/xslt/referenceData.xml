@@ -106,6 +106,7 @@
     <item type="TroposUOM" id="CASE"><value>CS</value></item>  
     <item type="TroposUOM" id="PALL"><value>PAL</value></item>  
     <item type="TroposUOM" id="EACH"><value>EA</value></item>  
+    <item type="TroposUOM" id="KG"><value>KG</value></item>  
     
     <item type="SageUOM" id="EA"><value>EA</value></item>  
     <item type="SageUOM" id="KG"><value>KG</value></item> 
