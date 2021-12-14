@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="9.0.5" transformSequenceNumber="9">
   <directoryPresets config="./xml/config/SaxonConfiguration.xml" />
-  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java11/b5middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="3.20" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="11" javaMaxVersion="11" jdkMode="jdk" jdkName="JDK 1.8">
+  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java11/b5middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="3.21" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="11" javaMaxVersion="11" jdkMode="jdk" jdkName="JDK 1.8">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
         <language id="da" />

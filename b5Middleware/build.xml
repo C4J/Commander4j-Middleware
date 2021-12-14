@@ -17,8 +17,8 @@
         <pathelement location="lib/mail/commons-email-1.5.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.3.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
-        <pathelement location="lib/log/log4j-api-2.14.0.jar"/>
-        <pathelement location="lib/log/log4j-core-2.14.0.jar"/>
+        <pathelement location="lib/log/log4j-api-2.15.0.jar"/>
+        <pathelement location="lib/log/log4j-core-2.15.0.jar"/>
         <pathelement location="lib/commons/commons-io-2.8.0.jar"/>
         <pathelement location="lib/commons/commons-lang3-3.12.0.jar"/>
         <pathelement location="lib/saxon/jline-2.14.6.jar"/>
@@ -33,7 +33,6 @@
         <pathelement location="lib/poi_lib/commons-collections4-4.4.jar"/>
         <pathelement location="lib/poi_lib/commons-io-2.11.0.jar"/>
         <pathelement location="lib/poi_lib/commons-math3-3.6.1.jar"/>
-        <pathelement location="lib/poi_lib/log4j-api-2.14.1.jar"/>
         <pathelement location="lib/poi_lib/SparseBitSet-1.2.jar"/>
         <pathelement location="lib/auxiliary/batik-anim-1.14.jar"/>
         <pathelement location="lib/auxiliary/batik-awt-util-1.14.jar"/>
@@ -78,8 +77,8 @@
         <pathelement location="lib/mail/commons-email-1.5.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.3.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
-        <pathelement location="lib/log/log4j-api-2.14.0.jar"/>
-        <pathelement location="lib/log/log4j-core-2.14.0.jar"/>
+        <pathelement location="lib/log/log4j-api-2.15.0.jar"/>
+        <pathelement location="lib/log/log4j-core-2.15.0.jar"/>
         <pathelement location="lib/commons/commons-io-2.8.0.jar"/>
         <pathelement location="lib/commons/commons-lang3-3.12.0.jar"/>
         <pathelement location="lib/saxon/jline-2.14.6.jar"/>
@@ -94,7 +93,6 @@
         <pathelement location="lib/poi_lib/commons-collections4-4.4.jar"/>
         <pathelement location="lib/poi_lib/commons-io-2.11.0.jar"/>
         <pathelement location="lib/poi_lib/commons-math3-3.6.1.jar"/>
-        <pathelement location="lib/poi_lib/log4j-api-2.14.1.jar"/>
         <pathelement location="lib/poi_lib/SparseBitSet-1.2.jar"/>
         <pathelement location="lib/auxiliary/batik-anim-1.14.jar"/>
         <pathelement location="lib/auxiliary/batik-awt-util-1.14.jar"/>
