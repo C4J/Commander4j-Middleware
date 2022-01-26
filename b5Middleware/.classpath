@@ -12,8 +12,8 @@
 	<classpathentry kind="lib" path="lib/mail/commons-email-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv/opencsv-5.3.jar"/>
 	<classpathentry kind="lib" path="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/log/log4j-api-2.15.0.jar"/>
-	<classpathentry kind="lib" path="lib/log/log4j-core-2.15.0.jar"/>
+	<classpathentry kind="lib" path="lib/log/log4j-api-2.17.1.jar"/>
+	<classpathentry kind="lib" path="lib/log/log4j-core-2.17.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons/commons-io-2.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons/commons-lang3-3.12.0.jar"/>
 	<classpathentry kind="lib" path="lib/saxon/jline-2.14.6.jar"/>

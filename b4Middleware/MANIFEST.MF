@@ -12,8 +12,8 @@ Class-Path: lib/commons-codec-1.14.jar
  lib/javax.mail.jar 
  lib/jsch-0.1.55.jar 
  lib/junit-4.13.jar 
- lib/log4j-api-2.15.0.jar 
- lib/log4j-core-2.15.0.jar 
+ lib/log4j-api-2.17.0.jar 
+ lib/log4j-core-2.17.0.jar 
  lib/opencsv-5.1.jar 
  lib/org.eclipse.paho.client.mqttv3_1.2.3.jar 
  lib/pdfbox-app-2.0.19.jar 
