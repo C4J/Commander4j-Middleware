@@ -3,26 +3,25 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/mail/javax.activation-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail/javax.mail.jar"/>
-	<classpathentry kind="lib" path="lib/saxon/saxon-he-10.6.jar">
+	<classpathentry kind="lib" path="lib/saxon/saxon-he-11.3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Users/dave/Commander4j/workspace.development/b5Middleware/lib/saxon/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/saxon/Saxon-HE-10.6-xqj.jar"/>
+	<classpathentry kind="lib" path="lib/saxon/saxon-he-xqj-11.3.jar"/>
 	<classpathentry kind="lib" path="lib/mail/commons-email-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/opencsv/opencsv-5.3.jar"/>
+	<classpathentry kind="lib" path="lib/opencsv/opencsv-5.6.jar"/>
 	<classpathentry kind="lib" path="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/log/log4j-api-2.17.1.jar"/>
-	<classpathentry kind="lib" path="lib/log/log4j-core-2.17.1.jar"/>
+	<classpathentry kind="lib" path="lib/log/log4j-api-2.17.2.jar"/>
+	<classpathentry kind="lib" path="lib/log/log4j-core-2.17.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons/commons-lang3-3.12.0.jar"/>
 	<classpathentry kind="lib" path="lib/saxon/jline-2.14.6.jar"/>
-	<classpathentry kind="lib" path="lib/saxon/icu4j-69_1.jar"/>
-	<classpathentry kind="lib" path="lib/poi/poi-5.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/poi/poi-excelant-5.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/poi/poi-javadoc-5.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/poi/poi-ooxml-5.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/poi/poi-ooxml-full-5.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-5.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-5.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-excelant-5.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-javadoc-5.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-ooxml-5.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-ooxml-full-5.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-5.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/poi_lib/commons-codec-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/poi_lib/commons-collections4-4.4.jar"/>
 	<classpathentry kind="lib" path="lib/poi_lib/commons-io-2.6.jar"/>
@@ -61,6 +60,8 @@
 	<classpathentry kind="lib" path="lib/ooxml-lib/curvesapi-1.06.jar"/>
 	<classpathentry kind="lib" path="lib/ooxml-lib/slf4j-api-1.7.32.jar"/>
 	<classpathentry kind="lib" path="lib/ooxml-lib/xmlbeans-5.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/saxon/xmlresolver-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/saxon/xmlresolver-4.2.0-data.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java 11 JDK">
 		<attributes>
 			<attribute name="module" value="true"/>
