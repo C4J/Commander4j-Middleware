@@ -50,7 +50,7 @@ Class-Path: lib/auxiliary/batik-anim-1.14.jar
  lib/poi_lib/SparseBitSet-1.2.jar 
  lib/poi_lib/commons-codec-1.15.jar 
  lib/poi_lib/commons-collections4-4.4.jar 
- lib/poi_lib/commons-io-2.6.jar 
+ lib/poi_lib/commons-io-2.8.0.jar 
  lib/poi_lib/commons-math3-3.6.1.jar 
  lib/saxon/jline-2.14.6.jar 
  lib/saxon/saxon-he-11.3.jar 
