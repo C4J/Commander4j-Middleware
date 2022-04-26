@@ -24,7 +24,7 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 	boolean disableQuotes = false;
 	char seperator = ',';
 	char quote = '"';
-	String endOfLine="default";
+	String endOfLine = "default";
 
 	public OutboundConnectorCSV(OutboundInterface inter)
 	{
@@ -41,49 +41,53 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 	private void parsePattern(String pattern, String delim)
 	{
 		parseOptions.clear();
-		delim = "\\" + delim;
-		String[] opts = pattern.split(delim);
-		for (int x = 0; x < opts.length; x++)
+
+		if (pattern.equals("") == false)
 		{
-			String two = opts[x];
-			String[] three = two.split("=");
-
-			String opt = three[0];
-			String val = three[1];
-
-			switch (opt)
+			delim = "\\" + delim;
+			String[] opts = pattern.split(delim);
+			for (int x = 0; x < opts.length; x++)
 			{
-			case "separator":
-				seperator = val.charAt(0);
-				break;
-			case "quote":
-				if (val.equals("none"))
+				String two = opts[x];
+				String[] three = two.split("=");
+
+				String opt = three[0];
+				String val = three[1];
+
+				switch (opt)
 				{
-					disableQuotes = true;
+				case "separator":
+					seperator = val.charAt(0);
+					break;
+				case "quote":
+					if (val.equals("none"))
+					{
+						disableQuotes = true;
+					}
+					else
+					{
+						quote = val.charAt(0);
+						disableQuotes = false;
+					}
+					break;
+				case "endofline":
+					endOfLine = val;
+					break;
+				default:
+					opt = "";
+					break;
 				}
-				else
-				{
-					quote = val.charAt(0);
-					disableQuotes = false;
-				}
-				break;
-			case "endofline":
-				endOfLine = val;
-				break;
-			default:
-				opt = "";
-				break;
 			}
 		}
 	}
 
 	@Override
-	public boolean connectorSave(String path,String prefix, String filename)
+	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		
-		filename = getOutboundInterface().get83GUIDFilename(prefix,filename);
-		
+
+		filename = getOutboundInterface().get83GUIDFilename(prefix, filename);
+
 		String fullPath = path + File.separator + filename;
 
 		fullPath = fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase();
@@ -114,76 +118,70 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 
 		try
 		{
-			//Create Writer
+			// Create Writer
 			CSVWriter writer;
 			if (disableQuotes)
 			{
 				if (endOfLine.equals("default"))
 				{
-					writer = new CSVWriter(new FileWriter(tempFilename),seperator,CSVWriter.NO_QUOTE_CHARACTER,CSVWriter.DEFAULT_ESCAPE_CHARACTER,CSVWriter.DEFAULT_LINE_END);				
+					writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 				}
 				else
 				{
-					writer = new CSVWriter(new FileWriter(tempFilename),seperator,CSVWriter.NO_QUOTE_CHARACTER,CSVWriter.DEFAULT_ESCAPE_CHARACTER,"\r\n");				
+					writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, "\r\n");
 				}
 
-				//writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.NO_QUOTE_CHARACTER);
+				// writer = new CSVWriter(new FileWriter(tempFilename),
+				// seperator, CSVWriter.NO_QUOTE_CHARACTER);
 			}
 			else
 			{
 				if (endOfLine.equals("default"))
 				{
-					writer = new CSVWriter(new FileWriter(tempFilename),seperator,CSVWriter.DEFAULT_QUOTE_CHARACTER,CSVWriter.DEFAULT_ESCAPE_CHARACTER,CSVWriter.DEFAULT_LINE_END);
+					writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.DEFAULT_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 				}
 				else
 				{
-					writer = new CSVWriter(new FileWriter(tempFilename),seperator,CSVWriter.DEFAULT_QUOTE_CHARACTER,CSVWriter.DEFAULT_ESCAPE_CHARACTER,"\r\n");	
+					writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.DEFAULT_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, "\r\n");
 				}
-				
-				//writer = new CSVWriter(new FileWriter(tempFilename), seperator, quote);
+
+				// writer = new CSVWriter(new FileWriter(tempFilename),
+				// seperator, quote);
 			}
 
 			int currentRow = 1;
-			int rows = 1;
+			int colsSpecified = 1;
 
-			//Loop through each row
-			while (rows > 0)
+			// Loop through each row
+
+			while (colsSpecified > 0)
 			{
 
-				// Get current row number
-				String rw = util.replaceNullStringwithBlank(document.findXPath("/data/row[" + String.valueOf(currentRow) + "]/@id").trim());
-				if (rw.equals(""))
+				// Get current row and check number of cols is present
+				String noOfCols = util.replaceNullStringwithBlank(document.findXPath("/data/row[" + String.valueOf(currentRow) + "]/@cols").trim()); // Yes
+																																				     // cols
+
+				if (noOfCols.equals(""))
 				{
-					rw = "0";
+					noOfCols = "0"; // Trigger end of file.
 				}
-				rows = Integer.valueOf(rw);
 
-				if (rows > 0)
+				colsSpecified = Integer.valueOf(noOfCols);
+
+				if (colsSpecified > 0)
 				{
-					// Get Number of columns on current row
-					String cl = util.replaceNullStringwithBlank(document.findXPath("/data/row[" + String.valueOf(currentRow) + "]/@cols").trim());
-					if (cl.equals(""))
+
+					String[] csvrow = new String[colsSpecified];
+
+					for (int currentCol = 1; currentCol <= colsSpecified; currentCol++)
 					{
-						cl = "0";
-					}
-					int columns = Integer.valueOf(cl);
+						String xpath = "/data/row[" + String.valueOf(currentRow) + "]/col[" + String.valueOf(currentCol) + "]";
+						String dataString = util.replaceNullStringwithBlank(document.findXPath(xpath).trim());
+						csvrow[currentCol - 1] = dataString;
 
-					if (columns > 0)
-					{
-
-						String[] csvrow = new String[columns];
-
-						for (int c = 1; c <= columns; c++)
-						{
-							String xpath = "//data/row[@id='" + String.valueOf(currentRow) + "']/col[@id='" + String.valueOf(c) + "']";
-							String dataString = util.replaceNullStringwithBlank(document.findXPath(xpath).trim());
-							csvrow[c - 1] = dataString;
-
-						}
-						
-						writer.writeNext(csvrow);
 					}
 
+					writer.writeNext(csvrow);
 				}
 
 				currentRow++;
@@ -191,7 +189,7 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 			}
 			writer.close();
 
-			FileUtils.deleteQuietly( new File(finalFilename));
+			FileUtils.deleteQuietly(new File(finalFilename));
 			FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
 			result = true;

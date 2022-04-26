@@ -6,8 +6,45 @@
     <logArchiveRetentionDays>3</logArchiveRetentionDays>
     <openFileRetries>3</openFileRetries>
     <openFileRetryMilliseconds>1000</openFileRetryMilliseconds>
-    <enableEmailNotifications>true</enableEmailNotifications>
+    <enableEmailNotifications>false</enableEmailNotifications>
     <statusReportTime>09:00:00</statusReportTime>
+    
+    <map id="map001" enabed="Y" description="C4J Despatch to Sage Shipment">
+        <input id="in1" description="Read XML">
+            <type>XML</type>
+            <path>./interface/input/001 (C4J XML Despatch to CSV Spec)</path>
+            <mask></mask>
+            <prefix>DespatchConfirmation</prefix>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT>C4J_DESPATCH_XML_to_SAGEX3_Shipment_CSV.xsl</XSLT>
+        </input>
+        
+        <output id="out1" enabed="Y" description="Write CSV Definition">
+            <path>./interface/input/001 (C4J XML Despatch to CSV Spec)</path>
+            <type>XML</type>
+            <prefix>S_</prefix>
+            <XSLT/>
+        </output>
+    </map>
+    
+    <map id="map002" enabed="Y" description="C4J Despatch to Sage Shipment">
+        <input id="in1" description="Read XML CSV Definition">
+            <type>XML</type>
+            <path>./interface/input/001 (C4J XML Despatch to CSV Spec)</path>
+            <mask/>
+            <prefix>S_</prefix>
+            <pollingInterval>1000</pollingInterval>
+        </input>
+        
+        <output id="out1" enabed="Y" description="Write CSV File">
+            <path>./interface/output/001 (C4J XML Despatch to CSV Spec)</path>
+            <type>CSV</type>
+            <optionDelimeter>^</optionDelimeter>
+            <csvOptions>separator=,^quote=none^endofline=\r\n</csvOptions>
+            <outputFileExtension>txt</outputFileExtension>
+            <XSLT/>
+        </output>
+    </map>
     
     <map id="map101" enabed="Y" description="NES Konnect XML Material to C4J Material Master">
         <input id="in1" description="Read Konnect XML Material Master">
