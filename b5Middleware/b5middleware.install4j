@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="9.0.6" transformSequenceNumber="9">
-  <directoryPresets config="./xml/config/SaxonConfiguration.xml" />
+  <directoryPresets config="./images/icons/iFace4j_Icons" />
   <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java11/b5middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="3.45" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="11" javaMaxVersion="11" jdkMode="jdk" jdkName="JDK 1.8">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
@@ -12,7 +12,7 @@
         <language id="pl" />
       </additionalLanguages>
     </languages>
-    <jreBundles jdkProviderId="Zulu" release="11/11.0.14.1" />
+    <jreBundles jdkProviderId="Zulu" release="11/11.0.15" />
   </application>
   <files keepModificationTimes="true" missingFilesStrategy="error" globalExcludeSuffixes="dirClean.ok,.DS_Store" preserveSymlinks="false">
     <mountPoints>
@@ -99,8 +99,8 @@
     </entries>
   </files>
   <launchers>
-    <launcher name="Middleware GUI" id="38" icnsFile="./images/Launcher/iFace_Icon.icns">
-      <executable name="Middleware_GUI" iconSet="true" iconFile="./images/Launcher/iFace_Icon.ico" executableDir="." executableMode="gui" singleInstance="true" dpiAware="false" />
+    <launcher name="Middleware GUI" id="38" icnsFile="./images/icons/iFace4j_Icons/MyIcon.icns">
+      <executable name="Middleware_GUI" iconSet="true" iconFile="./images/icons/iFace4j_Icons/icon.ico" executableDir="." executableMode="gui" singleInstance="true" dpiAware="false" />
       <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms256m -Xmx1024m -Dlog4j.configuration=file:xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="GUI">
         <classPath>
           <archive location="c4jMiddleware.jar" failOnError="false" />
@@ -110,15 +110,15 @@
       <macStaticAssociationActions mode="selected" />
       <vmOptionsFile mode="none" />
       <iconImageFiles>
-        <file path="./images/Launcher/iFace_Icon (PNG)/16x16.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/32x32.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/48x48.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/128x128.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/256x256.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_16x16.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_32x32.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_48x48.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_128x128.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_256x256.png" />
       </iconImageFiles>
     </launcher>
-    <launcher name="Middleware Service" id="149" icnsFile="./images/Launcher/iFace_Icon.icns">
-      <executable name="Middleware_Service" iconSet="true" iconFile="./images/Launcher/iFace_Icon.ico" executableDir="." redirectStderr="false" executableMode="service" singleInstance="true" dpiAware="false" />
+    <launcher name="Middleware Service" id="149" icnsFile="./images/icons/iFace4j_Icons/MyIcon.icns">
+      <executable name="Middleware_Service" iconSet="true" iconFile="./images/icons/iFace4j_Icons/icon.ico" executableDir="." redirectStderr="false" executableMode="service" singleInstance="true" dpiAware="false" />
       <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms256m -Xmx1024m -Dlog4j.configuration=file:xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="Service">
         <classPath>
           <archive location="c4jMiddleware.jar" failOnError="false" />
@@ -128,42 +128,42 @@
       <macStaticAssociationActions mode="selected" />
       <vmOptionsFile mode="none" />
       <iconImageFiles>
-        <file path="./images/Launcher/iFace_Icon (PNG)/16x16.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/32x32.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/48x48.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/128x128.png" />
-        <file path="./images/Launcher/iFace_Icon (PNG)/256x256.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_16x16.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_32x32.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_48x48.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_128x128.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_256x256.png" />
       </iconImageFiles>
     </launcher>
   </launchers>
   <installerGui>
     <applications>
-      <application id="installer" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" launchInNewProcess="false">
+      <application id="installer" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" customIcnsFile="./images/icons/iFace4j_Icons/MyIcon.icns" customIcoFile="./images/icons/iFace4j_Icons/icon.ico" launchInNewProcess="false">
         <serializedBean>
           <property name="customIconImageFiles">
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./images/Launcher/iFace_Icon (PNG)/16x16.png</string>
+                <string>./images/icons/iFace4j_Icons/MyIcon.iconset/icon_16x16.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./images/Launcher/iFace_Icon (PNG)/32x32.png</string>
+                <string>./images/icons/iFace4j_Icons/MyIcon.iconset/icon_32x32.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./images/Launcher/iFace_Icon (PNG)/48x48.png</string>
+                <string>./images/icons/iFace4j_Icons/MyIcon.iconset/icon_48x48.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./images/Launcher/iFace_Icon (PNG)/128x128.png</string>
+                <string>./images/icons/iFace4j_Icons/MyIcon.iconset/icon_128x128.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./images/Launcher/iFace_Icon (PNG)/256x256.png</string>
+                <string>./images/icons/iFace4j_Icons/MyIcon.iconset/icon_256x256.png</string>
               </object>
             </add>
           </property>
