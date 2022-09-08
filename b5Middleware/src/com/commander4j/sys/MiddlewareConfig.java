@@ -90,6 +90,7 @@ public class MiddlewareConfig
 		String LogPath = "";
 		String ArchiveRetentionDays = "";
 		String statusReportTime = "00:00:00";
+		String temp = "";
 
 		int mapSeq = 1;
 
@@ -101,7 +102,21 @@ public class MiddlewareConfig
 		XSLTPath = doc.findXPath("//config/XSLTPath");
 		LogPath = doc.findXPath("//config/logPath");
 		Common.emailEnabled = Boolean.valueOf(doc.findXPath("//config/enableEmailNotifications").toLowerCase());
-
+		
+		temp = doc.findXPath("//config/retryOpenFileCount");
+		if (temp.equals(""))
+		{
+			temp="0";
+		}
+		Common.retryOpenFileCount = Integer.valueOf(temp);
+		
+		temp = doc.findXPath("//config/retryOpenFileDelay");
+		if (temp.equals(""))
+		{
+			temp="500";
+		}
+		Common.retryOpenFileDelay = Integer.valueOf(temp);
+		
 		ArchiveRetentionDays = doc.findXPath("//config/logArchiveRetentionDays");
 		statusReportTime = doc.findXPath("//config/statusReportTime");
 

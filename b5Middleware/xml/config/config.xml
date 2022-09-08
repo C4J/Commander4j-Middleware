@@ -8,6 +8,8 @@
     <openFileRetryMilliseconds>1000</openFileRetryMilliseconds>
     <enableEmailNotifications>false</enableEmailNotifications>
     <statusReportTime>09:00:00</statusReportTime>
+    <retryOpenFileCount>3</retryOpenFileCount>
+    <retryOpenFileDelay>1000</retryOpenFileDelay>
     
     <map id="map001" enabed="Y" description="C4J Despatch to Sage Shipment">
         <input id="in1" description="Read XML">

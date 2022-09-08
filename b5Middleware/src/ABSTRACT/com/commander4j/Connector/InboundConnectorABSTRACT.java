@@ -33,20 +33,60 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	public Boolean backupInboundFile(String fullFilename)
 	{
 		Boolean result = false;
-		try
+
+		Integer retries = Common.retryOpenFileCount;
+		Integer count = 0;
+
+		do
 		{
-			String destination = Common.logDir + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
-			logger.debug("connectorLoad Backup [" + fullFilename + "] to [" + destination + "]");
-			Path from = Paths.get(fullFilename);
-			Path to = Paths.get(destination);
-			Files.copy(from, to);
-			result = true;
-		} catch (Exception ex)
-		{
-			logger.error("connectorLoad unable to backup [" + fullFilename + "]");
-			logger.error("Error message [" + ex.getMessage() + "]");
-			Common.emailqueue.addToQueue("Error", "Error backing up file", "Error backing up file "+filename+ "["+ex.getMessage()+"]", "");
+
+			try
+			{
+				count++;
+
+				String destination = Common.logDir + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
+
+				logger.debug("connectorLoad Backup [" + fullFilename + "] to [" + destination + "]");
+
+				Path from = Paths.get(fullFilename);
+				Path to = Paths.get(destination);
+				Files.copy(from, to);
+
+				count = retries;
+				result = true;
+
+			}
+			catch (Exception ex)
+			{
+
+				if (count == retries)
+				{
+					logger.error("connectorLoad unable to backup (" + count + " attempts) [" + fullFilename + "]");
+					logger.error("Error message [" + ex.getMessage() + "]");
+					Common.emailqueue.addToQueue("Error", "Error backing up file", "Error backing up file " + filename + "[" + ex.getMessage() + "]", "");
+				}
+				else
+				{
+					logger.error("connectorLoad backup attempt (" + count + " of " + retries + ") of [" + fullFilename + "[" + ex.getMessage() + "]", "");
+
+					if (Common.retryOpenFileDelay > 0)
+					{
+						try
+						{
+							Thread.sleep(Common.retryOpenFileDelay);
+						}
+						catch (Exception e)
+						{
+
+						}
+					}
+				}
+
+			}
+
 		}
+		while (count < retries);
+
 		return result;
 	}
 
@@ -85,7 +125,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		setFilename(filename);
 		if (connectorLoad(inint.getInputPath() + File.separator + filename))
 		{
-			if ((getType().equals(Connector_EMAIL)==false) && (getType().equals(Connector_PDF_PRINT)==false) )
+			if ((getType().equals(Connector_EMAIL) == false) && (getType().equals(Connector_PDF_PRINT) == false))
 			{
 				if (connectorDelete(filename))
 				{
@@ -94,13 +134,15 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			}
 			else
 			{
-				// Don't delete email input file as we don't pass the contents of the file through the map - only a reference to its filename
+				// Don't delete email input file as we don't pass the contents
+				// of the file
+				// through the map - only a reference to its filename
 				result = true;
 			}
 
 		}
-		
-		if (result==false)
+
+		if (result == false)
 		{
 			com.commander4j.util.JWait.milliSec(1000);
 		}
@@ -156,10 +198,11 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			logger.debug(inint.getDescription() + " Delete input file :" + source.getAbsolutePath());
 			FileUtils.forceDelete(source);
 			result = true;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
-			logger.error("Error deleting file "+filename+ "["+e.getMessage()+"]");
-			Common.emailqueue.addToQueue("Error", "Error deleting file", "Error deleting file "+filename+ "["+e.getMessage()+"]", "");
+			logger.error("Error deleting file " + filename + "[" + e.getMessage() + "]");
+			Common.emailqueue.addToQueue("Error", "Error deleting file", "Error deleting file " + filename + "[" + e.getMessage() + "]", "");
 			result = false;
 		}
 

@@ -62,7 +62,7 @@
 	<classpathentry kind="lib" path="lib/ooxml-lib/xmlbeans-5.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/saxon/xmlresolver-4.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/saxon/xmlresolver-4.2.0-data.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java 11 JDK">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/Java 11 JDK">
 		<attributes>
 			<attribute name="module" value="true"/>
 			<attribute name="owner.project.facets" value="java"/>
