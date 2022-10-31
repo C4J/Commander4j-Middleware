@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="9.0.5" transformSequenceNumber="9">
+<install4j version="10.0.1" transformSequenceNumber="10">
   <directoryPresets config=".." />
   <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java8/b4middleware4j" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="3.03" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="1.8" javaMaxVersion="1.8" allowBetaVM="true" jdkMode="jdk" jdkName="JDK 1.8">
     <languages skipLanguageSelection="true">
@@ -14,7 +14,7 @@
     </languages>
     <jreBundles jdkProviderId="Zulu" release="8 without JavaFX/8u322" />
   </application>
-  <files keepModificationTimes="true" missingFilesStrategy="error" globalExcludeSuffixes="dirClean.ok,.DS_Store" preserveSymlinks="false">
+  <files keepModificationTimes="true" missingFilesStrategy="error" globalExcludeSuffixes="dirClean.ok,.DS_Store">
     <mountPoints>
       <mountPoint id="22" location="images" />
       <mountPoint id="24" location="xml" />
@@ -103,7 +103,6 @@
           <directory location="xml/config" failOnError="false" />
         </classPath>
       </java>
-      <macStaticAssociationActions mode="selected" />
       <vmOptionsFile mode="none" />
       <iconImageFiles>
         <file path="./images/Launcher/iFace_Icon (PNG)/16x16.png" />
@@ -121,7 +120,6 @@
           <directory location="xml/config" failOnError="false" />
         </classPath>
       </java>
-      <macStaticAssociationActions mode="selected" />
       <vmOptionsFile mode="none" />
       <iconImageFiles>
         <file path="./images/Launcher/iFace_Icon (PNG)/16x16.png" />
@@ -645,14 +643,14 @@ return console.askYesNo(message, true);
         </modules>
       </jreBundle>
     </macosFolder>
-    <windows name="Windows 64bit (with JRE)" id="88" mediaFileName="${compiler:sys.fullName}_${compiler:sys.platform}_${compiler:sys.version}${compiler:sys.withJre}" customInstallBaseDir="C:\">
+    <windows name="Windows 64bit (with JRE)" id="88" mediaFileName="${compiler:sys.fullName}_${compiler:sys.platform}_${compiler:sys.version}${compiler:sys.withJre}" customInstallBaseDir="C:\" architecture="64">
       <jreBundle includedJre="windows-amd64-1.8.0_202">
         <modules>
           <defaultModules set="all" />
         </modules>
       </jreBundle>
     </windows>
-    <windows name="Windows 32bit (with JRE)" id="89" mediaFileName="${compiler:sys.fullName}_${compiler:sys.platform}_${compiler:sys.version}${compiler:sys.withJre}" jreBitType="32" customInstallBaseDir="C:\">
+    <windows name="Windows 32bit (with JRE)" id="89" mediaFileName="${compiler:sys.fullName}_${compiler:sys.platform}_${compiler:sys.version}${compiler:sys.withJre}" customInstallBaseDir="C:\" architecture="32">
       <jreBundle includedJre="windows-x86-1.8.0_202">
         <modules>
           <defaultModules set="all" />

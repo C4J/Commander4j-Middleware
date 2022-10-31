@@ -8,46 +8,7 @@
     <openFileRetryMilliseconds>1000</openFileRetryMilliseconds>
     <enableEmailNotifications>false</enableEmailNotifications>
     <statusReportTime>09:00:00</statusReportTime>
-    <retryOpenFileCount>3</retryOpenFileCount>
-    <retryOpenFileDelay>1000</retryOpenFileDelay>
-    
-    <map id="map001" enabed="Y" description="C4J Despatch to Sage Shipment">
-        <input id="in1" description="Read XML">
-            <type>XML</type>
-            <path>./interface/input/001 (C4J XML Despatch to CSV Spec)</path>
-            <mask></mask>
-            <prefix>DespatchConfirmation</prefix>
-            <pollingInterval>1000</pollingInterval>
-            <XSLT>C4J_DESPATCH_XML_to_SAGEX3_Shipment_CSV.xsl</XSLT>
-        </input>
-        
-        <output id="out1" enabed="Y" description="Write CSV Definition">
-            <path>./interface/input/001 (C4J XML Despatch to CSV Spec)</path>
-            <type>XML</type>
-            <prefix>S_</prefix>
-            <XSLT/>
-        </output>
-    </map>
-    
-    <map id="map002" enabed="Y" description="C4J Despatch to Sage Shipment">
-        <input id="in1" description="Read XML CSV Definition">
-            <type>XML</type>
-            <path>./interface/input/001 (C4J XML Despatch to CSV Spec)</path>
-            <mask/>
-            <prefix>S_</prefix>
-            <pollingInterval>1000</pollingInterval>
-        </input>
-        
-        <output id="out1" enabed="Y" description="Write CSV File">
-            <path>./interface/output/001 (C4J XML Despatch to CSV Spec)</path>
-            <type>CSV</type>
-            <optionDelimeter>^</optionDelimeter>
-            <csvOptions>separator=,^quote=none^endofline=\r\n</csvOptions>
-            <outputFileExtension>txt</outputFileExtension>
-            <XSLT/>
-        </output>
-    </map>
-    
+
     <map id="map101" enabed="Y" description="NES Konnect XML Material to C4J Material Master">
         <input id="in1" description="Read Konnect XML Material Master">
             <type>XML</type>
@@ -198,8 +159,8 @@
             <XSLT/>
         </output>
     </map>
-    
-    <map id="map209v" enabed="Y" description="CDF Tropos Material XML - VAL">
+
+    <map id="map209v" enabed="N" description="CDF Tropos Material XML - VAL">
         <input id="in1" description="Read TROPOS Material XML File">
             <type>XML</type>
             <path>./interface/input/209 (CDF Tropos Material XML) - VAL</path>
@@ -207,6 +168,23 @@
             <prefix>VAL Inbound Material Master</prefix>
             <pollingInterval>1000</pollingInterval>
             <XSLT>TROPOS_Material_to_Commander4j_Material_VAL.xsl</XSLT>
+        </input>
+
+        <output id="out1" enabed="Y" description="Write C4J Material Master">
+            <path>./interface/output/209 (CDF C4J - Material) - VAL</path>
+            <type>XML</type>
+            <XSLT/>
+        </output>
+    </map>
+
+    <map id="map209vDesc2" enabed="Y" description="CDF Tropos Material DESC2 XML - VAL">
+        <input id="in1" description="Read TROPOS Material XML File">
+            <type>XML</type>
+            <path>./interface/input/209 (CDF Tropos Material XML) - VAL</path>
+            <mask/>
+            <prefix>VAL Inbound Material Master</prefix>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT>TROPOS_Material_to_Commander4j_Material_VAL_DESC2.xsl</XSLT>
         </input>
         
         <output id="out1" enabed="Y" description="Write C4J Material Master">
@@ -232,7 +210,7 @@
             <XSLT/>
         </output>
     </map>
-    
+
     <map id="map210v" enabed="Y" description="CDF Tropos Works Order XML - VAL">
         <input id="in1" description="Read TROPOS Works Order XML File">
             <type>XML</type>
@@ -242,7 +220,7 @@
             <pollingInterval>1000</pollingInterval>
             <XSLT>TROPOS_WorksOrder_to_Commander4j_Process_Order_VAL.xsl</XSLT>
         </input>
-        
+
         <output id="out1" enabed="Y" description="Write C4J Process Order">
             <path>./interface/output/210 (CDF C4J - Process Order) - VAL</path>
             <type>XML</type>
@@ -250,7 +228,8 @@
         </output>
     </map>
 
-    <map id="map211i" enabed="Y" description="CDF C4J Production Declaration to TROPOS Goods Receipt - IJM">
+    <map id="map211i" enabed="Y"
+        description="CDF C4J Production Declaration to TROPOS Goods Receipt - IJM">
         <input id="in1" description="Read C4J XML File">
             <type>XML</type>
             <path>./interface/input/211 (CDF C4J - Production Declaration) - IJM</path>
@@ -270,8 +249,9 @@
             <XSLT/>
         </output>
     </map>
-    
-    <map id="map211v" enabed="Y" description="CDF C4J Production Declaration to TROPOS Goods Receipt - VAL">
+
+    <map id="map211v" enabed="Y"
+        description="CDF C4J Production Declaration to TROPOS Goods Receipt - VAL">
         <input id="in1" description="Read C4J XML File">
             <type>XML</type>
             <path>./interface/input/211 (CDF C4J - Production Declaration) - VAL</path>
@@ -279,7 +259,7 @@
             <pollingInterval>1000</pollingInterval>
             <XSLT>C4J_PRODDEC_XML_to_TROPOS_GoodsReceipt_CSV_VAL.xsl</XSLT>
         </input>
-        
+
         <output id="out1" enabed="Y" description="Write TROPOS CSV">
             <path>./interface/output/211 (CDF TROPOS - Goods Receipt) - VAL</path>
             <type>CSV</type>
@@ -738,6 +718,22 @@
         </output>
     </map>
 
+    <map id="map335" enabed="Y" description="FH SAGE Bulk Order to C4J Bulk Order L400">
+        <input id="in1" description="Read SAGE XML Orders">
+            <type>XML</type>
+            <path>./interface/input/335 (FH Sage Order Bulk Message)</path>
+            <mask/>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT>SAGE_Order_to_Commander4j_Order_L4000_Materials.xsl</XSLT>
+        </input>
+        
+        <output id="out1" enabed="Y" description="Write C4J Order">
+            <path>./interface/output/335 (FH C4J Order Bulk Message)</path>
+            <type>XML</type>
+            <XSLT/>
+        </output>
+    </map>
+    
     <map id="map428" enabed="Y" description="GEN PDF Document to printer queue.">
         <input id="in1" description="Read PDF Document">
             <type>PDF_PRINT</type>
@@ -821,8 +817,9 @@
             <XSLT/>
         </output>
     </map>
-    
-    <map id="map432" enabed="Y" description="FFMW Material Master IDOC to C4J Material XML and Auto Move XML">
+
+    <map id="map432" enabed="Y"
+        description="FFMW Material Master IDOC to C4J Material XML and Auto Move XML">
         <input id="in1" description="Read IDOC">
             <type>IDOC</type>
             <path>./interface/input/432 (NES SAP IDOC Material Master SUD Tails)</path>
@@ -830,20 +827,20 @@
             <pollingInterval>1000</pollingInterval>
             <idocSchemaFilename>./idoc/schema/ZMATMAS03.txt</idocSchemaFilename>
         </input>
-        
+
         <output id="out1" enabed="Y" description="Write Commander4j Material">
             <path>./interface/output/432 C4J Material Definition</path>
             <XSLT>ROCKWELL_MM_FFMW_XML_to_C4J_XML_SUD_TAILS.xsl</XSLT>
             <type>XML</type>
         </output>
-        
+
         <output id="out2" enabed="Y" description="Write MM Auto Move XML File">
             <path>./interface/output/432 C4J Material Auto Move</path>
             <XSLT>ROCKWELL_MM_PROCUREMENT_AUTO_MOVE.xsl</XSLT>
             <type>XML</type>
         </output>
     </map>
-    
+
     <map id="map433" enabed="Y" description="Mii XML to C4J Material XML and Auto Move XML">
         <input id="in1" description="Read XML">
             <type>XML</type>
@@ -851,20 +848,20 @@
             <pollingInterval>1000</pollingInterval>
             <XSLT/>
         </input>
-        
+
         <output id="out1" enabed="Y" description="Write Commander4j Material">
             <path>./interface/output/433 C4J Material Definition</path>
             <XSLT>MII_MM_XML_to_C4J_XML_SUD_TAILS.xsl</XSLT>
             <type>XML</type>
         </output>
-        
+
         <output id="out2" enabed="Y" description="Write MM Auto Move XML File">
             <path>./interface/output/433 C4J Material Auto Move</path>
             <XSLT>MII_MM_XML_to_C4J_XML_AUTO_MOVE.xsl</XSLT>
             <type>XML</type>
         </output>
     </map>
-    
+
     <map id="map434" enabed="Y" description="Mii XML to C4J Material XML and Auto Move XML">
         <input id="in1" description="Read XML">
             <type>XML</type>
@@ -872,13 +869,13 @@
             <pollingInterval>1000</pollingInterval>
             <XSLT/>
         </input>
-        
+
         <output id="out1" enabed="Y" description="Write Commander4j Material">
             <path>./interface/output/433 C4J Material Definition</path>
             <XSLT>MII_MM_XML_to_C4J_XML_SUD_TAILS.xsl</XSLT>
             <type>XML</type>
         </output>
-        
+
         <output id="out2" enabed="Y" description="Write MM Auto Move XML File">
             <path>./interface/output/433 C4J Material Auto Move</path>
             <XSLT>MII_MM_XML_to_C4J_XML_AUTO_MOVE.xsl</XSLT>
