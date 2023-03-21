@@ -53,7 +53,7 @@ Class-Path: lib/auxiliary/batik-anim-1.14.jar
  lib/poi_lib/commons-io-2.8.0.jar 
  lib/poi_lib/commons-math3-3.6.1.jar 
  lib/saxon/jline-2.14.6.jar 
- lib/saxon/saxon-he-11.3.jar 
- lib/saxon/saxon-he-xqj-11.3.jar 
- lib/saxon/xmlresolver-4.2.0-data.jar 
- lib/saxon/xmlresolver-4.2.0.jar 
+ lib/saxon/saxon-he-11.4.jar 
+ lib/saxon/saxon-he-xqj-11.4.jar 
+ lib/saxon/xmlresolver-4.4.3-data.jar 
+ lib/saxon/xmlresolver-4.4.3.jar 

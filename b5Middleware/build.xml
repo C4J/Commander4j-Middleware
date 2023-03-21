@@ -12,8 +12,8 @@
         <pathelement location="bin"/>
         <pathelement location="lib/mail/javax.activation-1.2.0.jar"/>
         <pathelement location="lib/mail/javax.mail.jar"/>
-        <pathelement location="lib/saxon/saxon-he-11.3.jar"/>
-        <pathelement location="lib/saxon/saxon-he-xqj-11.3.jar"/>
+        <pathelement location="lib/saxon/saxon-he-11.4.jar"/>
+        <pathelement location="lib/saxon/saxon-he-xqj-11.4.jar"/>
         <pathelement location="lib/mail/commons-email-1.5.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.6.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
@@ -65,15 +65,15 @@
         <pathelement location="lib/ooxml-lib/curvesapi-1.06.jar"/>
         <pathelement location="lib/ooxml-lib/slf4j-api-1.7.32.jar"/>
         <pathelement location="lib/ooxml-lib/xmlbeans-5.0.2.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.2.0.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.2.0-data.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-4.4.3.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-4.4.3-data.jar"/>
     </path>
     <path id="run.StartMain.classpath">
         <path refid="b5Middleware.classpath"/>
         <pathelement location="lib/mail/javax.activation-1.2.0.jar"/>
         <pathelement location="lib/mail/javax.mail.jar"/>
         <pathelement location="lib/saxon/saxon-he-11.3.jar"/>
-        <pathelement location="lib/saxon/saxon-he-xqj-11.3.jar"/>
+        <pathelement location="lib/saxon/saxon-he-xqj-11.4.jar"/>
         <pathelement location="lib/mail/commons-email-1.5.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.6.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
@@ -125,15 +125,15 @@
         <pathelement location="lib/ooxml-lib/curvesapi-1.06.jar"/>
         <pathelement location="lib/ooxml-lib/slf4j-api-1.7.32.jar"/>
         <pathelement location="lib/ooxml-lib/xmlbeans-5.0.2.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.2.0.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.2.0-data.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-4.4.3.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-4.4.3-data.jar"/>
     </path>
     <path id="run.StartGUI.classpath">
         <path refid="b5Middleware.classpath"/>
         <pathelement location="lib/mail/javax.activation-1.2.0.jar"/>
         <pathelement location="lib/mail/javax.mail.jar"/>
-        <pathelement location="lib/saxon/saxon-he-11.3.jar"/>
-        <pathelement location="lib/saxon/saxon-he-xqj-11.3.jar"/>
+        <pathelement location="lib/saxon/saxon-he-11.4.jar"/>
+        <pathelement location="lib/saxon/saxon-he-xqj-11.4.jar"/>
         <pathelement location="lib/mail/commons-email-1.5.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.6.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
@@ -185,8 +185,8 @@
         <pathelement location="lib/ooxml-lib/curvesapi-1.06.jar"/>
         <pathelement location="lib/ooxml-lib/slf4j-api-1.7.32.jar"/>
         <pathelement location="lib/ooxml-lib/xmlbeans-5.0.2.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.2.0.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.2.0-data.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-4.4.3.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-4.4.3-data.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
