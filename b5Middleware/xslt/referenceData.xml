@@ -138,6 +138,6 @@
     <item type="TroposStatus" id="RELEASE CANCELLED"><value>Discarded</value></item>  
     <item type="TroposStatus" id="ORDER_CLOSED"><value>Finished</value></item>     
     <item type="TroposStatus" id="ORDER RE-OPENED"><value>Ready</value></item>    
- 
+    
 </lookup>
 
