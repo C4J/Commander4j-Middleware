@@ -1,11 +1,12 @@
 package ABSTRACT.com.commander4j.Connector;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -196,10 +197,10 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		try
 		{
 			logger.debug(inint.getDescription() + " Delete input file :" + source.getAbsolutePath());
-			FileUtils.forceDelete(source);
+			FileDeleteStrategy.NORMAL.delete(source);
 			result = true;
 		}
-		catch (Exception e)
+		catch (IOException | NullPointerException e)
 		{
 			logger.error("Error deleting file " + filename + "[" + e.getMessage() + "]");
 			Common.emailqueue.addToQueue("Error", "Error deleting file", "Error deleting file " + filename + "[" + e.getMessage() + "]", "");

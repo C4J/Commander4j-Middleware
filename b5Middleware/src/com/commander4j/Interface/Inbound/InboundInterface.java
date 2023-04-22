@@ -52,11 +52,21 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 	@Override
 	public void run()
 	{
+		File dir = new File(getInputPath());
+		String[] extensions = getInputFileMask();
+		String prefix = getPrefix();
+		List<File> files = null;
+		Xslt30Transformer transformer = null;
+		JXMLDocument doc =null;
+		
+		Processor processor =null;
+		XsltCompiler compiler = null;
+		XsltExecutable stylesheet = null;
+		Serializer out  = null;
+		Source xmlSource = null;
+
 		try
 		{
-			File dir = new File(getInputPath());
-			String[] extensions = getInputFileMask();
-			String prefix = getPrefix();
 
 			if (extensions.length > 0)
 			{
@@ -66,7 +76,8 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 				}
 			}
 
-			List<File> files = (List<File>) FileUtils.listFiles(dir, extensions, false);
+			files = (List<File>) FileUtils.listFiles(dir, extensions, false);
+			
 			if (files.size() > 0)
 			{
 				for (File file : files)
@@ -82,6 +93,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 								logger.debug("Processing [" + file.getName() + "]");
 								loadFileResult = true;
+								
 								if (connector.processInboundFile(file.getName()))
 								{
 									data = connector.getData();
@@ -105,27 +117,26 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											filename_transformed = filename_transformed + ".xml";
 										}
 
-										Source xmlSource = new StreamSource(new File(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator +"SaxonConfiguration.xml"));
-										
+										xmlSource = new StreamSource(new File(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
+
 										source = new StreamSource(new File(Common.logDir + File.separator + filename_imported));
 										destination = new StreamResult(new File(Common.logDir + File.separator + filename_transformed));
 										xslt = new StreamSource(new File(getXSLTPath() + getXSLTFilename()));
 
-										Processor processor = new Processor(Configuration.readConfiguration(xmlSource));
-										XsltCompiler compiler = processor.newXsltCompiler();
-										XsltExecutable stylesheet = compiler.compile(xslt);
-										Serializer out = processor.newSerializer(new File(Common.logDir + File.separator + filename_transformed));
+										processor = new Processor(Configuration.readConfiguration(xmlSource));
+										compiler = processor.newXsltCompiler();
+										stylesheet = compiler.compile(xslt);
+										out = processor.newSerializer(new File(Common.logDir + File.separator + filename_transformed));
 										out.setOutputProperty(Serializer.Property.METHOD, "xml");
 										out.setOutputProperty(Serializer.Property.INDENT, "yes");
-										//out.setOutputProperty(Serializer.Property.STANDALONE, "yes");
-										Xslt30Transformer transformer = stylesheet.load30();
+	
+										transformer = stylesheet.load30();
 										transformer.transform(source, out);
-										
-										
-										JXMLDocument doc = new JXMLDocument();
+
+										doc = new JXMLDocument();
 										loadFileResult = doc.setDocument(Common.logDir + File.separator + filename_transformed);
 										data = doc.getDocument();
-										
+
 									}
 
 									if (writeSuccess && loadFileResult)
@@ -151,18 +162,29 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 					}
 				}
 			}
-			files = null;
-			dir = null;
 
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			
+
 			logger.error("InboundInterface Map [" + map.getId() + "] error :" + ex.getMessage());
 			Common.emailqueue.addToQueue("Error", "InboundInterface Map [" + map.getId() + "]", " error :" + ex.getMessage(), "");
 		}
-
+		finally
+		{
+			processor =null;
+			compiler = null;
+			stylesheet = null;
+			out  = null;
+			dir = null;
+			extensions = null;
+			prefix = null;
+			files = null;
+			transformer = null;
+			doc = null;
+			xmlSource = null;
+		}
 	}
 
 	public void processConnectorToInterfaceData(String filename, Document data)

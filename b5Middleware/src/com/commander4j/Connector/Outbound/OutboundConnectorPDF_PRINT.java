@@ -12,8 +12,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
+import com.commander4j.exception.OutboundPrinterQueueException;
 import com.commander4j.sys.Common;
-import com.commander4j.util.JFileIO;
 import com.commander4j.util.JXMLDocument;
 
 import ABSTRACT.com.commander4j.Connector.OutboundConnectorABSTRACT;
@@ -22,7 +22,6 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((OutboundConnectorPDF_PRINT.class));
-	JFileIO jfileio = new JFileIO();
 
 	public OutboundConnectorPDF_PRINT(OutboundInterface inter)
 	{
@@ -33,7 +32,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		String errorMessage = "";
+
 		String fullPath = path + File.separator + filename;
 
 		JXMLDocument document = new JXMLDocument();
@@ -52,12 +51,17 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 			outputFilename = outputFilename + File.separator + filename;
 		}
 
-		logger.error("connectorLoad " + getType() + " inputFilename" + inputFilename);
-		logger.error("connectorLoad " + getType() + " outputFilename" + outputFilename);
+		logger.debug("connectorLoad " + getType() + " inputFilename" + inputFilename);
+		logger.debug("connectorLoad " + getType() + " outputFilename" + outputFilename);
+		
+		PrintService service = null;
+		PDDocument pdfdocument =  null;
+		PrinterJob printerjob =  null;
 
 		try
 		{
 			FileUtils.deleteQuietly(new File(outputFilename));
+			
 			FileUtils.moveFileToDirectory(new File(inputFilename), new File(path), false);
 
 			logger.debug("Printing PDF file called :" + outputFilename);
@@ -66,7 +70,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 			{
 				logger.debug("No print queue specified - getting default queue.");
 
-				PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+				service = PrintServiceLookup.lookupDefaultPrintService();
 
 				if (service != null)
 				{
@@ -87,9 +91,9 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 			if (getOutboundInterface().getQueueName().equals("") == false)
 			{
 
-				PDDocument pdfdocument = PDDocument.load(new File(outputFilename));
+				pdfdocument = PDDocument.load(new File(outputFilename));
 
-				PrinterJob printerjob = PrinterJob.getPrinterJob();
+				printerjob = PrinterJob.getPrinterJob();
 				
 				String validQueueNames="";
 
@@ -113,7 +117,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 
 				if (result==false)
 				{
-					errorMessage = "\n\nValid queues are \n\n"+validQueueNames;
+					throw new OutboundPrinterQueueException("\n\nValid queues are \n\n"+validQueueNames);
 				}
 
 			}
@@ -121,20 +125,22 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 			{
 				logger.debug("Unable to find print queue ");
 			}
-			
-			if (result==false)
-			{
-				Common.emailqueue.addToQueue("Error", "Error printing " + getType(), "Unable to print "+ filename + " to ["+getOutboundInterface().getQueueName()+"]"+errorMessage, "");
-			}
-			
+						
 		}
 		catch (Exception e)
 		{
 			logger.error("connectorLoad " + getType() + " " + e.getMessage());
 			Common.emailqueue.addToQueue("Error", "Error printing " + getType(), "connectorSave " + getType() + " " + e.getMessage() + "\n\n" + fullPath, "");
 		}
-
-		document = null;
+		finally
+		{
+			document = null;
+			inputFilename= null;
+			outputFilename = null;
+			service = null;
+			pdfdocument = null;
+			printerjob = null;
+		}
 
 		return result;
 	}

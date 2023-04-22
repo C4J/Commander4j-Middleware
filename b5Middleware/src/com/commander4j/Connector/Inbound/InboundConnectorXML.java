@@ -32,21 +32,27 @@ public class InboundConnectorXML extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
+			DocumentBuilderFactory factory = null;
+			DocumentBuilder builder = null;
 			try
 			{
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
+				factory = DocumentBuilderFactory.newInstance();
+				builder = factory.newDocumentBuilder();
 				data = builder.parse(new File(fullFilename));
 				result = true;
 				
-				factory=null;
-				builder=null;
+
 
 			} catch (Exception ex)
 			{
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 				Common.emailqueue.addToQueue("Error", "Error reading "+getType(), "connectorLoad " + getType() + " " + ex.getMessage()+"\n\n"+fullFilename, "");
+			}
+			finally
+			{
+				factory=null;
+				builder=null;
 			}
 
 		}

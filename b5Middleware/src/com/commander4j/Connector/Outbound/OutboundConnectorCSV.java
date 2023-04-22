@@ -2,9 +2,8 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
-
-import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
@@ -92,12 +91,10 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 
 		fullPath = fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase();
 
-		/*
-		 * if (fullPath.endsWith("." + getType().toLowerCase()) == false) {
-		 * fullPath = fullPath + "." + getType().toLowerCase(); }
-		 */
 		String tempFilename = fullPath + ".tmp";
 		String finalFilename = fullPath;
+
+		FileUtils.deleteQuietly(new File(tempFilename));
 
 		getCSVOptions();
 
@@ -106,20 +103,15 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 		JXMLDocument document = new JXMLDocument();
 		document.setDocument(getData());
 
+		CSVWriter writer = null;
+		
 		try
 		{
+			
 			System.out.println(document.documentToString(getData()));
-		}
-		catch (TransformerException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try
-		{
+			
 			// Create Writer
-			CSVWriter writer;
+			
 			if (disableQuotes)
 			{
 				if (endOfLine.equals("default"))
@@ -131,8 +123,6 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 					writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, "\r\n");
 				}
 
-				// writer = new CSVWriter(new FileWriter(tempFilename),
-				// seperator, CSVWriter.NO_QUOTE_CHARACTER);
 			}
 			else
 			{
@@ -145,8 +135,6 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 					writer = new CSVWriter(new FileWriter(tempFilename), seperator, CSVWriter.DEFAULT_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, "\r\n");
 				}
 
-				// writer = new CSVWriter(new FileWriter(tempFilename),
-				// seperator, quote);
 			}
 
 			int currentRow = 1;
@@ -159,7 +147,7 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 
 				// Get current row and check number of cols is present
 				String noOfCols = util.replaceNullStringwithBlank(document.findXPath("/data/row[" + String.valueOf(currentRow) + "]/@cols").trim()); // Yes
-																																				     // cols
+																																						// cols
 
 				if (noOfCols.equals(""))
 				{
@@ -187,20 +175,38 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 				currentRow++;
 
 			}
+			
+			writer.flush();
 			writer.close();
 
 			FileUtils.deleteQuietly(new File(finalFilename));
+
 			FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
 			result = true;
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
-			Common.emailqueue.addToQueue("Error", "Error Writing File [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+			logger.error("Message failed to process.");
+			Common.emailqueue.addToQueue("Error", "Error writing to CSV file [" + fullPath + "]", ex.getMessage() + "\n\n", "");
 		}
-
-		document = null;
+		finally
+		{
+			try
+			{
+				writer.close();
+			}
+			catch (IOException e)
+			{
+				//Suppress Error
+			}
+			
+			writer = null;
+			document = null;
+			fullPath = null;
+			tempFilename = null;
+			finalFilename = null;
+		}
 
 		return result;
 	}

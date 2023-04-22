@@ -2,6 +2,7 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
@@ -26,52 +27,53 @@ public class OutboundConnectorXML extends OutboundConnectorABSTRACT
 	}
 
 	@Override
-	public boolean connectorSave(String path, String prefix,String filename)
+	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		
-		filename = getOutboundInterface().get83GUIDFilename(prefix,filename);
+
+		filename = getOutboundInterface().get83GUIDFilename(prefix, filename);
 
 		String fullPath = path + File.separator + filename;
 
 		logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
 
+		DOMImplementationLS DOMiLS = null;
+		FileOutputStream FOS = null;
+		LSOutput LSO = null;
+		LSSerializer LSS = null;
+		String tempFilename = "";
+		String finalFilename = "";
+
 		try
 		{
-			DOMImplementationLS DOMiLS = null;
-			FileOutputStream FOS = null;
+
 			if ((data.getFeature("Core", "3.0") != null) && (data.getFeature("LS", "3.0") != null))
 			{
 				DOMiLS = (DOMImplementationLS) (data.getImplementation()).getFeature("LS", "3.0");
 
-				LSOutput LSO = DOMiLS.createLSOutput();
+				LSO = DOMiLS.createLSOutput();
 
 				if (fullPath.endsWith("." + getType().toLowerCase()) == false)
 				{
 					fullPath = fullPath + "." + getType().toLowerCase();
 				}
 
-				String tempFilename = fullPath + ".tmp";
-				String finalFilename = fullPath;
+				tempFilename = fullPath + ".tmp";
+				finalFilename = fullPath;
 
 				FOS = new FileOutputStream(tempFilename);
+
 				LSO.setByteStream((OutputStream) FOS);
 
-				LSSerializer LSS = DOMiLS.createLSSerializer();
+				LSS = DOMiLS.createLSSerializer();
 
 				LSS.write(getData(), LSO);
 
 				FOS.close();
 
 				FileUtils.deleteQuietly(new File(finalFilename));
-				FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
-				DOMiLS = null;
-				LSO = null;
-				LSS = null;
-				FOS = null;
-				tempFilename = null;
-				finalFilename = null;
+				FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
 				result = true;
 			}
@@ -81,7 +83,24 @@ public class OutboundConnectorXML extends OutboundConnectorABSTRACT
 			result = false;
 			logger.error(ex.getMessage());
 			Common.emailqueue.addToQueue("Error", "Error Writing File [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+		}
+		finally
+		{
+			try
+			{
+				FOS.close();
+			}
+			catch (IOException e)
+			{
+				// Suppress exception
+			}
 
+			DOMiLS = null;
+			LSO = null;
+			LSS = null;
+			FOS = null;
+			tempFilename = null;
+			finalFilename = null;
 		}
 
 		return result;

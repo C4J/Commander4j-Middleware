@@ -3,6 +3,7 @@ package com.commander4j.Connector.Inbound;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -23,7 +24,7 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorASCII.class));
-//	JFileIO jfileio = new JFileIO();
+
 	private LinkedList<FixedASCIIColumns> parseCols = new LinkedList<FixedASCIIColumns>();
 
 	public InboundConnectorASCII(InboundInterface inter)
@@ -95,20 +96,25 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 		{
 
 			String line = null;
+			FileReader fileReader = null;
+			BufferedReader bufferedReader  = null;
+			DocumentBuilderFactory factory  = null;
+			DocumentBuilder builder  = null;
+			Element message = null;
 
 			try
 			{
 
-				FileReader fileReader = new FileReader(fullFilename);
+				fileReader = new FileReader(fullFilename);
 
-				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				bufferedReader = new BufferedReader(fileReader);
 
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
+				factory = DocumentBuilderFactory.newInstance();
+				builder = factory.newDocumentBuilder();
 
 				data = builder.newDocument();
 
-				Element message = (Element) data.createElement("data");
+				message = (Element) data.createElement("data");
 				message.setAttribute("type", Connector_ASCII);
 
 				row = 0;
@@ -138,8 +144,6 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 					message.appendChild(xmlrow);
 				}
 
-				bufferedReader.close();
-
 				message.setAttribute("type", Connector_ASCII);
 				message.setAttribute("cols", String.valueOf(getPatternColumnCount()));
 				message.setAttribute("rows", String.valueOf(row));
@@ -156,6 +160,34 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 				Common.emailqueue.addToQueue("Error", "Error reading "+getType(), "connectorLoad " + getType() + " " + ex.getMessage()+"\n\n"+fullFilename, "");
 				result = false;
 			} 
+			finally
+			{
+				
+				try
+				{
+					bufferedReader.close();
+				}
+				catch (IOException e)
+				{
+					// Suppress Error
+				}
+				bufferedReader  = null;
+				
+				try
+				{
+					fileReader.close();
+				}
+				catch (IOException e)
+				{
+					// Suppress Error
+				}
+				fileReader = null;
+				
+				line = null;
+				factory  = null;
+				builder  = null;
+				message = null;
+			}
 		}
 
 		return result;

@@ -7,7 +7,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -31,11 +30,17 @@ public class OutboundConnectorMQTT extends OutboundConnectorABSTRACT
 	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		String errorDescription="";
 
 		filename = getOutboundInterface().get83GUIDFilename(prefix, filename);
 
 		String fullPath = path + File.separator + filename;
+		String tempFilename = null;
+		String finalFilename = null;
+		MemoryPersistence persistence = null;
+		MqttClient sampleClient = null;
+		MqttConnectOptions connOpts = null;
+		MqttMessage message = null;
+		FileWriter fw = null;
 
 		logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
 
@@ -47,102 +52,90 @@ public class OutboundConnectorMQTT extends OutboundConnectorABSTRACT
 				fullPath = fullPath + "." + getType().toLowerCase();
 			}
 
-			String tempFilename = fullPath + ".tmp";
-			String finalFilename = fullPath;
+			tempFilename = fullPath + ".tmp";
+			finalFilename = fullPath;
+
+			FileUtils.deleteQuietly(new File(tempFilename));
 
 			//////// MQTT Code Start
 
-			MemoryPersistence persistence;
-			MqttClient sampleClient;
-			MqttConnectOptions connOpts;
-			MqttMessage message;
-			FileWriter fw = new FileWriter(tempFilename);
-			try
-			{
+			fw = new FileWriter(tempFilename);
 
-				fw.write("MQTT Broker : " + getOutboundInterface().getMQTBroker() + "\n");
-				fw.write("MQTT Client : " + getOutboundInterface().getMQTTClient() + "\n");
-				fw.write("MQTT Content : " + getOutboundInterface().getMQTTContentXPath() + "\n");
-				fw.write("MQTT Topic : " + getOutboundInterface().getMQTTTopic() + "\n");
-				fw.write("MQTT QOS : " + getOutboundInterface().getMQTTQos() + "\n\n");
-				fw.flush();
+			fw.write("MQTT Broker : " + getOutboundInterface().getMQTBroker() + "\n");
+			fw.write("MQTT Client : " + getOutboundInterface().getMQTTClient() + "\n");
+			fw.write("MQTT Content : " + getOutboundInterface().getMQTTContentXPath() + "\n");
+			fw.write("MQTT Topic : " + getOutboundInterface().getMQTTTopic() + "\n");
+			fw.write("MQTT QOS : " + getOutboundInterface().getMQTTQos() + "\n\n");
+			fw.flush();
 
-				JXMLDocument document = new JXMLDocument();
-				document.setDocument(getData());
-				String messageContent = util.replaceNullStringwithBlank(document.findXPath(getOutboundInterface().getMQTTContentXPath()));
+			JXMLDocument document = new JXMLDocument();
+			document.setDocument(getData());
+			String messageContent = util.replaceNullStringwithBlank(document.findXPath(getOutboundInterface().getMQTTContentXPath()));
 
-				persistence = new MemoryPersistence();
+			persistence = new MemoryPersistence();
 
-				sampleClient = new MqttClient(getOutboundInterface().getMQTBroker(), getOutboundInterface().getMQTTClient(), persistence);
-				connOpts = new MqttConnectOptions();
-				connOpts.setCleanSession(true);
-				fw.write("Connecting to broker: " + getOutboundInterface().getMQTBroker()+ "\n");
-				fw.flush();
+			sampleClient = new MqttClient(getOutboundInterface().getMQTBroker(), getOutboundInterface().getMQTTClient(), persistence);
+			connOpts = new MqttConnectOptions();
+			connOpts.setCleanSession(true);
 
-				sampleClient.connect(connOpts);
-				fw.write("Connected\n");
-				fw.flush();
+			fw.write("Connecting to broker: " + getOutboundInterface().getMQTBroker() + "\n");
+			fw.flush();
 
-				fw.write("Publishing message: " + messageContent+ "\n");
-				fw.flush();
-				message = new MqttMessage(messageContent.getBytes());
-				message.setQos(getOutboundInterface().getMQTTQos());
+			sampleClient.connect(connOpts);
+			fw.write("Connected\n");
+			fw.flush();
 
-				sampleClient.publish(getOutboundInterface().getMQTTTopic(), message);
-				fw.write("Message published\n");
-				fw.flush();
+			fw.write("Publishing message: " + messageContent + "\n");
+			fw.flush();
 
-				sampleClient.disconnect();
-				fw.write("Disconnected\n\n");
-				fw.flush();
+			message = new MqttMessage(messageContent.getBytes());
+			message.setQos(getOutboundInterface().getMQTTQos());
+			sampleClient.publish(getOutboundInterface().getMQTTTopic(), message);
+			fw.write("Message published\n");
+			fw.flush();
 
-				sampleClient.close();
-				
-				fw.write("SUCCESS\n");
-				fw.flush();
+			sampleClient.disconnect();
+			fw.write("Disconnected\n\n");
+			fw.flush();
 
-				fw.close();
+			sampleClient.close();
 
-			}
-			catch (MqttException me)
-			{
-				errorDescription = "\n\nError Reason : " + me.getReasonCode() + "\n" + "Error Message : " + me.getReasonCode() + "\n" + "Error Location : " + me.getReasonCode() + "\n" + "Error Cause : " + me.getReasonCode() + "\n" + "Error Exception : " + me
-						+ "\n\n";
-
-				fw.write(errorDescription);
-				fw.write("SUCCESS\n");
-				fw.flush();
-
-				logger.debug(errorDescription);
-
-			}
-			finally
-			{
-				fw.close();
-				fw = null;
-				persistence = null;
-				sampleClient = null;
-				connOpts = null;
-				message = null;
-			}
+			fw.write("SUCCESS\n");
+			fw.flush();
 
 			//////// MQTT Code End
 
 			FileUtils.deleteQuietly(new File(finalFilename));
-			FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
-			tempFilename = null;
-			finalFilename = null;
+			FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
 			result = true;
 
 		}
 		catch (Exception ex)
 		{
-			result = false;
-			logger.error(errorDescription+ex.getMessage());
-			Common.emailqueue.addToQueue("Error", "Error Writing File [" + fullPath + "]", errorDescription+ex.getMessage() + "\n\n", "");
+			logger.error("Message failed to process.");
+			Common.emailqueue.addToQueue("Error", "Error with MQTT message send [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+		}
+		finally
+		{
+			try
+			{
+				fw.close();
+				fw = null;
 
+			}
+			catch (Exception ex)
+			{
+				// Suppress Error
+			}
+			fullPath=null;
+			tempFilename = null;
+			finalFilename = null;
+			persistence = null;
+			sampleClient = null;
+			connOpts = null;
+			message = null;
 		}
 
 		return result;

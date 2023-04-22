@@ -27,20 +27,23 @@ public class InboundConnectorEmail extends InboundConnectorABSTRACT
 
 		logger.debug("connectorLoad [" + fullFilename + "]");
 		boolean result = false;
+		DocumentBuilderFactory factory = null;
+		DocumentBuilder builder = null;
+		Element message = null;
+		Element content = null;
 
 		if (backupInboundFile(fullFilename))
 		{
 			try
 			{
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
+				factory = DocumentBuilderFactory.newInstance();
+				builder = factory.newDocumentBuilder();
 				
 				data = builder.newDocument();
 
-				Element message = (Element) data.createElement("email");
+				message = (Element) data.createElement("email");
 
-
-				Element content = (Element) data.createElement("inputFilename");
+				content = (Element) data.createElement("inputFilename");
 
 				content.setTextContent(fullFilename);
 
@@ -54,6 +57,13 @@ public class InboundConnectorEmail extends InboundConnectorABSTRACT
 			{
 				logger.error("connectorLoad " + getType() + " " + e.getMessage());
 				Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+			}
+			finally
+			{
+				builder = null;
+				factory = null;
+				message = null;
+				content = null;
 			}
 		}
 		return result;

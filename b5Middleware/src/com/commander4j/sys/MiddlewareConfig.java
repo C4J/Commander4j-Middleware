@@ -249,9 +249,19 @@ public class MiddlewareConfig
 						String mqttQos = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/mqtt/qos").trim();
 
 						String host_ip = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/host/ip").trim();
+						
 						String host_port = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/host/port").trim();
-						String host_repeat = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/host/repeat").trim();
-
+						if (host_port.equals(""))
+						{
+							host_port = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/host/socket").trim();
+						}
+						
+						String host_repeat = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/host/copies").trim();
+						if (host_repeat.equals(""))
+						{
+							host_repeat = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/host/repeat").trim();
+						}
+							
 						OutboundInterface outboundInterface = new OutboundInterface(map, outputDescription);
 
 						outboundInterface.setId(outputId);

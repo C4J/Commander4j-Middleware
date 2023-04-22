@@ -2,6 +2,7 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -28,7 +29,6 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		String errorDescription = "";
 
 		filename = getOutboundInterface().get83GUIDFilename(prefix, filename);
 
@@ -36,106 +36,117 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 
 		logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
 
-		try
+		if (fullPath.endsWith("." + getType().toLowerCase()) == false)
 		{
+			fullPath = fullPath + "." + getType().toLowerCase();
+		}
 
-			if (fullPath.endsWith("." + getType().toLowerCase()) == false)
+		String tempFilename = fullPath + ".tmp";
+		String finalFilename = fullPath;
+
+		FileUtils.deleteQuietly(new File(tempFilename));
+
+		Socket socket = null;
+		String send = "";
+		String eol = "";
+
+		PrintWriter out = null;
+		FileWriter fw = null;
+
+		try // File Output
+		{
+			fw = new FileWriter(tempFilename);
+
+			JXMLDocument document = new JXMLDocument();
+			document.setDocument(getData());
+
+			if (document.findXPath("//data/line[contains(text(),'*EOF*')]").equals("*EOF*"))
 			{
-				fullPath = fullPath + "." + getType().toLowerCase();
+
+				socket = new Socket(getOutboundInterface().getHostIP(), getOutboundInterface().getHostPort());
+				out = new PrintWriter(socket.getOutputStream(), true);
+
+				for (int rep = 0; rep < getOutboundInterface().getHostRepeat(); rep++)
+				{
+
+					int line = 1;
+					while (util.replaceNullStringwithBlank(document.findXPath("/data/line[" + String.valueOf(line) + "]")).equals("*EOF*") == false)
+					{
+						send = util.replaceNullStringwithBlank(document.findXPath("/data/line[" + String.valueOf(line) + "]"));
+						eol = util.replaceNullStringwithBlank(document.findXPath("/data/line[" + String.valueOf(line) + "]/@eol"));
+
+						if (eol.equals("") == false)
+						{
+							eol = eol.replace("cr", "\r");
+							eol = eol.replace("lf", "\n");
+						}
+
+						if (send.equals("*EOF*") == false)
+						{
+							out.print(send + eol);
+							out.flush();
+							fw.write(send + "\n");
+							fw.flush();
+							logger.debug(send);
+						}
+						line++;
+					}
+				}
+
+				out.close();
+				socket.close();
+
+				FileUtils.deleteQuietly(new File(finalFilename));
+
+				FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
+
+				tempFilename = null;
+				finalFilename = null;
+
+				result = true;
+
+			}
+			else
+			{
+				logger.error("Missing *EOF* in input file");
 			}
 
-			String tempFilename = fullPath + ".tmp";
-			String finalFilename = fullPath;
-
-			Socket socket;
-			String send = "";
-			String eol = "";
-			PrintWriter out;
-
-			FileWriter fw = new FileWriter(tempFilename);
+		}
+		catch (Exception err)
+		{
+			logger.error(err.getMessage());
+			Common.emailqueue.addToQueue("Error", "Error writing to socket [" + fullPath + "]", err.getMessage() + "\n\n", "");
+		}
+		finally
+		{
 			try
 			{
-				JXMLDocument document = new JXMLDocument();
-				document.setDocument(getData());
-
-				if (document.findXPath("//data/line[contains(text(),'*EOF*')]").equals("*EOF*"))
-				{
-
-					socket = new Socket(getOutboundInterface().getHostIP(), getOutboundInterface().getHostPort());
-					out = new PrintWriter(socket.getOutputStream(), true);
-
-					for (int rep = 0; rep < getOutboundInterface().getHostRepeat(); rep++)
-					{
-
-						int line = 1;
-						while (util.replaceNullStringwithBlank(document.findXPath("/data/line[" + String.valueOf(line) + "]")).equals("*EOF*") == false)
-						{
-							send = util.replaceNullStringwithBlank(document.findXPath("/data/line[" + String.valueOf(line) + "]"));
-							eol = util.replaceNullStringwithBlank(document.findXPath("/data/line[" + String.valueOf(line) + "]/@eol"));
-
-							if (eol.equals("") == false)
-							{
-								eol = eol.replace("cr", "\r");
-								eol = eol.replace("lf", "\n");
-							}
-
-							if (send.equals("*EOF*") == false)
-							{
-								out.print(send + eol);
-								out.flush();
-								fw.write(send + "\n");
-								fw.flush();
-								logger.debug(send);
-							}
-							line++;
-						}
-					}
-
-					out.close();
-					socket.close();
-
-					result = true;
-				}
-				else
-				{
-
-					errorDescription = "Missing *EOF* in input file";
-				}
-
-			}
-			catch (Exception e)
-			{
-				errorDescription = e.getMessage();
-				fw.write("*ERROR*\n");
-				fw.write(e.getMessage());
-
-			}
-			finally
-			{
-				fw.flush();
 				fw.close();
-				send = null;
+			}
+			catch (IOException e)
+			{
+
 			}
 
-			FileUtils.deleteQuietly(new File(finalFilename));
-			FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
+			out.close();
 
-			tempFilename = null;
-			finalFilename = null;
+			try
+			{
+				socket.close();
+			}
+			catch (IOException ex)
+			{
 
-		}
-		catch (Exception ex)
-		{
-			errorDescription = ex.getMessage();
-		}
-
-		if (result == false)
-		{
-			logger.error(errorDescription);
-			Common.emailqueue.addToQueue("Error", "Error writing to socket [" + fullPath + "]", errorDescription + "\n\n", "");
+			}
+			
+			socket = null;
+			
+			out = null;
+			
+			fw=null;
 		}
 
 		return result;
-	}
 
+	}
 }

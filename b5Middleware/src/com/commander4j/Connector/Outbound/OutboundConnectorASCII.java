@@ -2,6 +2,7 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.xml.transform.TransformerException;
@@ -10,9 +11,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
+
 import com.commander4j.sys.Common;
 import com.commander4j.sys.FixedASCIIColumns;
-import com.commander4j.util.JFileIO;
+
 import com.commander4j.util.JXMLDocument;
 
 import ABSTRACT.com.commander4j.Connector.OutboundConnectorABSTRACT;
@@ -21,7 +23,7 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((OutboundConnectorASCII.class));
-	JFileIO jfileio = new JFileIO();
+
 	private LinkedList<FixedASCIIColumns> parseCols = new LinkedList<FixedASCIIColumns>();
 	private int maxColumn = 0;
 
@@ -58,13 +60,13 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 	}
 
 	@Override
-	public boolean connectorSave(String path,String prefix,String filename)
+	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		
-		filename = getOutboundInterface().get83GUIDFilename(prefix,filename);
-		
-		String fullPath = path+File.separator+filename;
+
+		filename = getOutboundInterface().get83GUIDFilename(prefix, filename);
+
+		String fullPath = path + File.separator + filename;
 
 		parsePattern(getOutboundInterface().getOutputPattern());
 
@@ -88,30 +90,40 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 		try
 		{
 			System.out.println(document.documentToString(getData()));
-		} catch (TransformerException e)
+		}
+		catch (TransformerException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		if (rows > 0)
+		FileWriter fw = null;
+		String tempFilename = null;
+		String finalFilename = null;
+		String rowdata = null;
+		char[] rowdataArray = null;
+		
+		try
 		{
-			if (columns > 0)
+			if (rows > 0)
 			{
-				try
+				if (columns > 0)
 				{
+
 					fullPath = fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase();
-					String tempFilename = fullPath + ".tmp";
-					String finalFilename = fullPath;					
-					
-					FileWriter fw = new FileWriter(tempFilename);
+					tempFilename = fullPath + ".tmp";
+					finalFilename = fullPath;
+
+					FileUtils.deleteQuietly(new File(tempFilename));
+
+					fw = new FileWriter(tempFilename);
 
 					// Read new row value from XML
 
 					for (int r = 1; r <= rows; r++)
 					{
-						String rowdata = util.padSpace(maxColumn);
-						char[] rowdataArray = rowdata.toCharArray();
+						rowdata = util.padSpace(maxColumn);
+						rowdataArray = rowdata.toCharArray();
 
 						// Read new col value from XML
 
@@ -123,7 +135,8 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 								String xpath = "//data/row[@id='" + String.valueOf(r) + "']/col[@id='" + String.valueOf(c) + "']";
 								String dataString = util.replaceNullStringwithBlank(document.findXPath(xpath).trim());
 
-								// Get the position of the data within the ASCII
+								// Get the position of the data within the
+								// ASCII
 								// file for this column.
 								FixedASCIIColumns coldef = parseCols.get(c - 1);
 
@@ -133,19 +146,22 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 									// For each column in the data field
 									for (int x = 0; x < dataString.length(); x++)
 									{
-										// Make sure that the data string fits
+										// Make sure that the data string
+										// fits
 										// within output column range
 										if ((coldef.start + x) <= coldef.end)
 										{
-											// Update character in output row
+											// Update character in output
+											// row
 											rowdataArray[coldef.start + x - 1] = dataString.charAt(x);
 										}
 									}
 								}
 								logger.debug("row=[" + String.valueOf(r) + "] col=[" + String.valueOf(c) + "] data=[" + dataString + "]");
-							} else
+							}
+							else
 							{
-								logger.debug("Igored row=[" + String.valueOf(r) + "] col=[" + String.valueOf(c) + "] - no column defined in config.xml");
+								logger.debug("Ignored row=[" + String.valueOf(r) + "] col=[" + String.valueOf(c) + "] - no column defined in config.xml");
 							}
 						}
 
@@ -159,22 +175,43 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 
 					// Close output file
 					fw.close();
-					
-					FileUtils.deleteQuietly( new File(finalFilename));
-					FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
-					
-					result=true;
 
-				} catch (Exception ex)
-				{
-					logger.error(ex.getMessage());
-					Common.emailqueue.addToQueue("Error", "Error Writing File ["+fullPath+"]", ex.getMessage()+"\n\n", "");
+					FileUtils.deleteQuietly(new File(finalFilename));
+
+					FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
+
+					result = true;
 
 				}
 			}
 		}
-
-		document = null;
+		catch (Exception ex)
+		{
+			logger.error("Message failed to process.");
+			Common.emailqueue.addToQueue("Error", "Error writing to ASCII file [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+		}
+		finally
+		{
+			try
+			{
+				fw.close();
+			}
+			catch (IOException e)
+			{
+				// Suppress Error
+			}
+			
+			fw=null;
+			document = null;
+			fullPath = null;
+			tempFilename = null;
+			finalFilename = null;
+			rowdata = null;
+			rowdataArray = null;
+			document = null;
+			cl=null;
+			rw=null;
+		}
 
 		return result;
 	}

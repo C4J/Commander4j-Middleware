@@ -2,6 +2,7 @@ package com.commander4j.Connector.Inbound;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -92,11 +93,15 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
+			CSVParser csvParser = null;
+			CSVReader reader = null;
+			String[] nextLine = null; 
+			Element message = null;
+			
 			try
 			{
 				result = true;
-				CSVParser csvParser;
-				CSVReader reader;
+
 				if (disableQuotes)
 				{
 					csvParser = new CSVParserBuilder().withSeparator(seperator).withIgnoreQuotations(true).build();
@@ -107,14 +112,14 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 					csvParser = new CSVParserBuilder().withSeparator(seperator).withIgnoreQuotations(false).withQuoteChar(quote).build();
 					reader = new CSVReaderBuilder(new FileReader(fullFilename)).withCSVParser(csvParser).build();
 				}
-				String[] nextLine;
+
 
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
 
 				data = builder.newDocument();
 
-				Element message = (Element) data.createElement("data");
+				message = (Element) data.createElement("data");
 				message.setAttribute("type", Connector_CSV);
 
 				while ((nextLine = reader.readNext()) != null)
@@ -138,7 +143,6 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 					}
 					message.appendChild(xmlrow);
 				}
-				reader.close();
 
 				message.setAttribute("type", Connector_CSV);
 				message.setAttribute("cols", String.valueOf(maxcol));
@@ -155,6 +159,22 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 				Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+			}
+			finally
+			{
+				csvParser = null;
+				try
+				{
+					reader.close();
+				}
+				catch (IOException e)
+				{
+					//Suppress Error
+				}
+				
+				reader=null;
+				nextLine=null;
+				message=null;
 			}
 		}
 		return result;

@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
 import com.commander4j.sys.Common;
-import com.commander4j.util.JFileIO;
 import com.commander4j.util.JXMLDocument;
 
 import ABSTRACT.com.commander4j.Connector.OutboundConnectorABSTRACT;
@@ -16,7 +15,6 @@ public class OutboundConnectorEmail extends OutboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((OutboundConnectorEmail.class));
-	JFileIO jfileio = new JFileIO();
 
 	public OutboundConnectorEmail(OutboundInterface inter)
 	{
@@ -24,50 +22,55 @@ public class OutboundConnectorEmail extends OutboundConnectorABSTRACT
 	}
 
 	@Override
-	public boolean connectorSave(String path,String prefix,String filename)
+	public boolean connectorSave(String path, String prefix, String filename)
 	{
 		boolean result = false;
-		String fullPath = path+File.separator+filename;
 
 		JXMLDocument document = new JXMLDocument();
 		document.setDocument(getData());
 
 		String inputFilename = util.replaceNullStringwithBlank(document.findXPath("//email/inputFilename").trim());
-		
+
 		String outputFilename = path;
-		
+
 		if (outputFilename.endsWith(File.separator))
 		{
 			outputFilename = outputFilename + filename;
 		}
 		else
 		{
-			outputFilename = outputFilename +File.separator+filename;
+			outputFilename = outputFilename + File.separator + filename;
 		}
-		
+
 		logger.debug("connectorLoad " + getType() + " inputFilename" + inputFilename);
 		logger.debug("connectorLoad " + getType() + " outputFilename" + outputFilename);
 
 		try
 		{
 			FileUtils.deleteQuietly(new File(outputFilename));
+
 			FileUtils.moveFileToDirectory(new File(inputFilename), new File(path), false);
-			
-			result=true;
-			
+
 			String addresses = getOutboundInterface().getEmailListID();
 			String subject = getOutboundInterface().getEmailSubject();
-			String message = getOutboundInterface().getEmailMessage()+"\n\n";
-			
-			Common.emailqueue.addToQueue(addresses, subject,message,outputFilename);
+			String message = getOutboundInterface().getEmailMessage() + "\n\n";
 
-		} catch (Exception e)
-		{
-			logger.error("connectorLoad " + getType() + " " + e.getMessage());
-			Common.emailqueue.addToQueue("Error", "Error writing " + getType(), "connectorSave " + getType() + " " + e.getMessage() + "\n\n" + fullPath, "");
+			Common.emailqueue.addToQueue(addresses, subject, message, outputFilename);
+
+			result = true;
+
 		}
-
-		document = null;
+		catch (Exception ex)
+		{
+			logger.error("Message failed to process.");
+			Common.emailqueue.addToQueue("Error", "Unable to Email file [" + inputFilename + "]", ex.getMessage() + "\n\n", "");
+		}
+		finally
+		{
+			document = null;
+			inputFilename = null;
+			outputFilename = null;
+		}
 
 		return result;
 	}
