@@ -29,7 +29,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 	protected Document data;
 
-	private InboundInterface inint;
+	protected InboundInterface inint;
 
 	public Boolean backupInboundFile(String fullFilename)
 	{
@@ -126,7 +126,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		setFilename(filename);
 		if (connectorLoad(inint.getInputPath() + File.separator + filename))
 		{
-			if ((getType().equals(Connector_EMAIL) == false) && (getType().equals(Connector_PDF_PRINT) == false))
+			if ((getType().equals(Connector_EMAIL) == false) && (getType().equals(Connector_PDF_PRINT) == false) && (getType().equals(Connector_RAW) == false))
 			{
 				if (connectorDelete(filename))
 				{

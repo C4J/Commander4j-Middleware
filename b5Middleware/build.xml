@@ -10,7 +10,7 @@
     <property name="source" value="11"/>
     <path id="b5Middleware.classpath">
         <pathelement location="bin"/>
-        <pathelement location="lib/poi/lib/commons-io-2.12.0-20230320.221451-21.jar"/>
+        <pathelement location="lib/poi/lib/commons-io-2.12.0-SNAPSHOT.jar"/>
         <pathelement location="lib/log/log4j-api-2.20.0.jar"/>
         <pathelement location="lib/log/log4j-core-2.20.0.jar"/>
         <pathelement location="lib/saxon/jline-2.14.6.jar"/>
@@ -46,7 +46,7 @@
     </path>
     <path id="run.StartMain.classpath">
         <path refid="b5Middleware.classpath"/>
-        <pathelement location="lib/poi/lib/commons-io-2.12.0-20230320.221451-21.jar"/>
+        <pathelement location="lib/poi/lib/commons-io-2.12.0-SNAPSHOT.jar"/>
         <pathelement location="lib/log/log4j-api-2.20.0.jar"/>
         <pathelement location="lib/log/log4j-core-2.20.0.jar"/>
         <pathelement location="lib/saxon/jline-2.14.6.jar"/>

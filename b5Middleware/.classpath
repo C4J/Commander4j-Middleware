@@ -7,7 +7,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/poi/lib/commons-io-2.12.0-20230320.221451-21.jar"/>
+	<classpathentry kind="lib" path="lib/poi/lib/commons-io-2.12.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/log/log4j-api-2.20.0.jar"/>
 	<classpathentry kind="lib" path="lib/log/log4j-core-2.20.0.jar"/>
 	<classpathentry kind="lib" path="lib/saxon/jline-2.14.6.jar"/>

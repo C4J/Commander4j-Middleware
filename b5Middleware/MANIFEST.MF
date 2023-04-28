@@ -15,7 +15,7 @@ Class-Path: lib/log/log4j-api-2.20.0.jar
  lib/poi/lib/SparseBitSet-1.2.jar 
  lib/poi/lib/commons-codec-1.15.jar 
  lib/poi/lib/commons-collections4-4.4.jar 
- lib/poi/lib/commons-io-2.12.0-20230320.221451-21.jar 
+ lib/poi/lib/commons-io-2.12.0-SNAPSHOT.jar 
  lib/poi/lib/commons-math3-3.6.1.jar 
  lib/poi/ooxml-lib/commons-compress-1.21.jar 
  lib/poi/ooxml-lib/commons-logging-1.2.jar 

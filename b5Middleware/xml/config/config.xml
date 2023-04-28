@@ -572,11 +572,6 @@
             <XSLT/>
         </output>
 
-        <output id="out2" enabed="Y" description="Write Copy 2">
-            <path>./interface/output/427 (GEN Copy 2)</path>
-            <type>RAW</type>
-            <XSLT/>
-        </output>
     </map>
 
     <map id="map128" enabed="Y" description="NES C4J ProdDec to Marcellus XML &amp; B2MML S95 XML">
