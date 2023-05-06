@@ -18,8 +18,27 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.w3c.dom.Document;
 
+import com.commander4j.sys.Common;
+
 public class Utility
 {
+	
+	public void retryDelay()
+	{
+		if (Common.retryOpenFileDelay == 0)
+		{
+			Common.retryOpenFileDelay = 1000;
+		}
+		
+		try
+		{
+			Thread.sleep(Common.retryOpenFileDelay);
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
 	
 	public String getISODateTimeString()
 	{

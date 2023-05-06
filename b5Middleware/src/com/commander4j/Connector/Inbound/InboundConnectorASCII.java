@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 
@@ -90,104 +91,134 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 		logger.debug("connectorLoad [" + fullFilename + "]");
 		boolean result = false;
 
-		//backupInboundFile(fullFilename);
+		// backupInboundFile(fullFilename);
 
 		if (backupInboundFile(fullFilename))
 		{
 
-			String line = null;
-			FileReader fileReader = null;
-			BufferedReader bufferedReader  = null;
-			DocumentBuilderFactory factory  = null;
-			DocumentBuilder builder  = null;
-			Element message = null;
+			Integer retries = Common.retryOpenFileCount;
+			Integer count = 0;
 
-			try
+			do
 			{
 
-				fileReader = new FileReader(fullFilename);
+				String line = null;
+				FileReader fileReader = null;
+				BufferedReader bufferedReader = null;
+				DocumentBuilderFactory factory = null;
+				DocumentBuilder builder = null;
+				Element message = null;
 
-				bufferedReader = new BufferedReader(fileReader);
-
-				factory = DocumentBuilderFactory.newInstance();
-				builder = factory.newDocumentBuilder();
-
-				data = builder.newDocument();
-
-				message = (Element) data.createElement("data");
-				message.setAttribute("type", Connector_ASCII);
-
-				row = 0;
-				while ((line = bufferedReader.readLine()) != null)
+				try
 				{
-					row++;
-					Element xmlrow = (Element) data.createElement("row");
-					xmlrow.setAttribute("id", String.valueOf(row));
-					xmlrow.setNodeValue(String.valueOf(row));
+					count++;
+					fileReader = new FileReader(fullFilename);
 
-					System.out.println(line);
+					bufferedReader = new BufferedReader(fileReader);
 
-					LinkedList<FixedASCIIData> nextLine = getASCIIColumnData(line);
+					factory = DocumentBuilderFactory.newInstance();
+					builder = factory.newDocumentBuilder();
 
-					for (int x = 0; x < getPatternColumnCount(); x++)
+					data = builder.newDocument();
+
+					message = (Element) data.createElement("data");
+					message.setAttribute("type", Connector_ASCII);
+
+					row = 0;
+					while ((line = bufferedReader.readLine()) != null)
 					{
+						row++;
+						Element xmlrow = (Element) data.createElement("row");
+						xmlrow.setAttribute("id", String.valueOf(row));
+						xmlrow.setNodeValue(String.valueOf(row));
 
-						System.out.println(nextLine.get(x).columnId);
-						System.out.println(nextLine.get(x).columnData);
+						System.out.println(line);
 
-						Element xmlcol = addElement(data, "col", nextLine.get(x).columnData);
-						xmlcol.setAttribute("id", String.valueOf(nextLine.get(x).columnId));
-						xmlcol.setNodeValue(nextLine.get(x).columnData);
-						xmlrow.appendChild(xmlcol);
+						LinkedList<FixedASCIIData> nextLine = getASCIIColumnData(line);
+
+						for (int x = 0; x < getPatternColumnCount(); x++)
+						{
+
+							System.out.println(nextLine.get(x).columnId);
+							System.out.println(nextLine.get(x).columnData);
+
+							Element xmlcol = addElement(data, "col", nextLine.get(x).columnData);
+							xmlcol.setAttribute("id", String.valueOf(nextLine.get(x).columnId));
+							xmlcol.setNodeValue(nextLine.get(x).columnData);
+							xmlrow.appendChild(xmlcol);
+
+						}
+						message.appendChild(xmlrow);
+					}
+
+					message.setAttribute("type", Connector_ASCII);
+					message.setAttribute("cols", String.valueOf(getPatternColumnCount()));
+					message.setAttribute("rows", String.valueOf(row));
+					message.setAttribute("filename", (new File(fullFilename)).getName());
+
+					data.appendChild(message);
+
+					count = retries;
+					result = true;
+
+				}
+				catch (Exception ex)
+				{
+					if (count >= retries)
+					{
+						result = false;
+
+						try
+						{
+							FileUtils.moveFile(FileUtils.getFile(fullFilename), FileUtils.getFile(fullFilename + ".error"));
+						}
+						catch (IOException e)
+						{
+
+						}
+
+						System.out.println("Unable to open file '" + fullFilename + "'");
+						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
+						Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to "+fullFilename+".error", "");
+					}
+					else
+					{
+						logger.error("connectorLoad " + getType() + " parse attempt (" + count + " of " + retries + ") of [" + fullFilename + " [" + ex.getMessage() + "]", "");
+
+						util.retryDelay();
 
 					}
-					message.appendChild(xmlrow);
 				}
+				finally
+				{
 
-				message.setAttribute("type", Connector_ASCII);
-				message.setAttribute("cols", String.valueOf(getPatternColumnCount()));
-				message.setAttribute("rows", String.valueOf(row));
-				message.setAttribute("filename", (new File(fullFilename)).getName());
+					try
+					{
+						bufferedReader.close();
+					}
+					catch (IOException e)
+					{
+						// Suppress Error
+					}
+					bufferedReader = null;
 
-				data.appendChild(message);
-				
-				result = true;
+					try
+					{
+						fileReader.close();
+					}
+					catch (IOException e)
+					{
+						// Suppress Error
+					}
+					fileReader = null;
 
-			} catch (Exception ex)
-			{
-				System.out.println("Unable to open file '" + fullFilename + "'");
-				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error reading "+getType(), "connectorLoad " + getType() + " " + ex.getMessage()+"\n\n"+fullFilename, "");
-				result = false;
-			} 
-			finally
-			{
-				
-				try
-				{
-					bufferedReader.close();
+					line = null;
+					factory = null;
+					builder = null;
+					message = null;
 				}
-				catch (IOException e)
-				{
-					// Suppress Error
-				}
-				bufferedReader  = null;
-				
-				try
-				{
-					fileReader.close();
-				}
-				catch (IOException e)
-				{
-					// Suppress Error
-				}
-				fileReader = null;
-				
-				line = null;
-				factory  = null;
-				builder  = null;
-				message = null;
 			}
+			while (count < retries);
 		}
 
 		return result;

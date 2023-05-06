@@ -16,7 +16,7 @@ public class StartMain
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
 	public MiddlewareConfig cfg;
-	public static String version = "4.00";
+	public static String version = "4.03";
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;
@@ -140,7 +140,7 @@ public class StartMain
 		logger.debug("*************************");
 		
 		
-		Common.emailqueue.addToQueue("Monitor", "Stopping ["+Common.configName+"] on "+ util.getClientName(), statistics, "");
+		Common.emailqueue.addToQueue("Monitor", "Stopping ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), statistics, "");
 		
 		
 		try

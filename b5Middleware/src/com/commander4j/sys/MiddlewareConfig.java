@@ -106,14 +106,14 @@ public class MiddlewareConfig
 		temp = doc.findXPath("//config/retryOpenFileCount");
 		if (temp.equals(""))
 		{
-			temp="0";
+			temp="1";
 		}
 		Common.retryOpenFileCount = Integer.valueOf(temp);
 		
 		temp = doc.findXPath("//config/retryOpenFileDelay");
 		if (temp.equals(""))
 		{
-			temp="500";
+			temp="1000";
 		}
 		Common.retryOpenFileDelay = Integer.valueOf(temp);
 		

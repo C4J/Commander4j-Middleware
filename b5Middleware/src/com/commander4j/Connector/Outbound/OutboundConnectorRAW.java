@@ -34,7 +34,6 @@ public class OutboundConnectorRAW extends OutboundConnectorABSTRACT
 
 		logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
 
-
 		JXMLDocument document = new JXMLDocument();
 		document.setDocument(getData());
 
@@ -42,15 +41,18 @@ public class OutboundConnectorRAW extends OutboundConnectorABSTRACT
 
 		try
 		{
-			FileUtils.deleteQuietly(new File(tempFilename));
-			
-			FileUtils.deleteQuietly(new File(finalFilename));
+			if (new File(sourceFile).exists())
+			{
+				FileUtils.deleteQuietly(new File(tempFilename));
 
-			FileUtils.moveFile(new File(sourceFile), new File(tempFilename));
-			
-			FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
-			
-			FileUtils.deleteQuietly(new File(sourceFile));
+				FileUtils.deleteQuietly(new File(finalFilename));
+
+				FileUtils.moveFile(new File(sourceFile), new File(tempFilename));
+
+				FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
+
+				FileUtils.deleteQuietly(new File(sourceFile));
+			}
 
 			result = true;
 

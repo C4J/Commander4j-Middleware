@@ -35,7 +35,7 @@ public class OutboundConnectorXML extends OutboundConnectorABSTRACT
 
 		String fullPath = path + File.separator + filename;
 
-		logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
+		logger.debug("connectorSave [" + fullPath + "]");
 
 		DOMImplementationLS DOMiLS = null;
 		FileOutputStream FOS = null;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="10.0.5" transformSequenceNumber="10">
   <directoryPresets config="./xslt/referenceData.xml" />
-  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java11/b5middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="4.00" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="11" javaMaxVersion="11">
+  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java11/b5middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="4.03" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="11" javaMaxVersion="11">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
         <language id="da" />
@@ -22,7 +22,6 @@
       <mountPoint id="35" location="lib" />
       <mountPoint id="36" location="logs" />
       <mountPoint id="295" location="xslt" />
-      <mountPoint id="296" location="samples" />
       <mountPoint id="349" location="project" />
       <mountPoint id="402" location="interface" />
       <mountPoint id="403" location="interface/input" />
@@ -64,11 +63,6 @@
       <fileEntry mountPoint="295" file="./xslt/configData.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="295" file="./xslt/referenceData.xml" overwriteMode="2" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="295" file="./xslt/UOMData.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <dirEntry mountPoint="296" file="./samples" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="samples">
-        <exclude>
-          <entry location=".DS_Store" />
-        </exclude>
-      </dirEntry>
       <dirEntry mountPoint="349" file="./project" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="project" />
       <dirEntry mountPoint="403" file="./interface/input" uninstallMode="1" overrideUninstallMode="true" subDirectory="input">
         <exclude>
@@ -102,7 +96,7 @@
   <launchers>
     <launcher name="Middleware GUI" id="38" icnsFile="./images/icons/iFace4j_Icons/MyIcon.icns">
       <executable name="Middleware_GUI" iconSet="true" iconFile="./images/icons/iFace4j_Icons/icon.ico" executableDir="." executableMode="gui" singleInstance="true" dpiAware="false" />
-      <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms256m -Xmx1024m -Dlog4j.configuration=file:xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="GUI">
+      <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms128m -Xmx512m -Dlog4j.configuration=file:xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="GUI">
         <classPath>
           <archive location="c4jMiddleware.jar" failOnError="false" />
           <directory location="xml/config" failOnError="false" />
@@ -119,7 +113,7 @@
     </launcher>
     <launcher name="Middleware Service" id="149" icnsFile="./images/icons/iFace4j_Icons/MyIcon.icns">
       <executable name="Middleware_Service" iconSet="true" iconFile="./images/icons/iFace4j_Icons/icon.ico" executableDir="." redirectStderr="false" executableMode="service" singleInstance="true" dpiAware="false" />
-      <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms256m -Xmx1024m -Dlog4j.configuration=file:xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="Service">
+      <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms128m -Xmx512m -Dlog4j.configuration=file:xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="Service">
         <classPath>
           <archive location="c4jMiddleware.jar" failOnError="false" />
           <directory location="xml/config" failOnError="false" />

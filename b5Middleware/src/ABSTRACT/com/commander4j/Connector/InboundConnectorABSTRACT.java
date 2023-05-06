@@ -2,11 +2,9 @@ package ABSTRACT.com.commander4j.Connector;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.commons.io.FileDeleteStrategy;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,13 +21,18 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	private boolean enabled = true;
 	private String type = "";
 	private String filename = "";
-	Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorABSTRACT.class));
+	private String destination = "";
+	private Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorABSTRACT.class));
 	private Long inboundConnectorMessageCount = (long) 0;
 	protected Utility util = new Utility();
-
 	protected Document data;
 
 	protected InboundInterface inint;
+	
+	public boolean isBinaryFile()
+	{
+		return inint.isBinaryFile();
+	}
 
 	public Boolean backupInboundFile(String fullFilename)
 	{
@@ -45,14 +48,20 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			{
 				count++;
 
-				String destination = Common.logDir + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
-
+				destination = Common.logDir + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
+				
 				logger.debug("connectorLoad Backup [" + fullFilename + "] to [" + destination + "]");
-
-				Path from = Paths.get(fullFilename);
-				Path to = Paths.get(destination);
-				Files.copy(from, to);
-
+				
+				File fromFile = new File(fullFilename);
+				File toFile = new File(destination);
+				
+				FileUtils.deleteQuietly(toFile);
+				
+				FileUtils.copyFile(fromFile, toFile, false);
+				
+				fromFile = null;
+				toFile = null;
+				
 				count = retries;
 				result = true;
 
@@ -60,29 +69,33 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			catch (Exception ex)
 			{
 
-				if (count == retries)
+				if (count >= retries)
 				{
-					logger.error("connectorLoad unable to backup (" + count + " attempts) [" + fullFilename + "]");
+					logger.error("backupInboundFile unable to backup attempt (" + count + " attempts) for [" + fullFilename + "]");
+					
 					logger.error("Error message [" + ex.getMessage() + "]");
-					Common.emailqueue.addToQueue("Error", "Error backing up file", "Error backing up file " + filename + "[" + ex.getMessage() + "]", "");
+					
+					Common.emailqueue.addToQueue("Error", "Error backing up file", "Error backing up file \\n" + fullFilename + "\\nto\\n" + destination + "\\n[" + ex.getMessage() + "]", "");
 				}
 				else
 				{
-					logger.error("connectorLoad backup attempt (" + count + " of " + retries + ") of [" + fullFilename + "[" + ex.getMessage() + "]", "");
+					logger.error("backupInboundFile backup attempt (" + count + " of " + retries + ") for [" + fullFilename + "[" + ex.getMessage() + "]", "");
 
-					if (Common.retryOpenFileDelay > 0)
-					{
-						try
-						{
-							Thread.sleep(Common.retryOpenFileDelay);
-						}
-						catch (Exception e)
-						{
-
-						}
-					}
+					util.retryDelay();
+					
 				}
 
+			}
+			finally 
+			{
+				try
+				{
+					
+				}
+				catch (Exception ex)
+				{
+					
+				}
 			}
 
 		}
@@ -104,7 +117,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	public InboundConnectorABSTRACT(String type, InboundInterface inter)
 	{
 		this.type = type;
-		this.inint = inter;
+		this.inint = inter;		
 	}
 
 	public void setEnabled(boolean enabled)
@@ -126,7 +139,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		setFilename(filename);
 		if (connectorLoad(inint.getInputPath() + File.separator + filename))
 		{
-			if ((getType().equals(Connector_EMAIL) == false) && (getType().equals(Connector_PDF_PRINT) == false) && (getType().equals(Connector_RAW) == false))
+			if (isBinaryFile()==false)
 			{
 				if (connectorDelete(filename))
 				{

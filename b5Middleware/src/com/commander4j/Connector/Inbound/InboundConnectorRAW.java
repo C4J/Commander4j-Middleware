@@ -31,6 +31,8 @@ public class InboundConnectorRAW extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
+			//here
+			
 			try
 			{
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

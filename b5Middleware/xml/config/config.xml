@@ -4,8 +4,8 @@
     <logPath/>
     <XSLTPath/>
     <logArchiveRetentionDays>3</logArchiveRetentionDays>
-    <openFileRetries>3</openFileRetries>
-    <openFileRetryMilliseconds>1000</openFileRetryMilliseconds>
+    <retryOpenFileCount>3</retryOpenFileCount>
+    <retryOpenFileDelay>1000</retryOpenFileDelay>
     <enableEmailNotifications>false</enableEmailNotifications>
     <statusReportTime>09:00:00</statusReportTime>
 

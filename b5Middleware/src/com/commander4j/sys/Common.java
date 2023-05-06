@@ -57,7 +57,7 @@ public class Common
 	public static EmailQueue emailqueue = new EmailQueue();
 	public static String statusReportTime = "00:00:00";
 	
-	public static Integer retryOpenFileCount = 0;
+	public static Integer retryOpenFileCount = 3;
 	public static Integer retryOpenFileDelay = 1000;
 
 }

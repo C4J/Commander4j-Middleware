@@ -1,6 +1,7 @@
 package com.commander4j.Interface.Inbound;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.transform.Source;
@@ -57,12 +58,12 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 		String prefix = getPrefix();
 		List<File> files = null;
 		Xslt30Transformer transformer = null;
-		JXMLDocument doc =null;
-		
-		Processor processor =null;
+		JXMLDocument doc = null;
+
+		Processor processor = null;
 		XsltCompiler compiler = null;
 		XsltExecutable stylesheet = null;
-		Serializer out  = null;
+		Serializer out = null;
 		Source xmlSource = null;
 
 		try
@@ -77,9 +78,11 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 			}
 
 			files = (List<File>) FileUtils.listFiles(dir, extensions, false);
-			
+
 			if (files.size() > 0)
 			{
+				logger.debug("Checked for files with extension " + Arrays.toString(extensions) + " found " + files.size());
+
 				for (File file : files)
 				{
 					if (file.length() > 0)
@@ -92,69 +95,84 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 							{
 
 								logger.debug("Processing [" + file.getName() + "]");
-								loadFileResult = true;
-								
+								loadFileResult = false;
+								writeSuccess = false;
+
 								if (connector.processInboundFile(file.getName()))
 								{
+
 									data = connector.getData();
 
-									filename_imported = util.getCurrentTimeStampString() + " INPUT_IMPORTED_" + connector.getType() + "_" + getId() + "_" + file.getName();
 
-									if (filename_imported.endsWith(".xml") == false)
+
+									if (isBinaryFile()==false)
+								//	if ((getType().equals(InboundConnectorINTERFACE.Connector_EMAIL) == false) && (getType().equals(InboundConnectorINTERFACE.Connector_PDF_PRINT) == false) && (getType().equals(InboundConnectorINTERFACE.Connector_RAW) == false))
 									{
-										filename_imported = filename_imported + ".xml";
-									}
+										filename_imported = util.getCurrentTimeStampString() + " INPUT_IMPORTED_" + connector.getType() + "_" + getId() + "_" + file.getName();
 
-									writeSuccess = jfileio.writeToDisk(Common.logDir, data, filename_imported);
-
-									if (getXSLTFilename().equals("") == false)
-									{
-
-										filename_transformed = util.getCurrentTimeStampString() + " INPUT_TRANSFORMED_" + connector.getType() + "_" + getId() + "_" + file.getName();
-
-										if (filename_transformed.endsWith(".xml") == false)
+										if (filename_imported.endsWith(".xml") == false)
 										{
-											filename_transformed = filename_transformed + ".xml";
+											filename_imported = filename_imported + ".xml";
 										}
 
-										xmlSource = new StreamSource(new File(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
-
-										source = new StreamSource(new File(Common.logDir + File.separator + filename_imported));
-										destination = new StreamResult(new File(Common.logDir + File.separator + filename_transformed));
-										xslt = new StreamSource(new File(getXSLTPath() + getXSLTFilename()));
-
-										processor = new Processor(Configuration.readConfiguration(xmlSource));
-										compiler = processor.newXsltCompiler();
-										stylesheet = compiler.compile(xslt);
-										out = processor.newSerializer(new File(Common.logDir + File.separator + filename_transformed));
-										out.setOutputProperty(Serializer.Property.METHOD, "xml");
-										out.setOutputProperty(Serializer.Property.INDENT, "yes");
-	
-										transformer = stylesheet.load30();
-										transformer.transform(source, out);
-
-										doc = new JXMLDocument();
-										loadFileResult = doc.setDocument(Common.logDir + File.separator + filename_transformed);
-										data = doc.getDocument();
-
-									}
-
-									if (writeSuccess && loadFileResult)
-									{
-										processConnectorToInterfaceData(connector.getFilename(), data);
-									}
-									else
-									{
-										if (writeSuccess == false)
+										writeSuccess = jfileio.writeToDisk(Common.logDir, data, filename_imported);
+										
+										if (getXSLTFilename().equals("") == false)
 										{
-											logger.error("Error Map [" + map.getId() + "] Unable to save inbound xml" + " " + filename_imported);
-											Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", "Unable to save inbound xml" + "\n\n", filename_imported);
+
+											filename_transformed = util.getCurrentTimeStampString() + " INPUT_TRANSFORMED_" + connector.getType() + "_" + getId() + "_" + file.getName();
+
+											if (filename_transformed.endsWith(".xml") == false)
+											{
+												filename_transformed = filename_transformed + ".xml";
+											}
+
+											xmlSource = new StreamSource(new File(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
+
+											source = new StreamSource(new File(Common.logDir + File.separator + filename_imported));
+											destination = new StreamResult(new File(Common.logDir + File.separator + filename_transformed));
+											xslt = new StreamSource(new File(getXSLTPath() + getXSLTFilename()));
+
+											processor = new Processor(Configuration.readConfiguration(xmlSource));
+											compiler = processor.newXsltCompiler();
+											stylesheet = compiler.compile(xslt);
+											out = processor.newSerializer(new File(Common.logDir + File.separator + filename_transformed));
+											out.setOutputProperty(Serializer.Property.METHOD, "xml");
+											out.setOutputProperty(Serializer.Property.INDENT, "yes");
+
+											transformer = stylesheet.load30();
+											transformer.transform(source, out);
+
+											doc = new JXMLDocument();
+											loadFileResult = doc.setDocument(Common.logDir + File.separator + filename_transformed);
+											data = doc.getDocument();
+
+										}
+
+										if (writeSuccess && loadFileResult)
+										{
+											processConnectorToInterfaceData(connector.getFilename(), data);
 										}
 										else
 										{
-											logger.error("Error Map [" + map.getId() + "] Unable to load inbound xml" + " " + filename_imported);
-											Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", "Unable to load inbound xml" + "\n\n", filename_imported);
+
+											if (writeSuccess == false)
+											{
+												logger.error("Error Map [" + map.getId() + "] Unable to save inbound xml" + " " + filename_imported);
+												Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", "Unable to save inbound xml" + "\n\n", filename_imported);
+											}
+
+											if (loadFileResult == false)
+											{
+												logger.error("Error Map [" + map.getId() + "] Unable to load inbound xml" + " " + filename_imported);
+												Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", "Unable to load inbound xml" + "\n\n", filename_imported);
+											}
+
 										}
+									}
+									else
+									{
+										 processConnectorToInterfaceData(connector.getFilename(),data);
 									}
 								}
 							}
@@ -173,10 +191,10 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 		}
 		finally
 		{
-			processor =null;
+			processor = null;
 			compiler = null;
 			stylesheet = null;
-			out  = null;
+			out = null;
 			dir = null;
 			extensions = null;
 			prefix = null;

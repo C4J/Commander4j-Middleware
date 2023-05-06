@@ -45,8 +45,19 @@ public abstract class InboundInterfaceABSTRACT extends TimerTask implements Inbo
 	private String csvOptions = "";
 	private String delimeter = "";
 	protected Utility util = new Utility();
+	private boolean binaryFile = false;
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundInterfaceABSTRACT.class));
+	
+	public boolean isBinaryFile()
+	{
+		return binaryFile;
+	}
+
+	public void setBinaryFile(boolean binaryFile)
+	{
+		this.binaryFile = binaryFile;
+	}
 	
 	public String getMapId()
 	{
@@ -258,34 +269,42 @@ public abstract class InboundInterfaceABSTRACT extends TimerTask implements Inbo
 		switch (type)
 		{
 		case InboundConnectorINTERFACE.Connector_PDF_PRINT:
+			setBinaryFile(true);
 			connector = new InboundConnectorPDF_PRINT((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_PDF_PRINT);
 			break;
 		case InboundConnectorINTERFACE.Connector_ASCII:
+			setBinaryFile(false);
 			connector = new InboundConnectorASCII((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_ASCII);
 			break;
 		case InboundConnectorINTERFACE.Connector_CSV:
+			setBinaryFile(false);
 			connector = new InboundConnectorCSV((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_CSV);
 			break;
 		case InboundConnectorINTERFACE.Connector_EMAIL:
+			setBinaryFile(true);
 			connector = new InboundConnectorEmail((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_EMAIL);
 			break;
 		case InboundConnectorINTERFACE.Connector_RAW:
+			setBinaryFile(true);
 			connector = new InboundConnectorRAW((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_RAW);
 			break;			
 		case InboundConnectorINTERFACE.Connector_Excel:
+			setBinaryFile(false);
 			connector = new InboundConnectorExcel((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_Excel);
 			break;			
 		case InboundConnectorINTERFACE.Connector_IDOC:
+			setBinaryFile(false);
 			connector = new InboundConnectorIDOC((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_IDOC);
 			break;
 		case InboundConnectorINTERFACE.Connector_XML:
+			setBinaryFile(false);
 			connector = new InboundConnectorXML((InboundInterface) this);
 			setInputFileMask(InboundConnectorINTERFACE.Mask_XML);
 			break;

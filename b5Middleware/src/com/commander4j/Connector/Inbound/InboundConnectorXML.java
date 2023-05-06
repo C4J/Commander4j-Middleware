@@ -1,10 +1,12 @@
 package com.commander4j.Connector.Inbound;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
@@ -32,28 +34,57 @@ public class InboundConnectorXML extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
-			DocumentBuilderFactory factory = null;
-			DocumentBuilder builder = null;
-			try
-			{
-				factory = DocumentBuilderFactory.newInstance();
-				builder = factory.newDocumentBuilder();
-				data = builder.parse(new File(fullFilename));
-				result = true;
-				
+			Integer retries = Common.retryOpenFileCount;
+			Integer count = 0;
 
+			do
+			{
 
-			} catch (Exception ex)
-			{
-				result = false;
-				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error reading "+getType(), "connectorLoad " + getType() + " " + ex.getMessage()+"\n\n"+fullFilename, "");
+				DocumentBuilderFactory factory = null;
+				DocumentBuilder builder = null;
+				try
+				{
+					count++;
+					factory = DocumentBuilderFactory.newInstance();
+					builder = factory.newDocumentBuilder();
+					data = builder.parse(new File(fullFilename));
+					count = retries;
+					result = true;
+
+				}
+				catch (Exception ex)
+				{
+					if (count >= retries)
+					{
+						result = false;
+
+						try
+						{
+							FileUtils.moveFile(FileUtils.getFile(fullFilename), FileUtils.getFile(fullFilename + ".error"));
+						}
+						catch (IOException e)
+						{
+
+						}
+
+						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
+						Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to "+fullFilename+".error", "");
+					}
+					else
+					{
+						logger.error("connectorLoad " + getType() + " parse attempt (" + count + " of " + retries + ") of [" + fullFilename + " [" + ex.getMessage() + "]", "");
+
+						util.retryDelay();
+
+					}
+				}
+				finally
+				{
+					factory = null;
+					builder = null;
+				}
 			}
-			finally
-			{
-				factory=null;
-				builder=null;
-			}
+			while (count < retries);
 
 		}
 
