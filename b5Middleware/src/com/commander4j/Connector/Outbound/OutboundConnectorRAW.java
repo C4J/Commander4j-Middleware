@@ -26,50 +26,59 @@ public class OutboundConnectorRAW extends OutboundConnectorABSTRACT
 	{
 		boolean result = false;
 
+		String[] multiPath = path.split(";");
 		filename = getOutboundInterface().get83GUIDFilename(prefix, filename);
-		String fullPath = path + File.separator + filename;
 
-		String tempFilename = fullPath + ".tmp";
-		String finalFilename = fullPath;
-
-		logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
-
-		JXMLDocument document = new JXMLDocument();
-		document.setDocument(getData());
-
-		String sourceFile = util.replaceNullStringwithBlank(document.findXPath("//RAW/@sourceFile").trim());
-
-		try
+		for (int temp = 0; temp < multiPath.length; temp++)
 		{
-			if (new File(sourceFile).exists())
+			String fullPath = multiPath[temp] + File.separator + filename;
+
+			String tempFilename = fullPath + ".tmp";
+			String finalFilename = fullPath;
+
+			logger.debug("connectorSave [" + fullPath + "." + getOutboundInterface().getOutputFileExtension().toLowerCase() + "]");
+
+			JXMLDocument document = new JXMLDocument();
+			document.setDocument(getData());
+
+			String sourceFile = util.replaceNullStringwithBlank(document.findXPath("//RAW/@sourceFile").trim());
+
+			try
 			{
-				FileUtils.deleteQuietly(new File(tempFilename));
+				if (new File(sourceFile).exists())
+				{
+					FileUtils.deleteQuietly(new File(tempFilename));
 
-				FileUtils.deleteQuietly(new File(finalFilename));
+					FileUtils.deleteQuietly(new File(finalFilename));
+					
+					FileUtils.copyFile(new File(sourceFile), new File(tempFilename), true);
 
-				FileUtils.moveFile(new File(sourceFile), new File(tempFilename));
+					FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
 
-				FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
+					if (temp == (multiPath.length - 1))
+					{
+						FileUtils.deleteQuietly(new File(sourceFile));
+					}
+				}
 
-				FileUtils.deleteQuietly(new File(sourceFile));
+				result = true;
+
+			}
+			catch (Exception ex)
+			{
+				logger.error("Message failed to process.");
+				Common.emailqueue.addToQueue("Error", "Unable to copy RAW file [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+			}
+			finally
+			{
+
+				fullPath = null;
+				tempFilename = null;
+				finalFilename = null;
+				document = null;
+				sourceFile = null;
 			}
 
-			result = true;
-
-		}
-		catch (Exception ex)
-		{
-			logger.error("Message failed to process.");
-			Common.emailqueue.addToQueue("Error", "Unable to copy RAW file [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
-		}
-		finally
-		{
-
-			fullPath = null;
-			tempFilename = null;
-			finalFilename = null;
-			document = null;
-			sourceFile = null;
 		}
 
 		return result;

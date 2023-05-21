@@ -298,10 +298,18 @@ public class MiddlewareConfig
 						outboundInterface.setCompareParam2_Type(outputParam2_Type);
 						outboundInterface.setComparator(outputComparitor);
 
-						if (fio.isValidDirectory(outputPath) == false)
+						String[] multiPath = outputPath.split(";");
+						
+						for (int temp2 = 0; temp2 < multiPath.length; temp2++)
 						{
-							directoryErrors.addLast("Map : [" + mapId + "] outputId : [" + outputId + "] Invalid Directory : " + outputPath);
+							String outputPath2 = multiPath[temp2];
+							
+							if (fio.isValidDirectory(outputPath2) == false)
+							{
+								directoryErrors.addLast("Map : [" + mapId + "] outputId : [" + outputId + "] Invalid Directory : " + outputPath2);
+							}
 						}
+						
 
 						logger.debug("Loading output connector : (" + outputId + ") " + outputDescription);
 

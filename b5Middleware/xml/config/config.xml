@@ -8,6 +8,23 @@
     <retryOpenFileDelay>1000</retryOpenFileDelay>
     <enableEmailNotifications>false</enableEmailNotifications>
     <statusReportTime>09:00:00</statusReportTime>
+    
+    <map id="map001" enabed="Y" description="Plain XML Copy">
+        <input id="in1" description="Read Konnect XML Material Master">
+            <type>XML</type>
+            <path>./interface/input/001 (Plain XML)</path>
+            <mask/>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT/>
+        </input>
+
+        <output id="out1" enabed="Y" description="Write C4J Material Master">
+            <path>./interface/output/001 (Plain XML)</path>
+            <type>XML</type>
+            <XSLT/>
+        </output>
+    </map>
+    
 
     <map id="map101" enabed="Y" description="NES Konnect XML Material to C4J Material Master">
         <input id="in1" description="Read Konnect XML Material Master">
@@ -566,8 +583,8 @@
             <XSLT/>
         </input>
 
-        <output id="out1" enabed="Y" description="Write Copy 1">
-            <path>./interface/output/427 (GEN Copy 1)</path>
+        <output id="out1" enabed="Y" description="Write Copy 1 and 2">
+            <path>./interface/output/427 (GEN Copy 1);./interface/output/427 (GEN Copy 2)</path>
             <type>RAW</type>
             <XSLT/>
         </output>

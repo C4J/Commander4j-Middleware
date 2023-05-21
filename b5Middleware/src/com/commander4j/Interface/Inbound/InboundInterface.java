@@ -103,10 +103,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 									data = connector.getData();
 
-
-
 									if (isBinaryFile()==false)
-								//	if ((getType().equals(InboundConnectorINTERFACE.Connector_EMAIL) == false) && (getType().equals(InboundConnectorINTERFACE.Connector_PDF_PRINT) == false) && (getType().equals(InboundConnectorINTERFACE.Connector_RAW) == false))
 									{
 										filename_imported = util.getCurrentTimeStampString() + " INPUT_IMPORTED_" + connector.getType() + "_" + getId() + "_" + file.getName();
 
@@ -147,6 +144,11 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											loadFileResult = doc.setDocument(Common.logDir + File.separator + filename_transformed);
 											data = doc.getDocument();
 
+										}
+										else
+										{
+											data = connector.getData();
+											loadFileResult = true;
 										}
 
 										if (writeSuccess && loadFileResult)

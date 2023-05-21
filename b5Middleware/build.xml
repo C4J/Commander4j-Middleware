@@ -10,14 +10,14 @@
     <property name="source" value="11"/>
     <path id="b5Middleware.classpath">
         <pathelement location="bin"/>
-        <pathelement location="lib/poi/lib/commons-io-2.12.0-SNAPSHOT.jar"/>
+        <pathelement location="lib/poi/lib/commons-io-2.12.0.jar"/>
         <pathelement location="lib/log/log4j-api-2.20.0.jar"/>
         <pathelement location="lib/log/log4j-core-2.20.0.jar"/>
         <pathelement location="lib/saxon/jline-2.14.6.jar"/>
-        <pathelement location="lib/saxon/saxon-he-11.5.jar"/>
-        <pathelement location="lib/saxon/saxon-he-xqj-11.5.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.6.4.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.6.4-data.jar"/>
+        <pathelement location="lib/saxon/saxon-he-12.2.jar"/>
+        <pathelement location="lib/saxon/saxon-he-xqj-12.2.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-5.1.2.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-5.1.2-data.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.7.1.jar"/>
         <pathelement location="lib/opencsv/lib/commons-beanutils-1.9.4.jar"/>
         <pathelement location="lib/opencsv/lib/commons-lang3-3.12.0.jar"/>
@@ -46,14 +46,14 @@
     </path>
     <path id="run.StartMain.classpath">
         <path refid="b5Middleware.classpath"/>
-        <pathelement location="lib/poi/lib/commons-io-2.12.0-SNAPSHOT.jar"/>
+        <pathelement location="lib/poi/lib/commons-io-2.12.0.jar"/>
         <pathelement location="lib/log/log4j-api-2.20.0.jar"/>
         <pathelement location="lib/log/log4j-core-2.20.0.jar"/>
         <pathelement location="lib/saxon/jline-2.14.6.jar"/>
-        <pathelement location="lib/saxon/saxon-he-11.5.jar"/>
-        <pathelement location="lib/saxon/saxon-he-xqj-11.5.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.6.4.jar"/>
-        <pathelement location="lib/saxon/xmlresolver-4.6.4-data.jar"/>
+        <pathelement location="lib/saxon/saxon-he-12.2.jar"/>
+        <pathelement location="lib/saxon/saxon-he-xqj-12.2.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-5.1.2.jar"/>
+        <pathelement location="lib/saxon/xmlresolver-5.1.2-data.jar"/>
         <pathelement location="lib/opencsv/opencsv-5.7.1.jar"/>
         <pathelement location="lib/opencsv/lib/commons-beanutils-1.9.4.jar"/>
         <pathelement location="lib/opencsv/lib/commons-lang3-3.12.0.jar"/>
