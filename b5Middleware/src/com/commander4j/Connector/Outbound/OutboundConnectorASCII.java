@@ -2,7 +2,6 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.xml.transform.TransformerException;
@@ -11,10 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
-
 import com.commander4j.sys.Common;
 import com.commander4j.sys.FixedASCIIColumns;
-
 import com.commander4j.util.JXMLDocument;
 
 import ABSTRACT.com.commander4j.Connector.OutboundConnectorABSTRACT;
@@ -196,7 +193,7 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 			{
 				fw.close();
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				// Suppress Error
 			}

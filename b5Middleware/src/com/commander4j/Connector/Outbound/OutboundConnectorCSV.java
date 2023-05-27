@@ -2,7 +2,6 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.LinkedList;
 
 import org.apache.commons.io.FileUtils;
@@ -196,7 +195,7 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 			{
 				writer.close();
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				//Suppress Error
 			}

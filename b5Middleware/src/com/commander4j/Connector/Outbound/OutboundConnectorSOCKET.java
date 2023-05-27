@@ -2,7 +2,6 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -123,7 +122,7 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 			{
 				fw.close();
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 
 			}
@@ -134,7 +133,7 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 			{
 				socket.close();
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
 
 			}

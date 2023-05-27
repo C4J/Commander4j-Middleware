@@ -2,7 +2,6 @@ package com.commander4j.Connector.Outbound;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
@@ -90,7 +89,7 @@ public class OutboundConnectorXML extends OutboundConnectorABSTRACT
 			{
 				FOS.close();
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				// Suppress exception
 			}
