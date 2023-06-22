@@ -81,7 +81,9 @@ public class OutboundConnectorXML extends OutboundConnectorABSTRACT
 		{
 			result = false;
 			logger.error(ex.getMessage());
-			Common.emailqueue.addToQueue("Error", "Error Writing File [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error Writing File [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+
 		}
 		finally
 		{

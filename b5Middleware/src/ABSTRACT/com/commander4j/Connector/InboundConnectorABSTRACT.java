@@ -28,7 +28,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	protected Document data;
 
 	protected InboundInterface inint;
-	
+
 	public boolean isBinaryFile()
 	{
 		return inint.isBinaryFile();
@@ -49,19 +49,19 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 				count++;
 
 				destination = Common.logDir + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
-				
+
 				logger.debug("connectorLoad Backup [" + fullFilename + "] to [" + destination + "]");
-				
+
 				File fromFile = new File(fullFilename);
 				File toFile = new File(destination);
-				
+
 				FileUtils.deleteQuietly(toFile);
-				
+
 				FileUtils.copyFile(fromFile, toFile, false);
-				
+
 				fromFile = null;
 				toFile = null;
-				
+
 				count = retries;
 				result = true;
 
@@ -72,29 +72,29 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 				if (count >= retries)
 				{
 					logger.error("backupInboundFile unable to backup attempt (" + count + " attempts) for [" + fullFilename + "]");
-					
+
 					logger.error("Error message [" + ex.getMessage() + "]");
-					
-					Common.emailqueue.addToQueue("Error", "Error backing up file", "Error backing up file \\n" + fullFilename + "\\nto\\n" + destination + "\\n[" + ex.getMessage() + "]", "");
+					Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error backing up file", "Error backing up file \\n" + fullFilename + "\\nto\\n" + destination + "\\n[" + ex.getMessage() + "]", "");
+
 				}
 				else
 				{
 					logger.error("backupInboundFile backup attempt (" + count + " of " + retries + ") for [" + fullFilename + "[" + ex.getMessage() + "]", "");
 
 					util.retryDelay();
-					
+
 				}
 
 			}
-			finally 
+			finally
 			{
 				try
 				{
-					
+
 				}
 				catch (Exception ex)
 				{
-					
+
 				}
 			}
 
@@ -117,7 +117,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	public InboundConnectorABSTRACT(String type, InboundInterface inter)
 	{
 		this.type = type;
-		this.inint = inter;		
+		this.inint = inter;
 	}
 
 	public void setEnabled(boolean enabled)
@@ -139,7 +139,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		setFilename(filename);
 		if (connectorLoad(inint.getInputPath() + File.separator + filename))
 		{
-			if (isBinaryFile()==false)
+			if (isBinaryFile() == false)
 			{
 				if (connectorDelete(filename))
 				{
@@ -216,7 +216,9 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		catch (IOException | NullPointerException e)
 		{
 			logger.error("Error deleting file " + filename + "[" + e.getMessage() + "]");
-			Common.emailqueue.addToQueue("Error", "Error deleting file", "Error deleting file " + filename + "[" + e.getMessage() + "]", "");
+
+			Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error deleting file", "Error deleting file " + filename + "[" + e.getMessage() + "]", "");
+
 			result = false;
 		}
 

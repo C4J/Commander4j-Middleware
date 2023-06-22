@@ -103,14 +103,14 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 		document.setDocument(getData());
 
 		CSVWriter writer = null;
-		
+
 		try
 		{
-			
+
 			System.out.println(document.documentToString(getData()));
-			
+
 			// Create Writer
-			
+
 			if (disableQuotes)
 			{
 				if (endOfLine.equals("default"))
@@ -174,7 +174,7 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 				currentRow++;
 
 			}
-			
+
 			writer.flush();
 			writer.close();
 
@@ -187,7 +187,9 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 		catch (Exception ex)
 		{
 			logger.error("Message failed to process.");
-			Common.emailqueue.addToQueue("Error", "Error writing to CSV file [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error writing to CSV file [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+
 		}
 		finally
 		{
@@ -197,9 +199,9 @@ public class OutboundConnectorCSV extends OutboundConnectorABSTRACT
 			}
 			catch (Exception e)
 			{
-				//Suppress Error
+				// Suppress Error
 			}
-			
+
 			writer = null;
 			document = null;
 			fullPath = null;

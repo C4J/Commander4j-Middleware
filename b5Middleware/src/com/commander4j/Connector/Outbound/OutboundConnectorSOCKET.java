@@ -114,7 +114,9 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 		catch (Exception err)
 		{
 			logger.error(err.getMessage());
-			Common.emailqueue.addToQueue("Error", "Error writing to socket [" + fullPath + "]", err.getMessage() + "\n\n", "");
+
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error writing to socket [" + fullPath + "]", err.getMessage() + "\n\n", "");
+
 		}
 		finally
 		{
@@ -137,12 +139,12 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 			{
 
 			}
-			
+
 			socket = null;
-			
+
 			out = null;
-			
-			fw=null;
+
+			fw = null;
 		}
 
 		return result;

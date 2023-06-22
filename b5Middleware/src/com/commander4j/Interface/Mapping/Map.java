@@ -18,6 +18,7 @@ public class Map implements Comparable<Map>
 
 	private String id = "";
 	private String description = "";
+	private String emailEnabled = "Y";
 	private Long inboundMapMsgCount = (long) 0;
 	private Long outboundMapMsgCount = (long) 0;
 	private Utility util = new Utility();
@@ -75,6 +76,32 @@ public class Map implements Comparable<Map>
 		id = ID;
 	}
 
+	public void setEmailEnabled(String email)
+	{
+		emailEnabled = util.replaceNullStringwithBlank(email);
+		if (emailEnabled.equals(""))
+		{
+			emailEnabled = "Y";
+		}
+	}
+	
+	public String getEmailEnabled()
+	{
+		return emailEnabled;
+	}
+	
+	public boolean isMapEmailEnabled()
+	{
+		if (getEmailEnabled().equals("Y"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public void setDescription(String desc)
 	{
 		description = desc;

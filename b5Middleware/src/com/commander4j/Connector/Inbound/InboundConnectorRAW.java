@@ -31,8 +31,8 @@ public class InboundConnectorRAW extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
-			//here
-			
+			// here
+
 			try
 			{
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -44,7 +44,6 @@ public class InboundConnectorRAW extends InboundConnectorABSTRACT
 
 				message.setAttribute("sourceFile", fullFilename);
 
-
 				data.appendChild(message);
 
 				result = true;
@@ -53,7 +52,9 @@ public class InboundConnectorRAW extends InboundConnectorABSTRACT
 			catch (Exception e)
 			{
 				logger.error("connectorLoad " + getType() + " " + e.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error processing " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+
+				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error processing " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+
 			}
 			finally
 			{

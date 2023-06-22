@@ -103,7 +103,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 									data = connector.getData();
 
-									if (isBinaryFile()==false)
+									if (isBinaryFile() == false)
 									{
 										filename_imported = util.getCurrentTimeStampString() + " INPUT_IMPORTED_" + connector.getType() + "_" + getId() + "_" + file.getName();
 
@@ -113,7 +113,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 										}
 
 										writeSuccess = jfileio.writeToDisk(Common.logDir, data, filename_imported);
-										
+
 										if (getXSLTFilename().equals("") == false)
 										{
 
@@ -161,20 +161,24 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											if (writeSuccess == false)
 											{
 												logger.error("Error Map [" + map.getId() + "] Unable to save inbound xml" + " " + filename_imported);
-												Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", "Unable to save inbound xml" + "\n\n", filename_imported);
+
+												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", "Unable to save inbound xml" + "\n\n", filename_imported);
+
 											}
 
 											if (loadFileResult == false)
 											{
 												logger.error("Error Map [" + map.getId() + "] Unable to load inbound xml" + " " + filename_imported);
-												Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", "Unable to load inbound xml" + "\n\n", filename_imported);
+
+												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", "Unable to load inbound xml" + "\n\n", filename_imported);
+
 											}
 
 										}
 									}
 									else
 									{
-										 processConnectorToInterfaceData(connector.getFilename(),data);
+										processConnectorToInterfaceData(connector.getFilename(), data);
 									}
 								}
 							}
@@ -189,7 +193,9 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 			ex.printStackTrace();
 
 			logger.error("InboundInterface Map [" + map.getId() + "] error :" + ex.getMessage());
-			Common.emailqueue.addToQueue("Error", "InboundInterface Map [" + map.getId() + "]", " error :" + ex.getMessage(), "");
+
+			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "InboundInterface Map [" + map.getId() + "]", " error :" + ex.getMessage(), "");
+
 		}
 		finally
 		{

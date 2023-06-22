@@ -34,11 +34,10 @@ public class InboundConnectorPDF_PRINT extends InboundConnectorABSTRACT
 			{
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
-				
+
 				data = builder.newDocument();
 
 				Element message = (Element) data.createElement("pdf_print");
-
 
 				Element content = (Element) data.createElement("inputFilename");
 
@@ -50,10 +49,13 @@ public class InboundConnectorPDF_PRINT extends InboundConnectorABSTRACT
 
 				result = true;
 
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				logger.error("connectorLoad " + getType() + " " + e.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+
+				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+
 			}
 		}
 		return result;

@@ -100,7 +100,8 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 						Serializer out = processor.newSerializer(new File(Common.logDir + File.separator + filename_outputTransformed));
 						out.setOutputProperty(Serializer.Property.METHOD, "xml");
 						out.setOutputProperty(Serializer.Property.INDENT, "yes");
-						//out.setOutputProperty(Serializer.Property.STANDALONE, "yes");
+						// out.setOutputProperty(Serializer.Property.STANDALONE,
+						// "yes");
 						Xslt30Transformer transformer = stylesheet.load30();
 						transformer.transform(source, out);
 
@@ -111,14 +112,18 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 					catch (SaxonApiException e)
 					{
 						logger.error(e.getMessage());
-						Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", e.getMessage() + "\n\n", filename_outputImported);
+
+						Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", e.getMessage() + "\n\n", filename_outputImported);
+
 					}
 
 				}
 				catch (XPathException e)
 				{
 					logger.error(e.getMessage());
-					Common.emailqueue.addToQueue("Error", "Error Map [" + map.getId() + "]", e.getMessage() + "\n\n", filename_outputImported);
+
+					Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", e.getMessage() + "\n\n", filename_outputImported);
+
 				}
 
 			}

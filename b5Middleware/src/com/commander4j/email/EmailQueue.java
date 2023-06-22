@@ -2,6 +2,8 @@ package com.commander4j.email;
 
 import java.util.LinkedList;
 
+import com.commander4j.sys.Common;
+
 public class EmailQueue
 {
 	public LinkedList<Email> queue = new LinkedList<Email>();
@@ -11,11 +13,17 @@ public class EmailQueue
 	{
 		return queue.size();
 	}
-	
-	public synchronized void addToQueue(String distributionID, String subject, String messageText, String filename)
+
+	public synchronized void addToQueue(boolean overrideEmail, String distributionID, String subject, String messageText, String filename)
 	{
-		Email email = new Email(distributionID, subject, messageText, filename);
-		queue.addLast(email);
+		if (Common.emailEnabled)
+		{
+			if (overrideEmail)
+			{
+				Email email = new Email(distributionID, subject, messageText, filename);
+				queue.addLast(email);
+			}
+		}
 	}
 
 	public synchronized void addToQueue(Email email)

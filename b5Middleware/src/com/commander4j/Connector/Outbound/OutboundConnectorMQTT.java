@@ -115,7 +115,9 @@ public class OutboundConnectorMQTT extends OutboundConnectorABSTRACT
 		catch (Exception ex)
 		{
 			logger.error("Message failed to process.");
-			Common.emailqueue.addToQueue("Error", "Error with MQTT message send [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error with MQTT message send [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+
 		}
 		finally
 		{
@@ -129,7 +131,7 @@ public class OutboundConnectorMQTT extends OutboundConnectorABSTRACT
 			{
 				// Suppress Error
 			}
-			fullPath=null;
+			fullPath = null;
 			tempFilename = null;
 			finalFilename = null;
 			persistence = null;

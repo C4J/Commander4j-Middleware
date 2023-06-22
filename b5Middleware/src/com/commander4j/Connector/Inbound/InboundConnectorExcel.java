@@ -59,7 +59,6 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 		return result;
 	}
 
-
 	public boolean readXLSFile(String fullFilename)
 	{
 		logger.debug("connectorLoad [" + fullFilename + "]");
@@ -122,33 +121,35 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 							{
 
 								cellValue = evaluator.evaluate(cell);
-								String outputValue="";
-								
-								switch (cellValue.getCellType()) {
-							    case BOOLEAN:
-							    	outputValue=String.valueOf(cellValue.getBooleanValue());
-							        break;
-							    case NUMERIC :
-							        outputValue=String.valueOf(cellValue.getNumberValue());
-							        if (DateUtil.isCellDateFormatted(cell)) {
-							        	outputValue	= util.getISODateStringFormat((cell.getDateCellValue()));
-							        }
-							        break;
-							    case STRING :
-							        outputValue=String.valueOf(cellValue.getStringValue());
-							        break;
-							    case BLANK:
-							        break;
-							    case ERROR :
-							        break;
-							    case FORMULA : 
-							        break;
+								String outputValue = "";
+
+								switch (cellValue.getCellType())
+								{
+								case BOOLEAN:
+									outputValue = String.valueOf(cellValue.getBooleanValue());
+									break;
+								case NUMERIC:
+									outputValue = String.valueOf(cellValue.getNumberValue());
+									if (DateUtil.isCellDateFormatted(cell))
+									{
+										outputValue = util.getISODateStringFormat((cell.getDateCellValue()));
+									}
+									break;
+								case STRING:
+									outputValue = String.valueOf(cellValue.getStringValue());
+									break;
+								case BLANK:
+									break;
+								case ERROR:
+									break;
+								case FORMULA:
+									break;
 								case _NONE:
 									break;
 								default:
 									break;
-							}
-								
+								}
+
 								Element xmlcol = addElement(data, "col", outputValue);
 								xmlcol.setAttribute("id", String.valueOf(currentColumn + 1));
 
@@ -170,11 +171,14 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 
 				result = true;
 
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+
+				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+
 			}
 
 		}
@@ -196,7 +200,7 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 				XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 				FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
 				CellValue cellValue;
-				
+
 				XSSFSheet sheet = wb.getSheetAt(0);
 				XSSFRow excelRow;
 				XSSFCell cell;
@@ -244,34 +248,36 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 							{
 
 								cellValue = evaluator.evaluate(cell);
-								String outputValue="";
-								
-								switch (cellValue.getCellType()) {
-							    case BOOLEAN:
-							    	outputValue=String.valueOf(cellValue.getBooleanValue());
-							        break;
-							    case NUMERIC:
-							        outputValue=String.valueOf(cellValue.getNumberValue());
-							        if (DateUtil.isCellDateFormatted(cell)) {
-							        	outputValue	= util.getISODateStringFormat((cell.getDateCellValue()));
-							        }
+								String outputValue = "";
 
-							        break;
-							    case STRING:
-							        outputValue=String.valueOf(cellValue.getStringValue());
-							        break;
-							    case BLANK:
-							        break;
-							    case ERROR:
-							        break;
-							    case FORMULA: 
-							        break;
+								switch (cellValue.getCellType())
+								{
+								case BOOLEAN:
+									outputValue = String.valueOf(cellValue.getBooleanValue());
+									break;
+								case NUMERIC:
+									outputValue = String.valueOf(cellValue.getNumberValue());
+									if (DateUtil.isCellDateFormatted(cell))
+									{
+										outputValue = util.getISODateStringFormat((cell.getDateCellValue()));
+									}
+
+									break;
+								case STRING:
+									outputValue = String.valueOf(cellValue.getStringValue());
+									break;
+								case BLANK:
+									break;
+								case ERROR:
+									break;
+								case FORMULA:
+									break;
 								case _NONE:
 									break;
 								default:
 									break;
-							}
-								
+								}
+
 								Element xmlcol = addElement(data, "col", outputValue);
 								xmlcol.setAttribute("id", String.valueOf(currentColumn + 1));
 
@@ -293,11 +299,14 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 
 				result = true;
 
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+
+				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+
 			}
 
 		}

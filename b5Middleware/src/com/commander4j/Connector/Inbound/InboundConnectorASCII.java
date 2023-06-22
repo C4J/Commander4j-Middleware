@@ -179,7 +179,9 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 
 						System.out.println("Unable to open file '" + fullFilename + "'");
 						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-						Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to "+fullFilename+".error", "");
+
+						Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to " + fullFilename + ".error", "");
+
 					}
 					else
 					{

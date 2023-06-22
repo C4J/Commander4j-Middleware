@@ -28,7 +28,7 @@ public abstract class OutboundConnectorABSTRACT implements OutboundConnectorINTE
 
 	protected Document data;
 
-	private OutboundInterface outint;
+	protected OutboundInterface outint;
 
 	public Long getOutboundConnectorCount()
 	{

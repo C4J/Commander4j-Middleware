@@ -55,7 +55,7 @@ public class OutboundConnectorEmail extends OutboundConnectorABSTRACT
 			String subject = getOutboundInterface().getEmailSubject();
 			String message = getOutboundInterface().getEmailMessage() + "\n\n";
 
-			Common.emailqueue.addToQueue(addresses, subject, message, outputFilename);
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), addresses, subject, message, outputFilename);
 
 			result = true;
 
@@ -63,7 +63,7 @@ public class OutboundConnectorEmail extends OutboundConnectorABSTRACT
 		catch (Exception ex)
 		{
 			logger.error("Message failed to process.");
-			Common.emailqueue.addToQueue("Error", "Unable to Email file [" + inputFilename + "]", ex.getMessage() + "\n\n", "");
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(),"Error", "Unable to Email file [" + inputFilename + "]", ex.getMessage() + "\n\n", "");
 		}
 		finally
 		{

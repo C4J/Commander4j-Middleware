@@ -67,6 +67,23 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask implements Out
 	private int hostPort = 9100;
 	private int hostRepeat = 1;
 	
+	public String getMapEmailEnabled()
+	{
+		return this.map.getEmailEnabled();
+	}
+	
+	public boolean isMapEmailEnabled()
+	{
+		if (this.map.getEmailEnabled().equals("Y"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public String getHostIP()
 	{
 		return hostIP;

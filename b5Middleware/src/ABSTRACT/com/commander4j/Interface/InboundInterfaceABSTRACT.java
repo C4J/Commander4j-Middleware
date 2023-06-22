@@ -59,6 +59,23 @@ public abstract class InboundInterfaceABSTRACT extends TimerTask implements Inbo
 		this.binaryFile = binaryFile;
 	}
 	
+	public String getMapEmailEnabled()
+	{
+		return this.map.getEmailEnabled();
+	}
+	
+	public boolean isMapEmailEnabled()
+	{
+		if (this.map.getEmailEnabled().equals("Y"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public String getMapId()
 	{
 		return this.map.getId();

@@ -145,9 +145,13 @@ public class MiddlewareConfig
 
 		logger.debug("Log Path :" + Common.logDir);
 
-		while (doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@enabed").trim() != "")
+		while (doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@id").trim() != "")
 		{
-			String mapEnabled = doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@enabed").trim();
+			String mapEnabled = util.replaceNullStringwithBlank(doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@enabed").trim());
+			if (mapEnabled.equals(""))
+			{
+				mapEnabled = util.replaceNullStringwithBlank(doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@enabled").trim());
+			}
 
 			if (mapEnabled.equals("Y"))
 			{
@@ -156,9 +160,11 @@ public class MiddlewareConfig
 
 				String mapId = doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@id").trim();
 				String mapDescription = doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@description").trim();
+				String mapEmailEnabled = doc.findXPath("//config/map[" + String.valueOf(mapSeq) + "]/@email").trim();
 
 				map.setId(mapId);
 				map.setDescription(mapDescription);
+				map.setEmailEnabled(mapEmailEnabled);
 
 				logger.debug("Loading map              : (" + mapId + ") " + mapDescription);
 

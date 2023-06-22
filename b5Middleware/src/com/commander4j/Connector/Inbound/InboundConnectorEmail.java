@@ -38,7 +38,7 @@ public class InboundConnectorEmail extends InboundConnectorABSTRACT
 			{
 				factory = DocumentBuilderFactory.newInstance();
 				builder = factory.newDocumentBuilder();
-				
+
 				data = builder.newDocument();
 
 				message = (Element) data.createElement("email");
@@ -53,10 +53,13 @@ public class InboundConnectorEmail extends InboundConnectorABSTRACT
 
 				result = true;
 
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				logger.error("connectorLoad " + getType() + " " + e.getMessage());
-				Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+
+				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+
 			}
 			finally
 			{

@@ -83,7 +83,6 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 	public boolean connectorLoad(String fullFilename)
 	{
 
-
 		logger.debug("connectorLoad [" + fullFilename + "]");
 		boolean result = false;
 
@@ -179,7 +178,9 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 
 						System.out.println("Unable to open file '" + fullFilename + "'");
 						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-						Common.emailqueue.addToQueue("Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to " + fullFilename + ".error", "");
+
+						Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to " + fullFilename + ".error", "");
+
 						result = false;
 					}
 					else

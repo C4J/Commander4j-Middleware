@@ -99,7 +99,7 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 		String finalFilename = null;
 		String rowdata = null;
 		char[] rowdataArray = null;
-		
+
 		try
 		{
 			if (rows > 0)
@@ -185,7 +185,8 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 		catch (Exception ex)
 		{
 			logger.error("Message failed to process.");
-			Common.emailqueue.addToQueue("Error", "Error writing to ASCII file [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+
+			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error writing to ASCII file [" + fullPath + "]", ex.getMessage() + "\n\n", "");
 		}
 		finally
 		{
@@ -197,8 +198,8 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 			{
 				// Suppress Error
 			}
-			
-			fw=null;
+
+			fw = null;
 			document = null;
 			fullPath = null;
 			tempFilename = null;
@@ -206,8 +207,8 @@ public class OutboundConnectorASCII extends OutboundConnectorABSTRACT
 			rowdata = null;
 			rowdataArray = null;
 			document = null;
-			cl=null;
-			rw=null;
+			cl = null;
+			rw = null;
 		}
 
 		return result;

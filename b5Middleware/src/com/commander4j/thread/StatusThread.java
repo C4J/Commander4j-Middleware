@@ -63,7 +63,7 @@ public class StatusThread extends Thread
 					
 					report = report+"Garbage Collector Finished.\n\n";
 					
-					Common.emailqueue.addToQueue("Monitor", "Statistics ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), report, "");
+					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), report, "");
 					
 					logger.debug(report);
 				}

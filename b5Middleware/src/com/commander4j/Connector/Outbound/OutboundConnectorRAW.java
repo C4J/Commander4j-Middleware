@@ -50,7 +50,7 @@ public class OutboundConnectorRAW extends OutboundConnectorABSTRACT
 					FileUtils.deleteQuietly(new File(tempFilename));
 
 					FileUtils.deleteQuietly(new File(finalFilename));
-					
+
 					FileUtils.copyFile(new File(sourceFile), new File(tempFilename), true);
 
 					FileUtils.moveFile(new File(tempFilename), new File(finalFilename));
@@ -67,7 +67,9 @@ public class OutboundConnectorRAW extends OutboundConnectorABSTRACT
 			catch (Exception ex)
 			{
 				logger.error("Message failed to process.");
-				Common.emailqueue.addToQueue("Error", "Unable to copy RAW file [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+
+				Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Unable to copy RAW file [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+
 			}
 			finally
 			{
