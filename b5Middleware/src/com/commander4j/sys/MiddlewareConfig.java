@@ -216,10 +216,15 @@ public class MiddlewareConfig
 
 				int outputSeq = 1;
 
-				while (doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/@enabed").trim() != "")
+				while (doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/@id").trim() != "")
 				{
 
-					String outputEnabled = doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/@enabed").trim();
+					String outputEnabled = util.replaceNullStringwithBlank(doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/@enabed").trim());
+					
+					if (outputEnabled.equals(""))
+					{
+						outputEnabled = util.replaceNullStringwithBlank(doc.findXPath("/config/map[" + String.valueOf(mapSeq) + "]/output[" + String.valueOf(outputSeq) + "]/@enabled").trim());
+					}
 
 					if (outputEnabled.toUpperCase().equals("Y"))
 					{
