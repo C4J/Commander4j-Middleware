@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lookup>
+
+    <material id="8006038">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8009449">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8009450">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8009451">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8009517">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8009771">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8010120">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+    
+    <material id="8010124">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+    
+    <material id="8010242">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8010243">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8011025">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+
+    <material id="8011026">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>64</value></item>  
+        <item type="BasePerLAG"><value>8</value></item>   
+        <item type="StockUnitPerBase"><value>4</value></item> 
+    </material>
+ 
+</lookup>
+
