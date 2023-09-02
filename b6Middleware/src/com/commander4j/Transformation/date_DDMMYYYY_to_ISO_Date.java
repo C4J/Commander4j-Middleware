@@ -57,8 +57,8 @@ public class date_DDMMYYYY_to_ISO_Date extends ExtensionFunctionDefinition
 	            	
 	        		String result = inputString;
 
-	        		SimpleDateFormat fromUser = new SimpleDateFormat("ddMMyyyy", Locale.UK);
-	        		SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
+	        		SimpleDateFormat fromUser = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
+	        		SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
 	        		try
 	        		{

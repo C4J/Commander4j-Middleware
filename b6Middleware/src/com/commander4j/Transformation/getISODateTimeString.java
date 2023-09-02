@@ -45,7 +45,7 @@ public class getISODateTimeString extends ExtensionFunctionDefinition
 	        		Timestamp ts = getSQLDateTime();
 	        		try
 	        		{
-	        			String temp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK).format(ts);
+	        			String temp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(ts);
 	        			result = temp.substring(0, 4);
 	        			result = result + "-";
 	        			result = result + temp.substring(5, 7);

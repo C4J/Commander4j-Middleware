@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="10.0.6" transformSequenceNumber="10">
   <directoryPresets config="./xslt/referenceData.xml" />
-  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.01" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
+  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.10" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
         <language id="da" />
@@ -113,7 +113,7 @@
     </launcher>
     <launcher name="Middleware Service" id="149" icnsFile="./images/icons/iFace4j_Icons/MyIcon.icns">
       <executable name="Middleware_Service" iconSet="true" iconFile="./images/icons/iFace4j_Icons/icon.ico" executableDir="." redirectStderr="false" executableMode="service" singleInstance="true" dpiAware="false" />
-      <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms128m -Xmx512m -Dlog4j.configurationFile=./xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="Service">
+      <java mainClass="com.commander4j.mw.StartMain" vmParameters="-Xms256m -Xmx1024m -Dlog4j.configurationFile=./xml/config/log4j2.xml -Dfile.encoding=Cp1252" arguments="Service">
         <classPath>
           <archive location="c4jMiddleware.jar" failOnError="false" />
           <directory location="xml/config" failOnError="false" />
