@@ -894,5 +894,23 @@
             <type>XML</type>
         </output>
     </map>
+    
+    <map id="map500" enabled="Y"
+        description="Despatch to Excel">
+        <input id="in1" description="Read C4J XML File">
+            <type>XML</type>
+            <path>./interface/input/500 Despatch</path>
+            <mask/>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT>C4J_DESPATCH_PREADVICE_XML_to_Excel.xsl</XSLT>
+        </input>
+
+        <output id="out1" enabled="Y" description="Write TROPOS CSV">
+            <path>./interface/output/500 Despatch</path>
+            <type>EXCEL</type>
+            <outputFileExtension>xlsx</outputFileExtension>
+            <XSLT/>
+        </output>
+    </map>
 
 </config>

@@ -23,6 +23,76 @@ import com.commander4j.sys.Common;
 public class Utility
 {
 	
+	public Timestamp getTimeStampFromISOString(String isoString)
+	{
+		Timestamp result;
+
+		// 2010-05-31T10:14:49
+		// 0123456789111111111
+		// 012345678
+		try
+		{
+			Calendar caldate = Calendar.getInstance();
+
+			int year = 0;
+			int month = 0;
+			int day = 0;
+			int hour = 0;
+			int min = 0;
+			int second = 0;
+
+			year = Integer.valueOf(isoString.substring(0, 4));
+			month = Integer.valueOf(isoString.substring(5, 7));
+			day = Integer.valueOf(isoString.substring(8, 10));
+
+			try
+			{
+				hour = Integer.valueOf(isoString.substring(11, 13));
+			}
+			catch (Exception ex)
+			{
+			}
+
+			try
+			{
+				min = Integer.valueOf(isoString.substring(14, 16));
+			}
+			catch (Exception ex)
+			{
+			}
+
+			try
+			{
+				second = Integer.valueOf(isoString.substring(17, 19));
+			}
+			catch (Exception ex)
+			{
+			}
+
+			if ((month < 1) | (month > 12))
+			{
+				throw new Exception("Invalid month " + String.valueOf(month));
+			}
+
+			if ((day < 1) | (day > 31))
+			{
+				throw new Exception("Invalid day " + String.valueOf(day));
+			}
+
+			caldate.set(year, month - 1, day, hour, min, second);
+
+			result = new Timestamp(caldate.getTimeInMillis());
+
+			result.setNanos(0); // or other value
+		}
+		catch (Exception ex)
+		{
+			result = null;
+		}
+
+		return result;
+	}
+	
 	public void retryDelay()
 	{
 		if (Common.retryOpenFileDelay == 0)

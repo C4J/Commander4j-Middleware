@@ -14,6 +14,7 @@ import INTERFACE.com.commander4j.Interface.OutboundInterfaceINTERFACE;
 import com.commander4j.Connector.Outbound.OutboundConnectorASCII;
 import com.commander4j.Connector.Outbound.OutboundConnectorCSV;
 import com.commander4j.Connector.Outbound.OutboundConnectorEmail;
+import com.commander4j.Connector.Outbound.OutboundConnectorExcel;
 import com.commander4j.Connector.Outbound.OutboundConnectorIDOC;
 import com.commander4j.Connector.Outbound.OutboundConnectorMQTT;
 import com.commander4j.Connector.Outbound.OutboundConnectorPDF_PRINT;
@@ -468,11 +469,14 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask implements Out
 			connector = new OutboundConnectorCSV((OutboundInterface) this);
 			setOutputFileExtension("csv");
 			break;
+		case OutboundConnectorINTERFACE.Connector_Excel:
+			connector = new OutboundConnectorExcel((OutboundInterface) this);
+			setOutputFileExtension("xlsx");
+			break;
 		case OutboundConnectorINTERFACE.Connector_EMAIL:
 			connector = new OutboundConnectorEmail((OutboundInterface) this);
 			setOutputFileExtension("");
 			break;
-
 		case OutboundConnectorINTERFACE.Connector_IDOC:
 			connector = new OutboundConnectorIDOC((OutboundInterface) this);
 			setOutputFileExtension("idoc");
