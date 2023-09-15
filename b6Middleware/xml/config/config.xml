@@ -912,5 +912,21 @@
             <XSLT/>
         </output>
     </map>
+    
+    <map id="map501" enabled="Y" description="DMO to C4J Production Declaration">
+        <input id="in1" description="Read DMO Prod Dec XML">
+            <type>XML</type>
+            <path>./interface/input/501 (DMO Production Declaration)</path>
+            <mask/>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT>DMO_PRODDEC_XML_C4J.xsl</XSLT>
+        </input>
+        
+        <output id="out1" enabled="Y" description="Write C4J Prod Dec XML">
+            <path>./interface/output/501 (C4J Production Declaration)</path>
+            <type>XML</type>
+            <XSLT/>
+        </output>
+    </map>
 
 </config>

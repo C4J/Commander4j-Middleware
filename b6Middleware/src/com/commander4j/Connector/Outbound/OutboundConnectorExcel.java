@@ -165,7 +165,7 @@ public class OutboundConnectorExcel extends OutboundConnectorABSTRACT
 							celldata.setCellValue(currentData);
 							break;
 						case "double":
-							celldata.setCellStyle(styles.get("cell_normal"));
+							celldata.setCellStyle(styles.get("cell_double"));
 							celldata.setCellValue(Double.valueOf(currentData));
 							break;
 						case "isodate":
@@ -315,6 +315,11 @@ public class OutboundConnectorExcel extends OutboundConnectorABSTRACT
 		style.setAlignment(HorizontalAlignment.LEFT);
 		style.setWrapText(true);
 		styles.put("cell_normal", style);
+		
+		style = createBorderedStyle(wb);
+		style.setAlignment(HorizontalAlignment.RIGHT);
+		style.setWrapText(true);
+		styles.put("cell_double", style);
 
 		style = createBorderedStyle(wb);
 		style.setAlignment(HorizontalAlignment.CENTER);
@@ -328,7 +333,7 @@ public class OutboundConnectorExcel extends OutboundConnectorABSTRACT
 		styles.put("cell_normal_date", style);
 		
 		style = createBorderedStyle(wb);
-		style.setAlignment(HorizontalAlignment.RIGHT);
+		style.setAlignment(HorizontalAlignment.CENTER);
 		style.setWrapText(true);
 		style.setDataFormat(df.getFormat("yyyy-mm-dd HH:MM:SS"));
 		styles.put("cell_iso_date", style);

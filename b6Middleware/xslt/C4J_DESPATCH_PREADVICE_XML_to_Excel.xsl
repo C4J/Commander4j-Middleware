@@ -13,6 +13,7 @@
 	<xsl:variable name="despatchNo" select="/message/messageData/despatchPreAdvice/despatchNo"/>
 	<xsl:variable name="despatchDate" select="/message/messageData/despatchPreAdvice/despatchDate"/>
 	<xsl:variable name="palletCount" select="count(/message/messageData/despatchPreAdvice/contents/pallet/SSCC)"/>
+	<xsl:variable name="loadNo" select="/message/messageData/despatchPreAdvice/loadNo"/>
 	
 	<xsl:template match="/message/messageData/despatchPreAdvice">
 		
@@ -21,7 +22,7 @@
 				<xsl:value-of select="$fromLocation"/>_<xsl:value-of select="$toLocation"/>_<xsl:value-of select="$despatchNo"/>
 			</xsl:attribute>
 
-			<sheet id="1" name="Sheet 1" cols="12">
+			<sheet id="1" name="Sheet 1" cols="13">
 				<xsl:attribute name="rows">
 					<xsl:value-of select="$palletCount"/>
 				</xsl:attribute>
@@ -39,6 +40,7 @@
 					<col id="10" type="isodate">Expiry Date</col>
 					<col id="11" type="string">SSCC Status</col>
 					<col id="12" type="string">Batch Status</col>
+					<col id="13" type="string">Purchase Order</col>
 				</header>
 
 				<xsl:apply-templates select='contents/pallet' />
@@ -68,6 +70,7 @@
 				<col id="10"><xsl:value-of select="bestBefore"/></col>
 				<col id="11"><xsl:value-of select="status"/></col>
 				<col id="12"><xsl:value-of select="batchStatus"/></col>
+				<col id="13"><xsl:value-of select="$loadNo"/></col>
 			</row>
 
 	</xsl:template>	
