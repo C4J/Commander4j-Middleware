@@ -3,12 +3,12 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="b5Middleware">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="b6Middleware">
     <property environment="env"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="17"/>
     <property name="source" value="17"/>
-    <path id="b5Middleware.classpath">
+    <path id="b6Middleware.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/poi/lib/commons-io-2.13.0.jar"/>
         <pathelement location="lib/log/log4j-api-2.20.0.jar"/>
@@ -32,20 +32,20 @@
         <pathelement location="lib/poi/lib/SparseBitSet-1.2.jar"/>
         <pathelement location="lib/poi/auxiliary/pdfbox-2.0.26.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
-        <pathelement location="lib/mail/commons-email-1.5.jar"/>
-        <pathelement location="lib/mail/javax.activation-1.2.0.jar"/>
-        <pathelement location="lib/mail/javax.mail.jar"/>
         <pathelement location="lib/poi/ooxml-lib/commons-compress-1.21.jar"/>
         <pathelement location="lib/poi/ooxml-lib/commons-logging-1.2.jar"/>
         <pathelement location="lib/poi/ooxml-lib/curvesapi-1.07.jar"/>
-        <pathelement location="lib/poi/ooxml-lib/jakarta.activation-2.0.1.jar"/>
         <pathelement location="lib/poi/ooxml-lib/jakarta.xml.bind-api-3.0.1.jar"/>
         <pathelement location="lib/poi/ooxml-lib/xmlbeans-5.1.1.jar"/>
         <pathelement location="lib/poi/poi-ooxml-5.2.3.jar"/>
         <pathelement location="lib/poi/poi-ooxml-full-5.2.3.jar"/>
+        <pathelement location="lib/mail/jakarta.mail-api-2.1.2.jar"/>
+        <pathelement location="lib/mail/angus-mail-2.0.2.jar"/>
+        <pathelement location="lib/mail/angus-activation-2.0.1.jar"/>
+        <pathelement location="lib/mail/jakarta.activation-api-2.1.2.jar"/>
     </path>
     <path id="run.StartMain.classpath">
-        <path refid="b5Middleware.classpath"/>
+        <path refid="b6Middleware.classpath"/>
         <pathelement location="lib/poi/lib/commons-io-2.13.0.jar"/>
         <pathelement location="lib/log/log4j-api-2.20.0.jar"/>
         <pathelement location="lib/log/log4j-core-2.20.0.jar"/>
@@ -68,23 +68,22 @@
         <pathelement location="lib/poi/lib/SparseBitSet-1.2.jar"/>
         <pathelement location="lib/poi/auxiliary/pdfbox-2.0.26.jar"/>
         <pathelement location="lib/mqtt/org.eclipse.paho.client.mqttv3_1.2.3.jar"/>
-        <pathelement location="lib/mail/commons-email-1.5.jar"/>
-        <pathelement location="lib/mail/javax.activation-1.2.0.jar"/>
-        <pathelement location="lib/mail/javax.mail.jar"/>
         <pathelement location="lib/poi/ooxml-lib/commons-compress-1.21.jar"/>
         <pathelement location="lib/poi/ooxml-lib/commons-logging-1.2.jar"/>
         <pathelement location="lib/poi/ooxml-lib/curvesapi-1.07.jar"/>
-        <pathelement location="lib/poi/ooxml-lib/jakarta.activation-2.0.1.jar"/>
         <pathelement location="lib/poi/ooxml-lib/jakarta.xml.bind-api-3.0.1.jar"/>
         <pathelement location="lib/poi/ooxml-lib/xmlbeans-5.1.1.jar"/>
         <pathelement location="lib/poi/poi-ooxml-5.2.3.jar"/>
         <pathelement location="lib/poi/poi-ooxml-full-5.2.3.jar"/>
+        <pathelement location="lib/mail/jakarta.mail-api-2.1.2.jar"/>
+        <pathelement location="lib/mail/angus-mail-2.0.2.jar"/>
+        <pathelement location="lib/mail/angus-activation-2.0.1.jar"/>
+        <pathelement location="lib/mail/jakarta.activation-api-2.1.2.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
-                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -99,18 +98,13 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="b5Middleware.classpath"/>
+            <classpath refid="b6Middleware.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target name="StartMain">
         <java classname="com.commander4j.mw.StartMain" failonerror="true" fork="yes">
             <classpath refid="run.StartMain.classpath"/>
-        </java>
-    </target>
-    <target name="StartGUI">
-        <java classname="com.commander4j.mw.StartGUI" failonerror="true" fork="yes">
-            <classpath refid="run.StartGUI.classpath"/>
         </java>
     </target>
 </project>

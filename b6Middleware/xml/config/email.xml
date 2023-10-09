@@ -53,7 +53,7 @@
 
     <!-- Distribution Lists are referred to within message mapping Config.xml -->
 
-    <distributionList id="Monitor" enabled="Y" maxFrequencyMins="0">
+    <distributionList id="Monitor" enabled="Y" maxFrequencyMins="5">
         <toAddressList>dummy1@gmail.com,dummy2@gmail.com</toAddressList>
     </distributionList>
 

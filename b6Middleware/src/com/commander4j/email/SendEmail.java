@@ -5,14 +5,22 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Properties;
 
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.EmailAttachment;
-import org.apache.commons.mail.MultiPartEmail;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.sys.Common;
 import com.commander4j.util.JXMLDocument;
 import com.commander4j.util.Utility;
+
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.Multipart;
 
 public class SendEmail
 {
@@ -89,126 +97,123 @@ public class SendEmail
 
 			if (distList.get(distributionID).enabled.equals("Y"))
 			{
-			String emailKey = "[" + distributionID + "] - [" + subject + "]";
-			logger.debug(emailKey);
+				String emailKey = "[" + distributionID + "] - [" + subject + "]";
+				logger.debug(emailKey);
 
-			Calendar lastSent;
-			Calendar now = Calendar.getInstance();
-			
-			Boolean okToSend = false;
+				Calendar lastSent  = Calendar.getInstance();
+				Calendar now = Calendar.getInstance();
 
-			if (emailLog.containsKey(emailKey))
-			{
-				lastSent = emailLog.get(emailKey);
-			}
-			else
-			{
-				okToSend = true;
-				lastSent = now;
-				emailLog.put(emailKey, lastSent);
-			}
-
-			
-			long seconds = (now.getTimeInMillis() - lastSent.getTimeInMillis()) / 1000;
-			
-			long ageInMins = seconds/60;
-			
-			logger.debug("Last email to " + emailKey + " was at " + util.getISODateStringFromCalendar(lastSent));
-			logger.debug("Current time is " + util.getISODateStringFromCalendar(now));
-			
-			logger.debug("Minutes since last email to " + emailKey + " is " + String.valueOf(ageInMins));
-
-			if (ageInMins >= distList.get(distributionID).maxFrequencyMins)
-			{
-				okToSend = true;
-				emailLog.put(emailKey, now);
-				logger.debug("Email allowed");
-			}
-			else
-			{
-				//okToSend = false;
-				logger.debug("Email suppressed - too frequent");
-			}
-
-			if (okToSend)
-			{
-				EmailAttachment attachment = new EmailAttachment();
-				MultiPartEmail email = new MultiPartEmail();
-				try
+				if (emailLog.containsKey(emailKey))
 				{
-					if (smtpProperties.get("mail.smtp.auth").toString().toLowerCase().equals("true"))
+					lastSent = emailLog.get(emailKey);
+				}
+				else
+				{
+					lastSent.add(Calendar.DATE, -1);
+					emailLog.put(emailKey, lastSent);
+				}
+
+				long seconds = (now.getTimeInMillis() - lastSent.getTimeInMillis()) / 1000;
+
+				long ageInMins = seconds / 60;
+
+				logger.debug("Last email to " + emailKey + " was at " + util.getISODateStringFromCalendar(lastSent));
+				logger.debug("Current time is " + util.getISODateStringFromCalendar(now));
+
+				logger.debug("Minutes since last email to " + emailKey + " is " + String.valueOf(ageInMins));
+
+				if (ageInMins >= distList.get(distributionID).maxFrequencyMins)
+				{
+
+					emailLog.put(emailKey, now);
+					logger.debug("Email frequency permitted.");
+
+					try
 					{
-						logger.debug("Email authentication required");
-						email.setAuthenticator(new DefaultAuthenticator(smtpProperties.get("mail.smtp.user").toString(), smtpProperties.get("mail.smtp.password").toString()));
-						email.setStartTLSEnabled(true);
-					}
-					else
-					{
-						logger.debug("Email No Authentication specified");
-					}
 
-					email.getMailSession().getProperties().putAll(smtpProperties);
+						Properties propAuth = new Properties();
+						Properties propNoAuth = new Properties();
 
-					String emails = distList.get(distributionID).addressList;
-					String[] emailArray = emails.split(",");
-					emails = null;
+						propAuth.putAll(smtpProperties);
+						propNoAuth.putAll(smtpProperties);
 
-					if (emailArray.length > 0)
-					{
-
-						for (int x = 0; x < emailArray.length; x++)
+						Session authenticatedSession = Session.getInstance(propAuth, new Authenticator()
 						{
-							email.addTo(emailArray[x].toLowerCase(), "");
-							logger.debug("Email To: " + emailArray[x].toLowerCase());
-						}
-
-						emailArray = null;
-
-						try
-						{
-
-							email.setFrom(smtpProperties.get("mail.smtp.from").toString(), "");
-							email.setSubject(subject);
-							email.setMsg(messageText);
-
-							// add the attachment
-							if (filename.equals("") == false)
+							@Override
+							protected PasswordAuthentication getPasswordAuthentication()
 							{
-								logger.debug("Email add attachment [" + util.getFilenameFromPath(filename) + "]");
-
-								attachment.setPath(filename);
-								attachment.setDisposition(EmailAttachment.ATTACHMENT);
-								attachment.setDescription(filename);
-								attachment.setName(util.getFilenameFromPath(filename));
-								email.attach(attachment);
+								return new PasswordAuthentication(smtpProperties.get("mail.smtp.user").toString(), smtpProperties.get("mail.smtp.password").toString());
 							}
+						});
 
-							// send the email
-							logger.debug("Email begin send...");
+						propNoAuth.put("mail.smtp.user","");
+						propNoAuth.put("mail.smtp.password","");
+						
 
-							email.send();
+						Session unauthenticatedSession = Session.getInstance(propAuth,null);
 
-							logger.debug("Email sent successfully");
+						MimeMessage message;
 
-						}
-						catch (Exception mex)
+						if (smtpProperties.get("mail.smtp.auth").toString().toLowerCase().equals("true"))
 						{
-							logger.error("Error sending email : " + mex.getMessage());
-							result = false;
+							logger.debug("Email authentication required");
+							message = new MimeMessage(authenticatedSession);
+						}
+						else
+						{
+							logger.debug("Email no authentication required");
+							message = new MimeMessage(unauthenticatedSession);
 						}
 
+						String emails = distList.get(distributionID).addressList;
+
+						logger.debug("Email To: " + emails);
+						message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(emails));
+
+						message.setFrom(new InternetAddress(smtpProperties.get("mail.smtp.from").toString()));
+
+						message.setSubject(subject);
+
+						MimeBodyPart mimeBodyPart = new MimeBodyPart();
+
+						// mimeBodyPart.setContent(messageText, "text/html;
+						// charset=utf-8");
+						mimeBodyPart.setText(messageText, "utf-8");
+
+						Multipart multipart = new MimeMultipart();
+						multipart.addBodyPart(mimeBodyPart);
+
+						if (filename.equals("") == false)
+						{
+							logger.debug("Email add attachment [" + util.getFilenameFromPath(filename) + "]");
+
+							MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+							attachmentBodyPart.attachFile(new File(filename));
+							attachmentBodyPart.setDescription(filename);
+
+							multipart.addBodyPart(attachmentBodyPart);
+
+						}
+						message.setContent(multipart);
+
+						logger.debug("Sending email");
+						Transport.send(message);
+						logger.debug("Email sent");
+
+						message = null;
+					}
+					catch (Exception ex)
+					{
+						logger.error("Error encountered sending email [" + ex.getMessage() + "]");
 					}
 
 				}
-				catch (Exception mex)
+				else
 				{
-					logger.error("Error sending email : " + mex.getMessage());
-					result = false;
+					// okToSend = false;
+					logger.debug("Email suppressed - too frequent");
 				}
 
-				attachment = null;
-				email = null;
-			}
 			}
 			else
 			{
