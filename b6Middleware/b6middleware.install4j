@@ -12,7 +12,7 @@
         <language id="pl" />
       </additionalLanguages>
     </languages>
-    <jreBundles jdkProviderId="Zulu" release="17/17.0.8.1" />
+    <jreBundles jdkProviderId="Zulu" release="17/17.0.9" />
   </application>
   <files keepModificationTimes="true" missingFilesStrategy="error" globalExcludeSuffixes="dirClean.ok,.DS_Store">
     <mountPoints>
