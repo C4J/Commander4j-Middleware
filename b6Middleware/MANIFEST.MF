@@ -29,7 +29,7 @@ Class-Path: lib/log/log4j-api-2.20.0.jar
  lib/poi/poi-ooxml-full-5.2.3.jar 
  lib/poi/poi-scratchpad-5.2.3.jar 
  lib/saxon/jline-2.14.6.jar 
- lib/saxon/saxon-he-12.2.jar 
- lib/saxon/saxon-he-xqj-12.2.jar 
- lib/saxon/xmlresolver-5.1.2-data.jar 
- lib/saxon/xmlresolver-5.1.2.jar 
+ lib/saxon/saxon-he-12.3.jar 
+ lib/saxon/saxon-he-xqj-12.3.jar 
+ lib/saxon/xmlresolver-5.2.0-data.jar 
+ lib/saxon/xmlresolver-5.2.0.jar 
