@@ -913,7 +913,7 @@
         </output>
     </map>
     
-    <map id="map501" enabled="N" description="DMO to C4J Production Declaration">
+    <map id="mapDMO1" enabled="N" description="DMO to C4J Production Declaration">
         <input id="in1" description="Read DMO Prod Dec XML">
             <type>XML</type>
             <path>./interface/input/501 (DMO Production Declaration)</path>
@@ -929,7 +929,7 @@
         </output>
     </map>
 
-    <map id="mapDMO2" enabled="Y" description="Parse and Seperate DMO FERT and HALB messages">
+    <map id="mapDMO2" enabled="N" description="Parse and Seperate DMO FERT and HALB messages">
         
         <input id="in1" description="Read C4J Prod Dec XML">
             <type>XML</type>
@@ -963,7 +963,7 @@
         
     </map>
     
-    <map id="mapDMO3" enabled="Y" description="DMO S95 FERT to C4J Production Declaration">
+    <map id="mapDMO3" enabled="N" description="DMO S95 FERT to C4J Production Declaration">
         <input id="in1" description="Read DMO Prod Dec XM">
             <type>XML</type>
             <path>./interface/output/501 (DMO Prod Dec Intermediate)</path>
@@ -977,6 +977,41 @@
             <type>XML</type>
              <XSLT>S95_PRODDEC_XML_to_C4J_PRODDEC.xsl</XSLT>
         </output>  
+    </map>
+    
+    <map id="mapDMO4" enabled="Y" description="Parse and Seperate DMO FERT and HALB messages">
+        
+        <input id="in1" description="Read C4J Prod Dec XML">
+            <type>XML</type>
+            <path>./interface/input/501 (DMO Production Declaration)</path>
+            <mask/>
+            <pollingInterval>1000</pollingInterval>
+            <XSLT/>
+        </input>
+        
+        <output id="out1" enabled="Y" description="Write FERT to C4J">
+            <condition>
+                <param1 type="xquery">//message/messageData[1]/productionDeclaration[1]/StorageModule[1]</param1>
+                <comparitor>EQUAL</comparitor>
+                <param2 type="literal">DESPATCH</param2>
+            </condition>
+            <path>./interface/output/501 (FERT)</path>
+            <type>XML</type>
+            <XSLT>S95_PRODDEC_XML_to_C4J_PRODDEC.xsl</XSLT>
+            <XSLT/>
+        </output>
+        
+        <output id="out2" enabled="Y" description="Write BULK to Mii">
+            <condition>
+                <param1 type="xquery">//ProductionPerformance/ProductionResponse[1]/SegmentResponse[1]/MaterialProducedActual[1]/Location[1]/Location[1]/Location[1]/Location[1]/Location[1]/EquipmentID[1]</param1>
+                <comparitor>NOT EQUAL</comparitor>
+                <param2 type="literal">DESPATCH</param2>
+            </condition>
+            <path>./interface/output/501 (HALB)</path>
+            <type>XML</type>
+            <XSLT/>
+        </output>
+        
     </map>
 
 </config>
