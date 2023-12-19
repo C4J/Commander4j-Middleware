@@ -28,7 +28,7 @@ public class MiddlewareConfig
 
 		for (int x = 0; x < getMaps().size(); x++)
 		{
-			result = result + "Map : [" + getMaps().get(x).getId() + "] Description [" + util.padString(getMaps().get(x).getDescription(), true, 60, " ") + "] Inbound Map Count ["
+			result = result + "Map : [" + util.padString( getMaps().get(x).getId(), true, 12, " ") + "] Description [" + util.padString(getMaps().get(x).getDescription(), true, 60, " ") + "] Inbound Map Count ["
 					+ util.padString(getMaps().get(x).getInboundMapMessageCount().toString(), false, 5, " ") + "] Outbound Map Count [" + util.padString(getMaps().get(x).getOutboundMapMessageCount().toString(), false, 5, " ") + "]" + "\n";
 		}
 
