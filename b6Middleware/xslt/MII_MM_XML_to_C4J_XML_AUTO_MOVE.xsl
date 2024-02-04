@@ -68,9 +68,9 @@
     <xsl:template match="IDOC">
         <xsl:apply-templates select="EDI_DC40"/>
         <messageData>
-            <materialDefinition>
+            <materialAutoMove>
                   <xsl:apply-templates select="E1MARAM"/>
-            </materialDefinition>
+            </materialAutoMove>
         </messageData>
     </xsl:template>
     
