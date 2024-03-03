@@ -20,7 +20,6 @@
 	
 	<xsl:template match='ProductionPerformance'>
 		
-		<ProductionPerformance>
 			<message>
 				<hostRef><xsl:value-of select='$HOSTREF' /></hostRef>
 				<messageRef><xsl:value-of select='/ProductionPerformance/ID' /></messageRef>
@@ -43,7 +42,6 @@
 				</messageData>	
 
 			</message>
-		</ProductionPerformance>
 	</xsl:template>
 	
 	<!-- ================
