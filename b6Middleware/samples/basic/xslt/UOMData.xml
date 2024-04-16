@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lookup>
+    
+    <material id="8006038">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>35</value></item>  
+        <item type="BasePerLAG"><value>7</value></item>   
+        <item type="StockUnitPerBase"><value>6</value></item> 
+    </material>
+    
+    <material id="8009449">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>80</value></item>  
+        <item type="BasePerLAG"><value>16</value></item>   
+        <item type="StockUnitPerBase"><value>5</value></item> 
+    </material>
+    
+    <material id="8009450">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>80</value></item>  
+        <item type="BasePerLAG"><value>16</value></item>   
+        <item type="StockUnitPerBase"><value>5</value></item> 
+    </material>
+    
+    <material id="8009451">
+        <item type="BaseUnitofMeasure"><value>BOX</value></item>
+        <item type="BasePerPAL"><value>80</value></item>  
+        <item type="BasePerLAG"><value>16</value></item>   
+        <item type="StockUnitPerBase"><value>5</value></item> 
+    </material>
+    
+</lookup>
+

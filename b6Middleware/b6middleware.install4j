@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="10.0.7" transformSequenceNumber="10">
-  <directoryPresets config="./xslt/referenceData.xml" />
-  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.23" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
+  <directoryPresets config="./samples/advanced" />
+  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.24" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
         <language id="da" />
@@ -22,14 +22,17 @@
       <mountPoint id="35" location="lib" />
       <mountPoint id="36" location="logs" />
       <mountPoint id="295" location="xslt" />
-      <mountPoint id="349" location="project" />
       <mountPoint id="402" location="interface" />
       <mountPoint id="403" location="interface/input" />
       <mountPoint id="404" location="interface/output" />
       <mountPoint id="405" location="interface/log" />
-      <mountPoint id="510" location="interface/intermediate" />
       <mountPoint id="457" location="licences" />
       <mountPoint id="619" location="idoc" />
+      <mountPoint id="725" location="samples" />
+      <mountPoint id="729" location="samples/basic" />
+      <mountPoint id="730" location="samples/basic/config" />
+      <mountPoint id="731" location="samples/basic/xslt" />
+      <mountPoint id="732" location="samples/basic/input" />
       <mountPoint id="94" />
     </mountPoints>
     <entries>
@@ -39,7 +42,6 @@
       <fileEntry mountPoint="32" file="./xml/config/config.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="32" file="./xml/config/config.dtd" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="32" file="./xml/config/email.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="32" file="./xml/config/config_new.xml" overwriteMode="1" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="32" file="./xml/config/SaxonConfiguration.xml" overwriteMode="3" overrideOverwriteMode="true" />
       <dirEntry mountPoint="35" file="./lib" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="lib" excludeSuffixes=".DS_Store">
         <exclude>
@@ -61,9 +63,8 @@
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="295" file="./xslt/configData.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="295" file="./xslt/referenceData.xml" overwriteMode="2" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
+      <fileEntry mountPoint="295" file="./xslt/referenceData.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
       <fileEntry mountPoint="295" file="./xslt/UOMData.xml" overwriteMode="0" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <dirEntry mountPoint="349" file="./project" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="project" />
       <dirEntry mountPoint="403" file="./interface/input" uninstallMode="1" overrideUninstallMode="true" subDirectory="input">
         <exclude>
           <entry location="dirClean.ok" />
@@ -81,9 +82,19 @@
           <entry location=".DS_Store" />
         </exclude>
       </dirEntry>
-      <dirEntry mountPoint="510" file="./interface/intermediate" subDirectory="intermediate" />
       <dirEntry mountPoint="457" file="./licences" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="licences" />
       <dirEntry mountPoint="619" file="./idoc" overwriteMode="1" uninstallMode="1" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="idoc">
+        <exclude>
+          <entry location=".DS_Store" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="730" file="./samples/basic/config" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="config">
+        <exclude>
+          <entry location=".DS_Store" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="731" file="./samples/basic/xslt" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="xslt" />
+      <dirEntry mountPoint="732" file="./samples/basic/input" overwriteMode="1" uninstallMode="2" overrideOverwriteMode="true" overrideUninstallMode="true" subDirectory="input">
         <exclude>
           <entry location=".DS_Store" />
         </exclude>

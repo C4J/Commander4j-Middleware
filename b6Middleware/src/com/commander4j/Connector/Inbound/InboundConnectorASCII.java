@@ -130,6 +130,7 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 						row++;
 						Element xmlrow = (Element) data.createElement("row");
 						xmlrow.setAttribute("id", String.valueOf(row));
+						xmlrow.setAttribute("cols", String.valueOf(getPatternColumnCount()));
 						xmlrow.setNodeValue(String.valueOf(row));
 
 						System.out.println(line);
