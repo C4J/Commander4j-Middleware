@@ -110,7 +110,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 						printerjob.setPageable(new PDFPageable(pdfdocument));
 						printerjob.print();
 						FileUtils.deleteQuietly(new File(outputFilename));
-
+						pdfdocument.close();
 						result = true;
 					}
 				}

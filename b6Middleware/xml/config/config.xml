@@ -71,7 +71,7 @@
         <input id="in1" description="Read CSV">
             <type>CSV</type>
             <path>./interface/input/Map04 CSV to XML</path>
-            <mask>NTR</mask>
+            <mask/>
             <pollingInterval>1000</pollingInterval>
             <optionDelimeter>^</optionDelimeter>
             <csvOptions>separator=|^quote=none</csvOptions>
@@ -112,7 +112,7 @@
         <output id="out1" enabled="Y" description="Print PDF Document to HP8600">
             <path>./interface/output/Map06 PDF to PRINT</path>
             <type>PDF_PRINT</type>
-            <queueName>MYPRINTQUEUE</queueName>
+            <queueName></queueName>
             <XSLT/>
         </output>
     </map>    
