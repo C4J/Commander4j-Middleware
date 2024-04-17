@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+    <SSCC>000000000000000123</SSCC>
+    <processOrder>00020725187</processOrder>
+    <productionDate>2016-08-01T14:58:03</productionDate>
+    <recipe>000000000028949253</recipe>
+    <requiredResource>P2VK1112</requiredResource>
+    <material>43170672</material>
+    <description>Reverse Ratcheting Router, Large</description>
+    <group1>001,002,003</group1>
+    <group2>AAA BBB CCC</group2>
+    <old_code>C</old_code>
+    <ean>7613032213848</ean>
+    <variant>0</variant>
+    <status>Unrestricted</status>
+    <batch>6214093310</batch>
+    <batchStatus>Restricted</batchStatus>
+    <expiry_Mode>BATCH</expiry_Mode>
+    <expiryDate>2018-08-31T00:00:00</expiryDate>
+    <location>EARTH</location>
+    <name>Earth</name>
+    <gln>5000161800292</gln>
+    <plant>1234</plant>
+    <warehouse>678</warehouse>
+    <shortdate1>17042024</shortdate1>
+    <shortdate2>14-04-24 16:57:34</shortdate2>
+    <shortdate3>14-APR-24</shortdate3>
+    <storageLocation>0001</storageLocation>
+    <storageSection>999   </storageSection>
+    <storageBin>DESPATCH</storageBin>
+    <storageType>PRO</storageType>
+    <productionQuantity>5616.000</productionQuantity>
+    <productionUOM>EA</productionUOM>
+    <confirmed>Y</confirmed>
+</message>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><function_demo>
+<!--Function substring(string,start,length)-->
+   <input>000000000000000123</input>
+   <output>000000012</output>
+   <!--Function removeLeadingZeros(string)-->
+   <input>00020725187</input>
+   <output>20725187</output>
+   <!--Function formatDate(string,string,string)-->
+   <input>2016-08-01T14:58:03</input>
+   <output>010816</output>
+   <!--Function ISO_Date_to_date_MMYYYY(string)-->
+   <input>2016-08-01T14:58:03</input>
+   <output>082016</output>
+   <!--Function ISO_Date_to_date_DD_MM_YYYY_HH_MM_SS(string)-->
+   <input>2016-08-01T14:58:03</input>
+   <output>01-08-2016 14:58:03</output>
+   <!--Function ISO_Date_to_date_DDMMYYYY(string)-->
+   <input>2016-08-01T14:58:03</input>
+   <output>01082016</output>
+   <!--Function removeCommas(string)-->
+   <input>001,002,003</input>
+   <output>001 002 003</output>
+   <!--Function removeSpaces(string)-->
+   <input>AAA BBB CCC</input>
+   <output>AAABBBCCC</output>
+   <!--Function trim(string)-->
+   <input>999   </input>
+   <output>999</output>
+   <!--Function padVariant(string)-->
+   <storageSection>:999   :</storageSection>
+   <input>0</input>
+   <output>00</output>
+   <!--Function padEAN(string)-->
+   <input>7613032213848</input>
+   <output>07613032213848</output>
+   <!--Function padStringLeft(string,integer,character)-->
+   <input>1234</input>
+   <output>XXXXXX1234</output>
+   <!--Function padStringRight(string,integer,character)-->
+   <input>1234</input>
+   <output>1234XXXXXX</output>
+   <!--Function getISODateTimeString()-->
+   <output>2024-04-17T18:32:31</output>
+   <!--Function getISODateTimeFilenameString()-->
+   <output>2024_04_17_18_32_31</output>
+   <!--Function date_DDMMYYYY_to_ISO_Date(string)-->
+   <input>17042024</input>
+   <output>2024-04-17T00:00:00</output>
+   <!--Function date_DD_MM_YY_HH_MM_SS_to_ISO_Date(string)-->
+   <input>14-04-24 16:57:34</input>
+   <output>2024-04-14 16:57:34</output>
+   <!--Function date_DD_MMM_YY_to_ISO_Date(string)-->
+   <input>14-APR-24</input>
+   <output>2024-04-14T00:00:00</output>
+   <!--Function concat(string,string)-->
+   <input1>43170672</input1>
+   <input2>6214093310</input2>
+   <output>431706726214093310</output>
+</function_demo>
