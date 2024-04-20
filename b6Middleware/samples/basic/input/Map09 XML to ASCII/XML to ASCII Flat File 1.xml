@@ -3,12 +3,12 @@
     <hostRef>service</hostRef>
     <messageRef>12584314</messageRef>
     <interfaceType>Production Declaration</interfaceType>
-    <messageInformation>SSCC=350001615021853044</messageInformation>
+    <messageInformation>SSCC=000000000000000123</messageInformation>
     <interfaceDirection>Output</interfaceDirection>
     <messageDate>2016-08-01T14:58:16</messageDate>
     <messageData>
         <productionDeclaration>
-            <SSCC>350001615021853044</SSCC>
+            <SSCC>000000000000000123</SSCC>
             <processOrder>20725187</processOrder>
             <recipe>100000000028949253</recipe>
             <requiredResource>P2VK1112</requiredResource>
@@ -22,8 +22,8 @@
             <batchStatus>Restricted</batchStatus>
             <expiry_Mode>BATCH</expiry_Mode>
             <expiryDate>2018-08-31T00:00:00</expiryDate>
-            <location>WISBECH</location>
-            <name>Wisbech</name>
+            <location>EARTH</location>
+            <name>Earth</name>
             <gln>5000161800292</gln>
             <plant>0933</plant>
             <warehouse>734</warehouse>
