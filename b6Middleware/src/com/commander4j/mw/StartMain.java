@@ -16,7 +16,7 @@ public class StartMain
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
 	public MiddlewareConfig cfg;
-	public static String version = "5.24";
+	public static String version = "5.25";
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;

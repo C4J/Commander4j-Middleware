@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -29,7 +31,6 @@ import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.gui.JList4j;
 import com.commander4j.sys.Common;
 import com.commander4j.util.Utility;
-import javax.swing.ListSelectionModel;
 
 public class StartGUI extends JFrame
 {
@@ -106,8 +107,17 @@ public class StartGUI extends JFrame
 			{
 				try
 				{
-					StartGUI.frame = new StartGUI();
-					StartGUI.frame.setVisible(true);
+					frame = new StartGUI();
+					
+					GraphicsDevice gd = Utility.getGraphicsDevice();
+					
+					GraphicsConfiguration gc = gd.getDefaultConfiguration();
+
+					Rectangle screenBounds = gc.getBounds();
+
+					frame.setBounds(screenBounds.x + ((screenBounds.width - frame.getWidth()) / 2), screenBounds.y + ((screenBounds.height - frame.getHeight()) / 2), frame.getWidth(), frame.getHeight());
+
+					frame.setVisible(true);
 
 				} catch (Exception e)
 				{
@@ -126,16 +136,15 @@ public class StartGUI extends JFrame
 		setTitle("Commander4j Middleware" + " " + StartMain.version);
 		util.initLogging("");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 1319, 765);
+		
+		setSize(1319, 765);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		addWindowListener(new WindowListener());
 
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Rectangle window = getBounds();
-		setLocation((screen.width - window.width) / 2, (screen.height - window.height) / 2);
 
 		JButton btnClose = new JButton(Common.icon_close);
 		btnClose.setFont(new Font("Dialog", Font.PLAIN, 12));
