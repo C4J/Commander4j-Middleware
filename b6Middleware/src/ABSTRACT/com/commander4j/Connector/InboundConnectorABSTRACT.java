@@ -130,6 +130,11 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		return this.enabled;
 	}
 
+	public void resetInBoundConnectorCount()
+	{
+		inboundConnectorMessageCount = (long) 0;
+	}
+	
 	public Boolean processInboundFile(String filename)
 	{
 		Boolean result = false;

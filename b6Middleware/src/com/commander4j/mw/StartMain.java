@@ -16,7 +16,7 @@ public class StartMain
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
 	public MiddlewareConfig cfg;
-	public static String version = "5.25";
+	public static String version = "5.31";
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;
@@ -28,26 +28,40 @@ public class StartMain
 		return running;
 	}
 
-	public Boolean StartMiddleware()
+	public Boolean init()
 	{
 		Boolean result = true;
-
-		logger.debug("Application starting");
+		
+		logger.debug("Application Initialisation");
+		
 		util.initLogging("");
-
+		
 		logger.debug("*************************");
 		logger.debug("**     STARTING        **");
 		logger.debug("*************************");
 		
-
+		return result;
+	}
+	
+	public Boolean loadMaps()
+	{
+		Boolean result = true;
+		
 		cfg = new MiddlewareConfig();
 
 		cfg.loadMaps(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "config.xml");
-
+		
 		logger.debug("*************************");
 		logger.debug("**     MAPS LOADED     **");
 		logger.debug("*************************");
-
+		
+		return result;	
+	}
+	
+	public Boolean runMaps()
+	{
+		Boolean result = true;
+		
 		if ((cfg.getMapDirectoryErrorCount() == 0) || (Common.runMode.equals("Service")))
 		{
 
@@ -88,11 +102,11 @@ public class StartMain
 			Common.emailqueue.addToQueue(true,"Monitor", "Error Starting ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), "Errors :-\n\n"+errorMsg, "");
 			result = false;
 		}
-
-		return result;
+		
+		return result;	
 	}
-
-	public Boolean StopMiddleware()
+	
+	public Boolean stopMaps()
 	{
 		Boolean result = true;
 

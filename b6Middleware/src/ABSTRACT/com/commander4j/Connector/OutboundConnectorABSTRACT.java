@@ -34,6 +34,11 @@ public abstract class OutboundConnectorABSTRACT implements OutboundConnectorINTE
 	{
 		return outboundConnectorCount;
 	}
+	
+	public void resetOutBoundConnectorCount()
+	{
+		outboundConnectorCount = (long) 0;
+	}
 
 	public OutboundInterface getOutboundInterface()
 	{

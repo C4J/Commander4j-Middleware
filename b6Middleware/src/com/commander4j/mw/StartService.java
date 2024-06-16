@@ -17,11 +17,14 @@ public class StartService
 
 	public Integer start(String[] args)
 	{
+		Common.smw.init();
+		Common.smw.loadMaps();
+		
 		Integer result = 0;
 		AddShutdownHookSample sample = new AddShutdownHookSample();
 		sample.attachShutDownHook();
 
-		if (Common.smw.StartMiddleware())
+		if (Common.smw.runMaps())
 		{
 
 			while (shutdown.equals(false))
@@ -30,7 +33,6 @@ public class StartService
 				{
 					JWait.oneSec();
 				}
-
 			}
 		}
 
@@ -40,7 +42,9 @@ public class StartService
 	public static void main(String[] args)
 	{
 		Common.sservice = new StartService();
+		
 		Common.sservice.start(args);
+		
 		System.exit(0);
 	}
 
@@ -48,7 +52,9 @@ public class StartService
 	{
 
 		shutdown = true;
-		Common.smw.StopMiddleware();
+		
+		Common.smw.stopMaps();
+		
 		return exitCode;
 	}
 
@@ -65,7 +71,7 @@ public class StartService
 
 					logger.info("Waiting for threads to stop.");
 					
-					Common.smw.StopMiddleware();
+					Common.smw.stopMaps();
 					
 					logger.info("All threads have stopped.");;
 				}

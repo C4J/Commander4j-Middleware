@@ -24,7 +24,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import com.commander4j.Interface.Mapping.Map;
@@ -37,12 +36,10 @@ public class StartGUI extends JFrame
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	// private StartMW smw = new StartMW();
 	private JButton btnStart;
 	private JButton btnStop;
-	private JPanel panelStatus = new JPanel();
-	private JLabel lblStatus = new JLabel("Ready");
-	private JPanel progressBarInterface = new JPanel();
+
+	private JLabel lblStatus = new JLabel();
 	private final JLabel lblInterfaceStatus = new JLabel("Interface Status :");
 	private JLabel label_NoOfMaps = new JLabel("");
 	private JList4j<Map> listMaps = new JList4j<Map>();
@@ -61,10 +58,11 @@ public class StartGUI extends JFrame
 
 			if (question == 0)
 			{
-				Common.smw.StopMiddleware();
+				Common.smw.stopMaps();
 				System.exit(0);
 			}
-		} else
+		}
+		else
 		{
 			System.exit(0);
 		}
@@ -83,20 +81,20 @@ public class StartGUI extends JFrame
 
 		DefaultComboBoxModel<Map> defComboBoxMod = new DefaultComboBoxModel<Map>();
 		int sel = -1;
-		if (Common.smw.isRunning())
+
+		for (int j = 0; j < Common.smw.cfg.getMaps().size(); j++)
 		{
+			defComboBoxMod.addElement(Common.smw.cfg.getMaps().get(j));
 
-			for (int j = 0; j < Common.smw.cfg.getMaps().size(); j++)
-			{
-				defComboBoxMod.addElement(Common.smw.cfg.getMaps().get(j));
-
-			}
 		}
+
 		ListModel<Map> jList1Model = defComboBoxMod;
 		listMaps.setModel(jList1Model);
 
 		listMaps.setCellRenderer(Common.renderer_list);
 		listMaps.ensureIndexIsVisible(sel);
+
+		label_NoOfMaps.setText(String.valueOf(Common.smw.cfg.getMaps().size()));
 	}
 
 	public static void main(String[] args)
@@ -108,9 +106,9 @@ public class StartGUI extends JFrame
 				try
 				{
 					frame = new StartGUI();
-					
+
 					GraphicsDevice gd = Utility.getGraphicsDevice();
-					
+
 					GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
 					Rectangle screenBounds = gc.getBounds();
@@ -119,7 +117,8 @@ public class StartGUI extends JFrame
 
 					frame.setVisible(true);
 
-				} catch (Exception e)
+				}
+				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -136,15 +135,14 @@ public class StartGUI extends JFrame
 		setTitle("Commander4j Middleware" + " " + StartMain.version);
 		util.initLogging("");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		
-		setSize(1319, 765);
-		
+
+		setSize(1142, 662);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		addWindowListener(new WindowListener());
-
 
 		JButton btnClose = new JButton(Common.icon_close);
 		btnClose.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -156,7 +154,7 @@ public class StartGUI extends JFrame
 				ConfirmExit();
 			}
 		});
-		btnClose.setBounds(911, 657, 150, 38);
+		btnClose.setBounds(863, 586, 150, 38);
 		contentPane.add(btnClose);
 
 		btnStart = new JButton(Common.icon_ok);
@@ -164,7 +162,7 @@ public class StartGUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Common.smw.StartMiddleware();
+				Common.smw.runMaps();
 				if (Common.smw.cfg.getMapDirectoryErrorCount() > 0)
 				{
 					String errorMessage = "";
@@ -176,15 +174,16 @@ public class StartGUI extends JFrame
 
 					JOptionPane.showMessageDialog(frame, errorMessage, "Map Errors", JOptionPane.ERROR_MESSAGE);
 
-				} else
+				}
+				else
 				{
 					btnStart.setEnabled(false);
 					btnStop.setEnabled(true);
-					lblStatus.setText("Running");
-					label_NoOfMaps.setText(String.valueOf(Common.smw.cfg.getMaps().size()));
+
 					populateList("");
 					btnClose.setEnabled(false);
-					progressBarInterface.setBackground(new Color(0, 128, 0));
+					lblStatus.setBackground(new Color(0, 128, 0));
+					lblStatus.setText("Running");
 				}
 			}
 		});
@@ -193,41 +192,36 @@ public class StartGUI extends JFrame
 		btnStart.setText("Start");
 		btnStart.setSelectedIcon(Common.icon_cancel);
 		btnStart.setOpaque(true);
-		btnStart.setBounds(261, 657, 150, 38);
+		btnStart.setBounds(213, 586, 150, 38);
 		contentPane.add(btnStart);
-
-		panelStatus.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panelStatus.setBounds(0, 707, 1320, 30);
-		contentPane.add(panelStatus);
-		panelStatus.setLayout(null);
-
-		lblStatus.setFont(new Font("Dialog", Font.PLAIN, 12));
-		lblStatus.setBounds(4, 0, 1320, 25);
+		
+		lblStatus.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
-		panelStatus.add(lblStatus);
-
-		progressBarInterface.setForeground(new Color(0, 128, 0));
-		progressBarInterface.setBounds(151, 15, 15, 15);
-		progressBarInterface.setPreferredSize(new Dimension(40, 40));
-		progressBarInterface.setBackground(Color.RED);
-		contentPane.add(progressBarInterface);
-		lblInterfaceStatus.setFont(new Font("Dialog", Font.PLAIN, 12));
+		lblStatus.setForeground(Color.BLACK);
+		lblStatus.setBounds(151, 12, 131, 22);
+		lblStatus.setPreferredSize(new Dimension(40, 40));
+		lblStatus.setBackground(new Color (238,238,238));
+		lblStatus.setOpaque(true);
+		lblStatus.setText("Idle");
+		
+		contentPane.add(lblStatus);
+		lblInterfaceStatus.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblInterfaceStatus.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblInterfaceStatus.setBounds(12, 12, 131, 22);
 
 		contentPane.add(lblInterfaceStatus);
 
 		JLabel lblNumberOfMaps = new JLabel("Number of Maps :");
-		lblNumberOfMaps.setFont(new Font("Dialog", Font.PLAIN, 12));
+		lblNumberOfMaps.setFont(new Font("Dialog", Font.BOLD, 12));
 		lblNumberOfMaps.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblNumberOfMaps.setBounds(181, 12, 131, 22);
+		lblNumberOfMaps.setBounds(305, 12, 131, 22);
 		contentPane.add(lblNumberOfMaps);
 
-		label_NoOfMaps.setBounds(319, 12, 60, 22);
+		label_NoOfMaps.setBounds(443, 12, 60, 22);
 		contentPane.add(label_NoOfMaps);
 
 		JScrollPane scrollPaneMaps = new JScrollPane();
-		scrollPaneMaps.setBounds(0, 65, 1313, 580);
+		scrollPaneMaps.setBounds(0, 80, 1141, 503);
 		contentPane.add(scrollPaneMaps);
 		listMaps.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -236,14 +230,21 @@ public class StartGUI extends JFrame
 		JButton buttonHelp = new JButton((Icon) null);
 		buttonHelp.setFont(new Font("Dialog", Font.PLAIN, 12));
 		buttonHelp.setText("Help");
-		buttonHelp.setBounds(749, 657, 150, 38);
+		buttonHelp.setBounds(701, 586, 150, 38);
 		contentPane.add(buttonHelp);
 
-		JLabel lblIdDescriptionType = new JLabel(" Map Id  Description                                                             Input       Output(s)         In      Out  Input Path");
-		lblIdDescriptionType.setForeground(Color.BLUE);
-		lblIdDescriptionType.setFont(new Font("Courier New", Font.PLAIN, 12));
-		lblIdDescriptionType.setBounds(0, 46, 1300, 22);
+		JLabel lblIdDescriptionType_1 = new   JLabel("                                                 Map      Map       Connector   Connector   Path(s)");
+		JLabel lblIdDescriptionType = new     JLabel("Map Id   Description                              In      Out         Type        Count     Input / Output");
+		lblIdDescriptionType.setForeground(Color.BLACK);
+		lblIdDescriptionType.setFont(new Font("Courier New", Font.BOLD, 12));
+		lblIdDescriptionType.setBounds(0, 58, 1300, 22);
 		contentPane.add(lblIdDescriptionType);
+		
+
+		lblIdDescriptionType_1.setForeground(Color.BLACK);
+		lblIdDescriptionType_1.setFont(new Font("Courier New", Font.BOLD, 12));
+		lblIdDescriptionType_1.setBounds(0, 42, 1300, 22);
+		contentPane.add(lblIdDescriptionType_1);
 
 		JButton btnRefresh = new JButton((Icon) null);
 		btnRefresh.addActionListener(new ActionListener()
@@ -255,7 +256,7 @@ public class StartGUI extends JFrame
 		});
 		btnRefresh.setText("Refresh");
 		btnRefresh.setFont(new Font("Dialog", Font.PLAIN, 12));
-		btnRefresh.setBounds(587, 657, 150, 38);
+		btnRefresh.setBounds(539, 586, 150, 38);
 		contentPane.add(btnRefresh);
 
 		btnStop = new JButton(Common.icon_cancel);
@@ -264,13 +265,13 @@ public class StartGUI extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				populateList("");
-				Common.smw.StopMiddleware();
+				Common.smw.stopMaps();
 
 				btnStart.setEnabled(true);
 				btnStop.setEnabled(false);
-				lblStatus.setText("Stopped");
 				btnClose.setEnabled(true);
-				progressBarInterface.setBackground(Color.RED);
+				lblStatus.setBackground(Color.RED);
+				lblStatus.setText("Stopped");
 			}
 		});
 		btnStop.setEnabled(false);
@@ -278,7 +279,13 @@ public class StartGUI extends JFrame
 		btnStop.setOpaque(true);
 		btnStop.setMnemonic(KeyEvent.VK_ENTER);
 		btnStop.setFont(new Font("Dialog", Font.PLAIN, 12));
-		btnStop.setBounds(423, 657, 150, 38);
+		btnStop.setBounds(375, 586, 150, 38);
 		contentPane.add(btnStop);
+
+		Common.smw.init();
+		Common.smw.loadMaps();
+
+		populateList("");
+
 	}
 }

@@ -36,11 +36,23 @@ public class Map implements Comparable<Map>
 	public void resetOutboundMapMessageCount()
 	{
 		outboundMapMsgCount = (long) 0;
+		
+		int OutboundIntCount = getNumberofOutboundInterfaces();
+		
+		if (OutboundIntCount > 0)
+		{
+			for (int x = 0; x < OutboundIntCount; x++)
+			{
+				getOutBoundInterface(x).connector.resetOutBoundConnectorCount();
+			}
+		}
 	}
 	
 	public void resetInboundMapMessageCount()
 	{
 		inboundMapMsgCount = (long) 0;
+		
+		getInboundInterface().connector.resetInBoundConnectorCount();
 	}	
 	
 	public Long getOutboundMapMessageCount()
@@ -52,23 +64,52 @@ public class Map implements Comparable<Map>
 	{
 		int OutboundIntCount = getNumberofOutboundInterfaces();
 		String outboundTypeList = "";
+		String outboundPathList = "";
 
 		if (OutboundIntCount > 0)
 		{
 			for (int x = 0; x < OutboundIntCount; x++)
-			{
-				getOutBoundInterface(x).getType();
+			{	
 				if (x > 0)
 				{
 					outboundTypeList = outboundTypeList + "+";
 				}
 				outboundTypeList = outboundTypeList + getOutBoundInterface(x).getType();
-
+				outboundPathList = outboundPathList + "<br><font color='red'>" +util.padString("",true,70," ")+util.padString(getOutBoundInterface(x).getType(),true,10," ")+"   "+util.padString(getOutBoundInterface(x).connector.getOutboundConnectorCount().toString(),true,5," ")+"   "+getOutBoundInterface(x).getOutputPath();
+				
+//				System.out.println("----------------------------");
+//				System.out.println("Map ID                      :"+getId());
+//				System.out.println("Map Description             :"+getDescription());
+//				System.out.println("Map InboundMapMessageCount  :"+getInboundMapMessageCount());
+//				System.out.println("Map OutboundMapMessageCount :"+getOutboundMapMessageCount());
+//				System.out.println("Interface ID                :"+getOutBoundInterface(x).getId());
+//				System.out.println("Interface Description       :"+getOutBoundInterface(x).getDescription());
+//				System.out.println("Connector Type              :"+getOutBoundInterface(x).connector.getType());
+//				System.out.println("Connector Path              :"+getOutBoundInterface(x).connector.getPath());
+//				System.out.println("Connector Count             :"+getOutBoundInterface(x).connector.getOutboundConnectorCount());
+//				System.out.println("----------------------------");
 			}
 		}
 
-		return util.padString(getId(), true, 7, " ") + "  " + util.padString(getDescription(), true, 70, " ") + "  " + util.padString(getInboundInterface().getType(), true, 10, " ") + "  " + util.padString(outboundTypeList, true, 12, " ")
-				+ util.padString(getInboundMapMessageCount().toString(), false, 8, " ") + " " + util.padString(getOutboundMapMessageCount().toString(), false, 8, " ") + "  " + getInboundInterface().getInputPath();
+		
+		String result = "<html><font color='blue'>"+
+						util.padString(getId(), true, 7, " ") + 
+						"  " + 
+						util.padString(getDescription(), true, 35, " ") + 
+						"<font color='green'>"+
+						util.padString(getInboundMapMessageCount().toString(), false, 8, " ") + 
+						" " + "<font color='red'>" + 
+						util.padString(getOutboundMapMessageCount().toString(), false, 8, " ") + 
+						"         "+"<font color='green'>"+
+						util.padString(getInboundInterface().getType(), true, 10, " ") + 
+						"   " + 
+						util.padString(getInboundInterface().connector.getInboundConnectorMessageCount().toString(),true,5," ")+
+						"   " + 
+						getInboundInterface().getInputPath()+outboundPathList+"</html>";
+		
+		result = result.replace(" ", "&nbsp;");
+		
+		return result;
 	}
 
 	public void setId(String ID)
