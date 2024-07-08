@@ -162,6 +162,7 @@ public class StartGUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				Common.smw.loadMaps();
 				Common.smw.runMaps();
 				if (Common.smw.cfg.getMapDirectoryErrorCount() > 0)
 				{

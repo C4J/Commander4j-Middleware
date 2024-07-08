@@ -44,6 +44,11 @@ public class MiddlewareConfig
 		}
 	}
 
+	public void resetErrors()
+	{
+		directoryErrors.clear();
+	}
+	
 	public int getMapDirectoryErrorCount()
 	{
 		return directoryErrors.size();

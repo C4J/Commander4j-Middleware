@@ -16,7 +16,7 @@ public class StartMain
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
 	public MiddlewareConfig cfg;
-	public static String version = "5.31";
+	public static String version = "5.33";
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;
@@ -48,6 +48,8 @@ public class StartMain
 		Boolean result = true;
 		
 		cfg = new MiddlewareConfig();
+		
+		cfg.resetErrors();
 
 		cfg.loadMaps(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "config.xml");
 		
@@ -60,6 +62,7 @@ public class StartMain
 	
 	public Boolean runMaps()
 	{
+		
 		Boolean result = true;
 		
 		if ((cfg.getMapDirectoryErrorCount() == 0) || (Common.runMode.equals("Service")))
