@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="10.0.8" transformSequenceNumber="10">
-  <directoryPresets config="./samples/advanced" />
+  <directoryPresets config="./images/icons/iFace4j_Icons" />
   <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.33" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
@@ -131,6 +131,22 @@
         </classPath>
       </java>
       <vmOptionsFile mode="none" />
+      <iconImageFiles>
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_16x16.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_32x32.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_48x48.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_128x128.png" />
+        <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_256x256.png" />
+      </iconImageFiles>
+    </launcher>
+    <launcher name="EncryptData" id="738" icnsFile="./images/icons/iFace4j_Icons/MyIcon.icns">
+      <executable name="EncryptData" iconSet="true" iconFile="./images/icons/iFace4j_Icons/icon.ico" executableDir="." redirectStderr="false" executableMode="console" />
+      <java mainClass="com.commander4j.util.EncryptData">
+        <classPath>
+          <archive location="c4jMiddleware.jar" failOnError="false" />
+          <directory location="lib" failOnError="false" />
+        </classPath>
+      </java>
       <iconImageFiles>
         <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_16x16.png" />
         <file path="./images/icons/iFace4j_Icons/MyIcon.iconset/icon_32x32.png" />
