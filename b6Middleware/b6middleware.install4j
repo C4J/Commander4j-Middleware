@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="10.0.8" transformSequenceNumber="10">
   <directoryPresets config="./images/icons/iFace4j_Icons" />
-  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.33" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
+  <application name="Commander4j Middleware" applicationId="1915-8055-3520-8512" mediaDir="../../../Distribution/java17/b6middleware4j" compression="9" shortName="c4jMiddleware" publisher="David Garratt" publisherWeb="http://www.commander4j.com" version="5.34" allPathsRelative="true" macVolumeId="ebde9226275d23ed" javaMinVersion="17" javaMaxVersion="17">
     <languages skipLanguageSelection="true">
       <additionalLanguages>
         <language id="da" />
@@ -12,7 +12,7 @@
         <language id="pl" />
       </additionalLanguages>
     </languages>
-    <jreBundles jdkProviderId="Zulu" release="17/17.0.11" />
+    <jreBundles jdkProviderId="Zulu" release="17/17.0.12" />
   </application>
   <files keepModificationTimes="true" missingFilesStrategy="error" globalExcludeSuffixes="dirClean.ok,.DS_Store">
     <mountPoints>
@@ -686,14 +686,14 @@ return console.askYesNo(message, true);
     <unixInstaller name="Linux Installer" id="90" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_linux${compiler:sys.withJre}">
       <jreBundle jreBundleSource="none" />
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder intel (with JRE)" id="86" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_intel_mac${compiler:sys.withJre}">
+    <macosFolder name="Mac OS X Folder intel (with JRE)" id="86" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_apple_intel${compiler:sys.withJre}">
       <jreBundle usePack200="false" includedJre="macosx-amd64-1.8.0_202">
         <modules>
           <defaultModules set="all" />
         </modules>
       </jreBundle>
     </macosFolder>
-    <macosFolder name="Mac OS X Folder arm (with JRE)" id="737" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_silicon_mac${compiler:sys.withJre}" architecture="aarch64">
+    <macosFolder name="Mac OS X Folder arm (with JRE)" id="737" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_apple_silicon${compiler:sys.withJre}" architecture="aarch64">
       <jreBundle usePack200="false" includedJre="macosx-amd64-1.8.0_202">
         <modules>
           <defaultModules set="all" />
