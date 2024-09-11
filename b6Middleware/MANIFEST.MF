@@ -1,8 +1,6 @@
 Manifest-Version: 1.0
 Main-Class: com.commander4j.mw.StartGUI
-Class-Path: lib/Saxon-HE-12.4-xqj.jar 
- lib/Saxon-HE-12.4.jar 
- lib/SparseBitSet-1.3.jar 
+Class-Path: lib/SparseBitSet-1.3.jar 
  lib/angus-activation-2.0.2.jar 
  lib/angus-mail-2.0.3.jar 
  lib/ant-1.10.14.jar 
@@ -35,6 +33,8 @@ Class-Path: lib/Saxon-HE-12.4-xqj.jar
  lib/poi-ooxml-5.2.5.jar 
  lib/poi-ooxml-lite-5.2.5.jar 
  lib/poi-scratchpad-5.2.5.jar 
+ lib/saxon-he-12.5.jar 
+ lib/saxon-he-xqj-12.5.jar 
  lib/slf4j-api-1.7.25.jar 
  lib/xmlbeans-5.2.0.jar 
  lib/xmlresolver-5.2.2-data.jar 

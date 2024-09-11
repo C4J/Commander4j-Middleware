@@ -134,6 +134,11 @@
 			<input2><xsl:value-of select="$batch" /></input2>
 			<output><xsl:value-of select="c4j_XSLT_Ext:concat($material,$batch)"/></output>
 			
+			<xsl:text>&#xA;</xsl:text>
+			<xsl:comment>Function getUUID()</xsl:comment>
+			<xsl:text>&#xA;</xsl:text>
+			<output><xsl:value-of select="c4j_XSLT_Ext:getUUID()" /></output>
+			
 		</function_demo>
 		
 	</xsl:template>

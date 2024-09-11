@@ -15,6 +15,7 @@
         <extensionFunction>com.commander4j.Transformation.ISO_Date_to_date_DD_MM_YYYY_HH_MM_SS</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.ISO_Date_to_date_MMYYYY</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.ISO_Date_to_date_DDMMYYYY</extensionFunction>
+        <extensionFunction>com.commander4j.Transformation.getUUID</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.getISODateTimeString</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.getISODateTimeFilenameString</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.removeLeadingZeros</extensionFunction>
@@ -23,6 +24,8 @@
         <extensionFunction>com.commander4j.Transformation.padVariant</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.trim</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.concat</extensionFunction>
+        <extensionFunction>com.commander4j.Transformation.uppercase</extensionFunction>
+        <extensionFunction>com.commander4j.Transformation.lowercase</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.date_DD_MMM_YY_to_ISO_Date</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.date_DDMMYYYY_to_ISO_Date</extensionFunction>
         <extensionFunction>com.commander4j.Transformation.date_DD_MM_YY_HH_MM_SS_to_ISO_Date</extensionFunction>
