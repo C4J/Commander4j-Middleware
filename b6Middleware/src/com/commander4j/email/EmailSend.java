@@ -24,12 +24,12 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.Multipart;
 
-public class SendEmail
+public class EmailSend
 {
-	Logger logger = org.apache.logging.log4j.LogManager.getLogger((SendEmail.class));
+	Logger logger = org.apache.logging.log4j.LogManager.getLogger((EmailSend.class));
 
 	private Properties smtpProperties;
-	private HashMap<String, distributionList> distList = new HashMap<String, distributionList>();
+	private HashMap<String, EmailDistributionList> distList = new HashMap<String, EmailDistributionList>();
 	private HashMap<String, Calendar> emailLog = new HashMap<String, Calendar>();
 	private Utility util = new Utility();
 	private JCipher cipher = new JCipher(EncryptData.key);
@@ -82,7 +82,7 @@ public class SendEmail
 			if (temp.equals(""))
 				temp = "0";
 
-			distributionList newItem = new distributionList();
+			EmailDistributionList newItem = new EmailDistributionList();
 
 			newItem.listId = distributionID;
 			newItem.addressList = addressList;
@@ -97,7 +97,7 @@ public class SendEmail
 	{
 		boolean result = true;
 
-		if (Common.emailEnabled == false)
+		if (Common.props.getChildById("enableEmailNotifications").getValueAsBoolean() == false)
 		{
 			return result;
 		}
@@ -190,10 +190,10 @@ public class SendEmail
 						message.setSubject(subject);
 
 						MimeBodyPart mimeBodyPart = new MimeBodyPart();
-
-						// mimeBodyPart.setContent(messageText, "text/html;
+						
+						mimeBodyPart.setContent(messageText, "text/html");
 						// charset=utf-8");
-						mimeBodyPart.setText(messageText, "utf-8");
+						//mimeBodyPart.setText(messageText, "utf-8");
 
 						Multipart multipart = new MimeMultipart();
 						multipart.addBodyPart(mimeBodyPart);

@@ -11,6 +11,8 @@ import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 
 import ABSTRACT.com.commander4j.Connector.OutboundConnectorABSTRACT;
@@ -82,7 +84,16 @@ public class OutboundConnectorXML extends OutboundConnectorABSTRACT
 			result = false;
 			logger.error(ex.getMessage());
 
-			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error Writing File [" + fullPath + "]", ex.getMessage() + "\n\n", "");
+			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
+			ept.addRow(new ExceptionMsg("Map Id",outint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id",outint.getId()));
+			ept.addRow(new ExceptionMsg("Type",getType()));
+			ept.addRow(new ExceptionMsg("Source",fullPath));
+			ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+			
+			Common.emailqueue.addToQueue(outint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 		}
 		finally

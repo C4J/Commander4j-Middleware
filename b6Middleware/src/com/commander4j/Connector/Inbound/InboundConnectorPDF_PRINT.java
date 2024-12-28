@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 
 import ABSTRACT.com.commander4j.Connector.InboundConnectorABSTRACT;
@@ -53,8 +55,17 @@ public class InboundConnectorPDF_PRINT extends InboundConnectorABSTRACT
 			catch (Exception e)
 			{
 				logger.error("connectorLoad " + getType() + " " + e.getMessage());
-
-				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + e.getMessage() + "\n\n" + fullFilename, "");
+				
+				ExceptionHTML ept = new ExceptionHTML("Error opening file","Description","10%","Detail","30%");
+				ept.clear();
+				ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+				ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+				ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+				ept.addRow(new ExceptionMsg("Type",getType()));
+				ept.addRow(new ExceptionMsg("Source",fullFilename));
+				ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
+				
+				Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error reading " + getType(),ept.getHTML(), "");
 
 			}
 		}

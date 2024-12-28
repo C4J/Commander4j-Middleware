@@ -1,6 +1,6 @@
 package com.commander4j.email;
 
-public class distributionList
+public class EmailDistributionList
 {
 	public String listId= "";
 	public String addressList = "";

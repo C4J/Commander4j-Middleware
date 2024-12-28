@@ -4,8 +4,11 @@ import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
+import com.commander4j.email.EmailHTML;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
-import com.commander4j.sys.MiddlewareConfig;
 import com.commander4j.thread.EmailThread;
 import com.commander4j.thread.LogArchiveThread;
 import com.commander4j.thread.StatusThread;
@@ -15,13 +18,16 @@ public class StartMain
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
-	public MiddlewareConfig cfg;
-	public static String version = "5.50";
+	public ConfigLoad cfg;
+	public ConfigUpdate update;
+	public static String appVersion = "6.04";
+	public static int configVersion = 2;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;
 	EmailThread emailthread;
 	Utility util = new Utility();
+	JPropQuickAccess qa = new JPropQuickAccess();
 
 	public Boolean isRunning()
 	{
@@ -47,7 +53,13 @@ public class StartMain
 	{
 		Boolean result = true;
 		
-		cfg = new MiddlewareConfig();
+		update = new ConfigUpdate();
+		
+		update.upgrade(configVersion);
+		
+		update = null;
+		
+		cfg = new ConfigLoad();
 		
 		cfg.resetErrors();
 
@@ -86,7 +98,22 @@ public class StartMain
 			logger.debug("**      STARTED        **");
 			logger.debug("*************************");
 			
-			Common.emailqueue.addToQueue(true,"Monitor", "Starting ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), "Program started", "");
+			ExceptionHTML ept = new ExceptionHTML("Middleware Properties","Property","10%","Value","30%");
+			ept.clear();
+			
+		
+			ept.addRow(new ExceptionMsg("description",qa.getString(Common.props, qa.getRootURL()+"//description")));
+			ept.addRow(new ExceptionMsg("home folder",System.getProperty("user.dir")));
+			ept.addRow(new ExceptionMsg("version",qa.getString(Common.props, qa.getRootURL()+"//version")));
+			ept.addRow(new ExceptionMsg("logArchiveRetentionDays",qa.getString(Common.props, qa.getRootURL()+"//logArchiveRetentionDays")));
+			ept.addRow(new ExceptionMsg("retryOpenFileCount",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileCount")));
+			ept.addRow(new ExceptionMsg("retryOpenFileDelay",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileDelay")));
+			ept.addRow(new ExceptionMsg("enableEmailNotifications",qa.getString(Common.props, qa.getRootURL()+"//enableEmailNotifications")));
+			ept.addRow(new ExceptionMsg("statusReportTime",qa.getString(Common.props, qa.getRootURL()+"//statusReportTime")));
+
+			
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Starting ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+StartMain.appVersion+" on "+ util.getClientName(),ept.getHTML(), "");
+			
 			running = true;
 
 		} else
@@ -95,14 +122,18 @@ public class StartMain
 			logger.debug("**      ERRORS         **");
 			logger.debug("*************************");
 
-			String errorMsg="";
+			ExceptionHTML ept = new ExceptionHTML("Error during Middleware startup","Description","10%","Detail","60%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Stage","Startup"));
+			
 			for (int x = 0; x < cfg.getMapDirectoryErrorCount(); x++)
 			{
+				ept.addRow(new ExceptionMsg("Exception",cfg.getMapDirectoryErrors().get(x)));
 				logger.error(cfg.getMapDirectoryErrors().get(x));
-				errorMsg=errorMsg+cfg.getMapDirectoryErrors().get(x)+"\n";
 			}
 			
-			Common.emailqueue.addToQueue(true,"Monitor", "Error Starting ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), "Errors :-\n\n"+errorMsg, "");
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Error", "Error during Middleware startup",ept.getHTML(), "");
+
 			result = false;
 		}
 		
@@ -149,16 +180,16 @@ public class StartMain
 		cfg.stopMaps();
 		logger.debug("Maps Terminated");
 
-		String statistics = cfg.getInterfaceStatistics();
-		logger.info(statistics);
+		if (qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"))
+		{
+			String statistics = EmailHTML.header + cfg.getInterfaceStatistics() + EmailHTML.footer;
+			logger.info(statistics);
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"),"Monitor", "Stopping ["+Common.props.getChildById("description").getValueAsString()+"] "+StartMain.appVersion+" on "+ util.getClientName(), statistics, "");
+		}
 
 		logger.debug("*************************");
 		logger.debug("**      STOPPED        **");
 		logger.debug("*************************");
-		
-		
-		Common.emailqueue.addToQueue(true,"Monitor", "Stopping ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), statistics, "");
-		
 		
 		try
 		{

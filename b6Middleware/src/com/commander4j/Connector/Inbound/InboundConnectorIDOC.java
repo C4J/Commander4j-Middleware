@@ -10,9 +10,11 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
-import com.commander4j.idoc.DataSegment;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.idoc.IdocDataSegment;
 import com.commander4j.idoc.IdocParser;
-import com.commander4j.idoc.OutputData;
+import com.commander4j.idoc.IdocOutputData;
 import com.commander4j.sys.Common;
 
 import ABSTRACT.com.commander4j.Connector.InboundConnectorABSTRACT;
@@ -48,7 +50,7 @@ public class InboundConnectorIDOC extends InboundConnectorABSTRACT
 				idp.GetConfigData();
 				idp.GetData();
 
-				OutputData od = idp.GetOutputData();
+				IdocOutputData od = idp.GetOutputData();
 
 				/* DOCUMENT */
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -70,7 +72,7 @@ public class InboundConnectorIDOC extends InboundConnectorABSTRACT
 
 				for (int x = 1; x <= dscount; x++)
 				{
-					DataSegment ds = od.GetDataSegments().get(x - 1);
+					IdocDataSegment ds = od.GetDataSegments().get(x - 1);
 
 					/* DATA */
 					Element outputdata = (Element) data.createElement("DATA");
@@ -135,8 +137,17 @@ public class InboundConnectorIDOC extends InboundConnectorABSTRACT
 			{
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-
-				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+				
+				ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+				ept.clear();
+				ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+				ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+				ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+				ept.addRow(new ExceptionMsg("Type",getType()));
+				ept.addRow(new ExceptionMsg("Source",fullFilename));
+				ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+				
+				Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 			}
 

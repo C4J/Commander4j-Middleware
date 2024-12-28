@@ -12,7 +12,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.exception.OutboundPrinterQueueException;
+import com.commander4j.prop.JPropQuickAccess;
+import com.commander4j.prop.JPropString;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JXMLDocument;
 
@@ -22,6 +26,8 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((OutboundConnectorPDF_PRINT.class));
+	JPropQuickAccess qa = new JPropQuickAccess();
+	JPropString jPropString = new JPropString();
 
 	public OutboundConnectorPDF_PRINT(OutboundInterface inter)
 	{
@@ -74,7 +80,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 
 				if (service != null)
 				{
-					getOutboundInterface().setQueueName(service.getName());
+					qa.setValue(Common.props,qa.getMapOutputURL(getOutboundInterface().getMapId(), getOutboundInterface().getId())+"//print//queueName", jPropString.getValue(service.getName()));
 					logger.debug("Using default print queue : " + getOutboundInterface().getQueueName());
 
 				}
@@ -112,6 +118,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 						FileUtils.deleteQuietly(new File(outputFilename));
 						pdfdocument.close();
 						result = true;
+						break;
 					}
 				}
 
@@ -131,8 +138,16 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 		{
 			logger.error("connectorLoad " + getType() + " " + e.getMessage());
 
-			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error printing " + getType(), "connectorSave " + getType() + " " + e.getMessage() + "\n\n" + fullPath, "");
-
+			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
+			ept.addRow(new ExceptionMsg("Map Id",outint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id",outint.getId()));
+			ept.addRow(new ExceptionMsg("Type",getType()));
+			ept.addRow(new ExceptionMsg("Source",fullPath));
+			ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
+			
+			Common.emailqueue.addToQueue(outint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 		}
 		finally
 		{

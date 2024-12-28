@@ -153,14 +153,10 @@ public class Utility
 	
 	public void retryDelay()
 	{
-		if (Common.retryOpenFileDelay == 0)
-		{
-			Common.retryOpenFileDelay = 1000;
-		}
 		
 		try
 		{
-			Thread.sleep(Common.retryOpenFileDelay);
+			Thread.sleep(Common.props.getChildById("retryOpenFileDelay").getValueAsInteger());
 		}
 		catch (Exception e)
 		{

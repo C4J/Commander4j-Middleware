@@ -23,6 +23,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.w3c.dom.Element;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
 
@@ -177,8 +179,17 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 
-				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
-
+				ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+				ept.clear();
+				ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+				ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+				ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+				ept.addRow(new ExceptionMsg("Type",getType()));
+				ept.addRow(new ExceptionMsg("Source",fullFilename));
+				ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+				
+				Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+			
 			}
 
 		}
@@ -304,8 +315,18 @@ public class InboundConnectorExcel extends InboundConnectorABSTRACT
 			{
 				result = false;
 				logger.error("connectorLoad " + getType() + " " + ex.getMessage());
-
-				Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename, "");
+				
+				ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+				ept.clear();
+				ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+				ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+				ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+				ept.addRow(new ExceptionMsg("Type",getType()));
+				ept.addRow(new ExceptionMsg("Source",fullFilename));
+				ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+				ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
+				
+				Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 			}
 

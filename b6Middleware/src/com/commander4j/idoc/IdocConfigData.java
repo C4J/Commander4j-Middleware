@@ -1,6 +1,6 @@
 package com.commander4j.idoc;
 
-public class ConfigData {
+public class IdocConfigData {
 
 	public String SegmentDefinition;
     public String IDOCField;

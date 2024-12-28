@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 
 import com.commander4j.Interface.Mapping.Map;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
 import com.commander4j.util.JXMLDocument;
@@ -43,10 +45,9 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 	Document data;
 	boolean enabled = false;
 
-	public OutboundInterface(Map map, String description)
+	public OutboundInterface(Map map)
 	{
 		super(map);
-		setDescription(description);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 				filename_outputImported = filename_outputImported + ".xml";
 			}
 
-			writeSuccess = jfileio.writeToDisk(Common.logDir, data, filename_outputImported);
+			writeSuccess = jfileio.writeToDisk(Common.props.getChildById("logDir").getValueAsString(), data, filename_outputImported);
 
 			if (writeSuccess)
 			{
@@ -87,34 +88,40 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 					Source xmlSource = new StreamSource(new File(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
 					Configuration.readConfiguration(xmlSource);
 
-					source = new StreamSource(new File(Common.logDir + File.separator + filename_outputImported));
-					destination = new StreamResult(new File(Common.logDir + File.separator + filename_outputTransformed));
+					source = new StreamSource(new File(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputImported));
+					destination = new StreamResult(new File(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed));
 					xslt = new StreamSource(new File(getXSLTPath() + getXSLTFilename()));
 
 					try
 					{
-
 						Processor processor = new Processor(Configuration.readConfiguration(xmlSource));
 						XsltCompiler compiler = processor.newXsltCompiler();
 						XsltExecutable stylesheet = compiler.compile(xslt);
-						Serializer out = processor.newSerializer(new File(Common.logDir + File.separator + filename_outputTransformed));
+						Serializer out = processor.newSerializer(new File(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed));
 						out.setOutputProperty(Serializer.Property.METHOD, "xml");
 						out.setOutputProperty(Serializer.Property.INDENT, "yes");
-						// out.setOutputProperty(Serializer.Property.STANDALONE,
-						// "yes");
 						Xslt30Transformer transformer = stylesheet.load30();
 						transformer.transform(source, out);
 
-						JXMLDocument doc = new JXMLDocument(Common.logDir + File.separator + filename_outputTransformed);
+						JXMLDocument doc = new JXMLDocument(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed);
 						data = doc.getDocument();
-
 					}
 					catch (SaxonApiException e)
 					{
 						logger.error(e.getMessage());
-
-						Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", e.getMessage() + "\n\n", filename_outputImported);
-
+						
+						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+						ept.clear();
+						ept.addRow(new ExceptionMsg("Stage","OutboundInterface - SaxonAPI"));
+						ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
+						ept.addRow(new ExceptionMsg("Type",getType()));
+						ept.addRow(new ExceptionMsg("Saxon Config",System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
+						ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
+						ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputImported));
+						ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed));
+						ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
+						
+						Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 					}
 
 				}
@@ -122,15 +129,23 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 				{
 					logger.error(e.getMessage());
 
-					Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", e.getMessage() + "\n\n", filename_outputImported);
+					ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+					ept.clear();
+					ept.addRow(new ExceptionMsg("Stage","OutboundInterface - XPath"));
+					ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
+					ept.addRow(new ExceptionMsg("Type",getType()));
+					ept.addRow(new ExceptionMsg("Saxon Config",System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
+					ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
+					ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputImported));
+					ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed));
+					ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
+					
+					Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 				}
-
 			}
 		}
 
 		connector.processOutboundData(getOutputPath(), filename, data);
-
 	}
-
 }

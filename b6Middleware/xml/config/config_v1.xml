@@ -166,7 +166,7 @@
         <output id="out1" enabled="Y" description="Write ASCII File">
             <path>./interface/output/Map09 XML to ASCII</path>
             <type>ASCII</type>
-            <outputPattern>1-10,12-21,23-32</outputPattern>
+            <outputPattern>1-10,12-21,23-53</outputPattern>
             <XSLT/>
         </output>
     </map>

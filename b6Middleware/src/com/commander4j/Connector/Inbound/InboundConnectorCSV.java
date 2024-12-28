@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -26,6 +29,8 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorCSV.class));
+	private JPropQuickAccess qa = new JPropQuickAccess();
+	
 	private LinkedList<String> parseOptions = new LinkedList<String>();
 	boolean disableQuotes = false;
 	char seperator = ',';
@@ -91,7 +96,7 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
-			Integer retries = Common.retryOpenFileCount;
+			Integer retries = qa.getInteger(Common.props,qa.getRootURL()+"//retryOpenFileCount");
 			Integer count = 0;
 
 			do
@@ -176,10 +181,19 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 
 						}
 
-						System.out.println("Unable to open file '" + fullFilename + "'");
 						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 
-						Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to " + fullFilename + ".error", "");
+						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+						ept.clear();
+						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+						ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+						ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+						ept.addRow(new ExceptionMsg("Type",getType()));
+						ept.addRow(new ExceptionMsg("Source",fullFilename));
+						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+						ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
+						
+						Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 						result = false;
 					}

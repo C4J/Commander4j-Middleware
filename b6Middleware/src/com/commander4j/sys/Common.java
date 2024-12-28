@@ -11,6 +11,7 @@ import com.commander4j.email.EmailQueue;
 import com.commander4j.gui.JListRenderer;
 import com.commander4j.mw.StartMain;
 import com.commander4j.mw.StartService;
+import com.commander4j.prop.JProp;
 import com.commander4j.util.JImageIconLoader;
 
 public class Common
@@ -18,7 +19,8 @@ public class Common
 
 	public static final JImageIconLoader imageIconloader = new JImageIconLoader();
 
-	public static String logDir = "";
+
+	
 	public final static String image_path = System.getProperty("user.dir") + File.separator + "images" + File.separator;
 
 	public final static String image_cancel = "cancel.gif";
@@ -28,7 +30,7 @@ public class Common
 	public final static String image_confirm = "CMD_Icon.gif";
 	public final static String image_interface = "interface.gif";
 
-	public static Icon icon_ok = Common.imageIconloader.getImageIcon(Common.image_ok);
+	public final static Icon icon_ok = Common.imageIconloader.getImageIcon(Common.image_ok);
 	public final static Icon icon_cancel = Common.imageIconloader.getImageIcon(Common.image_cancel);
 	public final static Icon icon_error = Common.imageIconloader.getImageIcon(Common.image_error);
 	public final static Icon icon_close = Common.imageIconloader.getImageIcon(Common.image_close);
@@ -46,18 +48,16 @@ public class Common
 
 	public final static StartMain smw = new StartMain();
 
-	public static Integer ArchiveRetentionDays = 30;
-
-	//public static StartGUI sgui;
 	public static StartService sservice;
 	public static CheckboxMenuItem runningStatus = new CheckboxMenuItem("Running...");
 	public static String runMode = "";
-	public static Boolean emailEnabled = true;
-	public static String configName = "";
-	public static EmailQueue emailqueue = new EmailQueue();
-	public static String statusReportTime = "00:00:00";
-	
-	public static Integer retryOpenFileCount = 3;
-	public static Integer retryOpenFileDelay = 1000;
 
+	public static EmailQueue emailqueue = new EmailQueue();
+	
+	public static String pathRoot = "config";
+	public static String pathMap = pathRoot+"//maps//{mapId}";
+	public static String pathMapInput = pathMap+"//connectors//{inId}";
+	public static String pathMapOutput = pathMap+"//connectors//{outId}";
+	public static JProp props = new JProp(pathRoot);
+	
 }

@@ -3,14 +3,14 @@ package com.commander4j.idoc;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OutputData {
+public class IdocOutputData {
 	
-	private ArrayList<DataSegment> DataSegments;
+	private ArrayList<IdocDataSegment> DataSegments;
 	private String msgId;
 	
-	public OutputData()
+	public IdocOutputData()
 	{
-		DataSegments = new ArrayList<DataSegment>();
+		DataSegments = new ArrayList<IdocDataSegment>();
 	}
 	
 	private int GetSegmentIndexByName(String name) throws NullPointerException
@@ -18,7 +18,7 @@ public class OutputData {
 		if (name.equals(""))
 			throw new NullPointerException("Name cannot be blank");
 		
-		for (DataSegment d : DataSegments)
+		for (IdocDataSegment d : DataSegments)
 		{
 			if (d.SegmentName.equals(name))
 				return DataSegments.indexOf(d);
@@ -32,7 +32,7 @@ public class OutputData {
 		if (DataSegments == null || DataSegments.size() == 0)
 			throw new NullPointerException("Contains no data segments");
 		
-		for (DataSegment d : DataSegments)
+		for (IdocDataSegment d : DataSegments)
 		{
 			if (d.HasKeyAndValue(segment, key, value))
 				return DataSegments.indexOf(d);
@@ -48,7 +48,7 @@ public class OutputData {
 		
 		
 		int segmentPos = 0;
-		for (DataSegment d : DataSegments)
+		for (IdocDataSegment d : DataSegments)
 		{
 			int keyCount = 0;
 			for (String k : values.keySet())
@@ -75,7 +75,7 @@ public class OutputData {
 		boolean foundSegment = false;
 		if (DataSegments.size() > 0)
 		{
-			for (DataSegment d : DataSegments)
+			for (IdocDataSegment d : DataSegments)
 		
 			{
 				if (d.SegmentName.equals(name))
@@ -86,19 +86,19 @@ public class OutputData {
 			}
 		}
 		if (!foundSegment)
-			DataSegments.add(new DataSegment(name));
+			DataSegments.add(new IdocDataSegment(name));
 	}
 	
 	public void AddDataSegmentWithKey(String name, String key, String value)
 	{
-		DataSegment s = new DataSegment(name);
+		IdocDataSegment s = new IdocDataSegment(name);
 		s.Properties.put(key, value);
 		DataSegments.add(s);
 	}
 	
 	public void AddDataSegmentWithKeys(String name, HashMap<String,String> keys)
 	{
-		DataSegment s = new DataSegment(name);
+		IdocDataSegment s = new IdocDataSegment(name);
 		s.Properties.putAll(keys);
 		DataSegments.add(s);
 	}
@@ -143,16 +143,16 @@ public class OutputData {
 		return output;
 	}
 	
-	public ArrayList<DataSegment> GetDataSegments()
+	public ArrayList<IdocDataSegment> GetDataSegments()
 	{
 		return DataSegments;
 	}
 	
-	public ArrayList<DataSegment> GetDataSegmentsByName(String segment)
+	public ArrayList<IdocDataSegment> GetDataSegmentsByName(String segment)
 	{
-		ArrayList<DataSegment> results = new ArrayList<DataSegment>();
+		ArrayList<IdocDataSegment> results = new ArrayList<IdocDataSegment>();
 		
-		for(DataSegment d: DataSegments)
+		for(IdocDataSegment d: DataSegments)
 		{
 			if (d.SegmentName.equals(segment))
 				results.add(d);

@@ -2,7 +2,9 @@ package com.commander4j.thread;
 
 import org.apache.logging.log4j.Logger;
 
+import com.commander4j.email.EmailHTML;
 import com.commander4j.mw.StartMain;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JWait;
 import com.commander4j.util.Utility;
@@ -17,6 +19,8 @@ public class StatusThread extends Thread
 	int mb = 1024 * 1024;
 	Utility util = new Utility();
 	Runtime runtime = Runtime.getRuntime();
+	JPropQuickAccess qa = new JPropQuickAccess();
+	String statusReportTime = "";
 	
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StatusThread.class));
 
@@ -29,6 +33,9 @@ public class StatusThread extends Thread
 	public void run()
 	{
 		logger.debug("StatusThread started.");
+		
+		statusReportTime = qa.getString(Common.props,qa.getRootURL()+"//statusReportTime").substring(0, 5);
+		
 		while (true)
 		{
 
@@ -36,34 +43,81 @@ public class StatusThread extends Thread
 			currentDateTime = util.getDateTimeString("yyyy-MM-dd HH:mm:ss");
 			currentDate = currentDateTime.substring(0, 10);
 			currentTime = currentDateTime.substring(11, 19);
-
-			if (currentTime.substring(0, 5).equals(Common.statusReportTime.substring(0, 5)))
+			
+			if (currentTime.substring(0, 5).equals(statusReportTime))
 			{
 				if (currentDate.equals(lastRunDate) == false)
 				{
 					lastRunDate = currentDate;
 					
-					String report = Common.smw.cfg.getInterfaceStatistics();
+					String report = EmailHTML.header + Common.smw.cfg.getInterfaceStatistics() + EmailHTML.footer;
+
 					Common.smw.cfg.resetInterfaceStatistics();
 					
-					report = report +"\n\n";
-					report = report+"Garbage Collector Started.\n\n";
-
-					report = report+"Before GC\n\n";
-					report = report+"  Used Memory  :" + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb\n";
-					report = report+"  Free Memory  :" + runtime.freeMemory() / mb + "mb\n";
-					report = report+"  Total Memory :" + runtime.totalMemory() / mb + "mb\n";
-					report = report+"  Max Memory   :" + runtime.maxMemory() / mb + "mb\n\n";
-					System.gc();
-					report = report+"After GC\n\n";
-					report = report+"  Used Memory  :" + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb\n";
-					report = report+"  Free Memory  :" + runtime.freeMemory() / mb + "mb\n";
-					report = report+"  Total Memory :" + runtime.totalMemory() / mb + "mb\n";
-					report = report+"  Max Memory   :" + runtime.maxMemory() / mb + "mb\n\n";
 					
-					report = report+"Garbage Collector Finished.\n\n";
+					report = report + "<br>\n"
+							+ "<div id=\"garbage\" >\n"
+							+ "<table border=\"3\">\n"
+							+ "	<thead>\n"
+							+ "  <caption>Before GC</caption>\n"
+							+ "	 <tr>\n"
+							+ "		<th>Memory</th>\n"
+							+ "		<th>MB</th>\n"
+							+ "	 </tr>\n"
+							+ "	</thead>\n"
+							+ " <tbody>\n"
+							+ "	 <tr>\n"
+							+ "	  <td>Used Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "  <tr>\n"
+							+ "	  <td>Free Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ runtime.freeMemory() / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "	 <tr>\n"
+							+ "	  <td>Total Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ runtime.totalMemory() / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "  <tr>\n"
+							+ "	  <td>Max Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ runtime.maxMemory() / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "	</tbody>\n"
+							+ "</table> \n"
+							+ "<br>\n";
 					
-					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+Common.configName+"] "+StartMain.version+" on "+ util.getClientName(), report, "");
+							System.gc();
+							
+					report = report + "<table border=\"3\">\n"
+							+ " <thead>\n"
+							+ "   <caption>After GC</caption>\n"
+							+ "   <tr>\n"
+							+ "	   <th>Memory</th>\n"
+							+ "    <th>MB</th>\n"
+							+ "	  </tr>\n"
+							+ "	</thead>\n"
+							+ "	<tbody>\n"
+							+ "	 <tr>\n"
+							+ "	  <td>Used Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "  <tr>\n"
+							+ "	  <td>Free Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ runtime.freeMemory() / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "	 <tr>\n"
+							+ "	  <td>Total Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ runtime.totalMemory() / mb + "mb</td>\n"
+							+ "	 </tr>\n"
+							+ "  <tr>\n"
+							+ "	  <td>Max Memory</td>\n"
+							+ "	  <td style=\"width:20%; text-align: right\">"+ runtime.maxMemory() / mb + "mb</td>\n"
+							+ "  </tr>\n"
+							+ " </tbody>\n"
+							+ "</table> \n"
+							+ "</div>";
+					
+					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+statusReportTime+"] "+StartMain.appVersion+" on "+ util.getClientName(), report, "");
 					
 					logger.debug(report);
 				}

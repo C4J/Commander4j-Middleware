@@ -9,14 +9,14 @@ public class IdocParser
 {
 	private String _configFile;
 	private String _fileToProcess;
-	private ArrayList<ConfigData> _configValues;
-	private OutputData _outputData;
+	private ArrayList<IdocConfigData> _configValues;
+	private IdocOutputData _outputData;
 
 	public IdocParser(String configFile, String fileToProcess)
 	{
 		_configFile = configFile;
 		_fileToProcess = fileToProcess;
-		_outputData = new OutputData();
+		_outputData = new IdocOutputData();
 	}
 
 	public String getFileToProcess()
@@ -32,7 +32,7 @@ public class IdocParser
 	public void ReadConfigFile() throws Exception, FileNotFoundException
 	{
 
-		_configValues = new ArrayList<ConfigData>();
+		_configValues = new ArrayList<IdocConfigData>();
 		boolean bFoundStartLine = false;
 		File cfgFile = new File(_configFile);
 		if (cfgFile.exists())
@@ -76,7 +76,7 @@ public class IdocParser
 					}
 
 					String[] configValues = line.split(",");
-					ConfigData cfgData = new ConfigData();
+					IdocConfigData cfgData = new IdocConfigData();
 					for (int i = 0; i < configValues.length; i++)
 					{
 						switch (i)
@@ -173,7 +173,7 @@ public class IdocParser
 
 			boolean found = false;
 			ArrayList<String> distinctSegments = new ArrayList<String>();
-			for (ConfigData cfg : _configValues)
+			for (IdocConfigData cfg : _configValues)
 			{
 				if (!cfg.SegmentDefinition.equals(null) && !cfg.SegmentDefinition.equals(""))
 				{
@@ -230,7 +230,7 @@ public class IdocParser
 				for (int i = nLowestIndex; i < _configValues.size(); i++)
 				{
 					hasSubKey = false;
-					ConfigData cfg = _configValues.get(i);
+					IdocConfigData cfg = _configValues.get(i);
 					if (cfg.SegmentDefinition.equals(CurrentSegmentDescription))
 					{
 
@@ -320,7 +320,7 @@ public class IdocParser
 	private int getLowestConfigIndex(String segment)
 	{
 
-		for (ConfigData cfg : _configValues)
+		for (IdocConfigData cfg : _configValues)
 		{
 			if (cfg.SegmentDefinition.equals(segment))
 				return _configValues.indexOf(cfg);
@@ -328,12 +328,12 @@ public class IdocParser
 		return -1;
 	}
 
-	public ArrayList<ConfigData> GetConfigData()
+	public ArrayList<IdocConfigData> GetConfigData()
 	{
 		return _configValues;
 	}
 
-	public OutputData GetOutputData()
+	public IdocOutputData GetOutputData()
 	{
 		return _outputData;
 	}

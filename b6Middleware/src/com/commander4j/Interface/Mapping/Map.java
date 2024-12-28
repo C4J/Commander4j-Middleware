@@ -7,6 +7,8 @@ import org.w3c.dom.Document;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
 import com.commander4j.Interface.Outbound.OutboundInterface;
+import com.commander4j.prop.JPropQuickAccess;
+import com.commander4j.sys.Common;
 import com.commander4j.util.Utility;
 
 public class Map implements Comparable<Map>
@@ -17,12 +19,12 @@ public class Map implements Comparable<Map>
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((Map.class));
 
 	private String id = "";
-	private String description = "";
-	private String emailEnabled = "Y";
+
 	private Long inboundMapMsgCount = (long) 0;
 	private Long outboundMapMsgCount = (long) 0;
 	private Utility util = new Utility();
-	
+	JPropQuickAccess qa = new JPropQuickAccess();
+
 	public void run()
 	{
 
@@ -36,9 +38,9 @@ public class Map implements Comparable<Map>
 	public void resetOutboundMapMessageCount()
 	{
 		outboundMapMsgCount = (long) 0;
-		
+
 		int OutboundIntCount = getNumberofOutboundInterfaces();
-		
+
 		if (OutboundIntCount > 0)
 		{
 			for (int x = 0; x < OutboundIntCount; x++)
@@ -47,14 +49,14 @@ public class Map implements Comparable<Map>
 			}
 		}
 	}
-	
+
 	public void resetInboundMapMessageCount()
 	{
 		inboundMapMsgCount = (long) 0;
-		
+
 		getInboundInterface().connector.resetInBoundConnectorCount();
-	}	
-	
+	}
+
 	public Long getOutboundMapMessageCount()
 	{
 		return outboundMapMsgCount;
@@ -69,46 +71,24 @@ public class Map implements Comparable<Map>
 		if (OutboundIntCount > 0)
 		{
 			for (int x = 0; x < OutboundIntCount; x++)
-			{	
+			{
 				if (x > 0)
 				{
 					outboundTypeList = outboundTypeList + "+";
 				}
 				outboundTypeList = outboundTypeList + getOutBoundInterface(x).getType();
-				outboundPathList = outboundPathList + "<br><font color='red'>" +util.padString("",true,70," ")+util.padString(getOutBoundInterface(x).getType(),true,10," ")+"   "+util.padString(getOutBoundInterface(x).connector.getOutboundConnectorCount().toString(),true,5," ")+"   "+getOutBoundInterface(x).getOutputPath();
-				
-//				System.out.println("----------------------------");
-//				System.out.println("Map ID                      :"+getId());
-//				System.out.println("Map Description             :"+getDescription());
-//				System.out.println("Map InboundMapMessageCount  :"+getInboundMapMessageCount());
-//				System.out.println("Map OutboundMapMessageCount :"+getOutboundMapMessageCount());
-//				System.out.println("Interface ID                :"+getOutBoundInterface(x).getId());
-//				System.out.println("Interface Description       :"+getOutBoundInterface(x).getDescription());
-//				System.out.println("Connector Type              :"+getOutBoundInterface(x).connector.getType());
-//				System.out.println("Connector Path              :"+getOutBoundInterface(x).connector.getPath());
-//				System.out.println("Connector Count             :"+getOutBoundInterface(x).connector.getOutboundConnectorCount());
-//				System.out.println("----------------------------");
+				outboundPathList = outboundPathList + "<br><font color='red'>" + util.padString("", true, 68, " ") + util.padString(getOutBoundInterface(x).getType(), true, 10, " ") + "   "
+						+ util.padString(getOutBoundInterface(x).connector.getOutboundConnectorCount().toString(), true, 5, " ") + " " + getOutBoundInterface(x).getOutputPath();
+
 			}
 		}
 
-		
-		String result = "<html><font color='blue'>"+
-						util.padString(getId(), true, 7, " ") + 
-						"  " + 
-						util.padString(getDescription(), true, 35, " ") + 
-						"<font color='green'>"+
-						util.padString(getInboundMapMessageCount().toString(), false, 8, " ") + 
-						" " + "<font color='red'>" + 
-						util.padString(getOutboundMapMessageCount().toString(), false, 8, " ") + 
-						"         "+"<font color='green'>"+
-						util.padString(getInboundInterface().getType(), true, 10, " ") + 
-						"   " + 
-						util.padString(getInboundInterface().connector.getInboundConnectorMessageCount().toString(),true,5," ")+
-						"   " + 
-						getInboundInterface().getInputPath()+outboundPathList+"</html>";
-		
+		String result = "<html><font color='blue'>" + util.padString(getId(), true, 7, " ") + "  " + util.padString(getDescription(), true, 35, " ")+" <font color='black'>"+getEmailEnabled() + "<font color='green'>" + util.padString(getInboundMapMessageCount().toString(), false, 8, " ") + " "
+				+ "<font color='red'>" + util.padString(getOutboundMapMessageCount().toString(), false, 6, " ") + "       " + "<font color='green'>" + util.padString(getInboundInterface().getType(), true, 10, " ") + "   "
+				+ util.padString(getInboundInterface().connector.getInboundConnectorMessageCount().toString(), true, 5, " ") + " " + getInboundInterface().getInputPath() + outboundPathList + "</html>";
+
 		result = result.replace(" ", "&nbsp;");
-		
+
 		return result;
 	}
 
@@ -117,37 +97,34 @@ public class Map implements Comparable<Map>
 		id = ID;
 	}
 
-	public void setEmailEnabled(String email)
-	{
-		emailEnabled = util.replaceNullStringwithBlank(email);
-		if (emailEnabled.equals(""))
-		{
-			emailEnabled = "Y";
-		}
-	}
-	
-	public String getEmailEnabled()
-	{
-		return emailEnabled;
-	}
-	
 	public boolean isMapEmailEnabled()
 	{
-		if (getEmailEnabled().equals("Y"))
+		boolean result = qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications");
+		
+		if (result)
 		{
-			return true;
+			result =  qa.getBoolean(Common.props, qa.getMapURL(getId())+"//enableEmailNotifications");
+		}
+		
+		return result;
+		
+	}
+
+	private String getEmailEnabled()
+	{
+		
+		if (isMapEmailEnabled())
+		{
+			return "Y";
 		}
 		else
 		{
-			return false;
+			return "N";
 		}
+		
+
 	}
 	
-	public void setDescription(String desc)
-	{
-		description = desc;
-	}
-
 	public String getId()
 	{
 		return id;
@@ -155,7 +132,7 @@ public class Map implements Comparable<Map>
 
 	public String getDescription()
 	{
-		return description;
+		return qa.getString(Common.props, qa.getMapURL(getId()) + "//description");
 	}
 
 	public void setEnabled(boolean yesno)
@@ -168,7 +145,8 @@ public class Map implements Comparable<Map>
 				outboundInterface.get(x).setEnabled(yesno);
 			}
 			this.inboundInterface.setEnabled(yesno);
-		} else
+		}
+		else
 		{
 			this.inboundInterface.setEnabled(yesno);
 			for (int x = 0; x < outboundInterface.size(); x++)
@@ -176,7 +154,6 @@ public class Map implements Comparable<Map>
 				outboundInterface.get(x).setEnabled(yesno);
 			}
 		}
-
 	}
 
 	public InboundInterface getInboundInterface()
@@ -232,9 +209,11 @@ public class Map implements Comparable<Map>
 	{
 		String id = o.getId();
 		int result = this.getId().compareTo(id);
-		if (result > 0) result = 1;
-		if (result < 0) result = -1;
-		
+		if (result > 0)
+			result = 1;
+		if (result < 0)
+			result = -1;
+
 		return result;
 	}
 

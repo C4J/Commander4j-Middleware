@@ -11,6 +11,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.Utility;
 
@@ -26,6 +29,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	private Long inboundConnectorMessageCount = (long) 0;
 	protected Utility util = new Utility();
 	protected Document data;
+	private JPropQuickAccess qa = new JPropQuickAccess();
 
 	protected InboundInterface inint;
 
@@ -38,7 +42,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	{
 		Boolean result = false;
 
-		Integer retries = Common.retryOpenFileCount;
+		Integer retries = qa.getInteger(Common.props, qa.getRootURL()+"//retryOpenFileCount");
 		Integer count = 0;
 
 		do
@@ -48,7 +52,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			{
 				count++;
 
-				destination = Common.logDir + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
+				destination = qa.getString(Common.props, qa.getRootURL()+"//logDir") + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
 
 				logger.debug("connectorLoad Backup [" + fullFilename + "] to [" + destination + "]");
 
@@ -74,7 +78,16 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 					logger.error("backupInboundFile unable to backup attempt (" + count + " attempts) for [" + fullFilename + "]");
 
 					logger.error("Error message [" + ex.getMessage() + "]");
-					Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error backing up file", "Error backing up file \\n" + fullFilename + "\\nto\\n" + destination + "\\n[" + ex.getMessage() + "]", "");
+					
+					ExceptionHTML ept = new ExceptionHTML("Error backing up file","Description","10%","Detail","30%");
+					ept.clear();
+					ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+					ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+					ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+					ept.addRow(new ExceptionMsg("Source",fullFilename));
+					ept.addRow(new ExceptionMsg("Destination",destination));
+
+					Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
 
 				}
 				else
@@ -153,9 +166,6 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			}
 			else
 			{
-				// Don't delete email input file as we don't pass the contents
-				// of the file
-				// through the map - only a reference to its filename
 				result = true;
 			}
 
@@ -214,15 +224,23 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 		try
 		{
-			logger.debug(inint.getDescription() + " Delete input file :" + source.getAbsolutePath());
+			logger.debug(qa.getString(Common.props, qa.getMapInputURL(inint.getMapId(), inint.getId())+"//description") + " Delete input file :" + source.getAbsolutePath());
 			FileDeleteStrategy.NORMAL.delete(source);
 			result = true;
 		}
 		catch (IOException | NullPointerException e)
 		{
 			logger.error("Error deleting file " + filename + "[" + e.getMessage() + "]");
+			
+			ExceptionHTML ept = new ExceptionHTML("Error deleting file","Description","10%","Detail","30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+			ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
+			ept.addRow(new ExceptionMsg("Source",filename));
+			ept.addRow(new ExceptionMsg("Destination",destination));
 
-			Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error deleting file", "Error deleting file " + filename + "[" + e.getMessage() + "]", "");
+			Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
 
 			result = false;
 		}

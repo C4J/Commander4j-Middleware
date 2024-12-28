@@ -15,6 +15,8 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 
 import com.commander4j.Interface.Mapping.Map;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
 import com.commander4j.util.JXMLDocument;
@@ -42,10 +44,9 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 	String filename_imported;
 	String filename_transformed;
 
-	public InboundInterface(Map map, String description)
+	public InboundInterface(Map map)
 	{
 		super(map);
-		setDescription(description);
 	}
 
 	boolean enabled = false;
@@ -112,7 +113,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											filename_imported = filename_imported + ".xml";
 										}
 
-										writeSuccess = jfileio.writeToDisk(Common.logDir, data, filename_imported);
+										writeSuccess = jfileio.writeToDisk(Common.props.getChildById("logDir").getValueAsString(), data, filename_imported);
 
 										if (getXSLTFilename().equals("") == false)
 										{
@@ -126,14 +127,14 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 											xmlSource = new StreamSource(new File(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "SaxonConfiguration.xml"));
 
-											source = new StreamSource(new File(Common.logDir + File.separator + filename_imported));
-											destination = new StreamResult(new File(Common.logDir + File.separator + filename_transformed));
+											source = new StreamSource(new File(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+											destination = new StreamResult(new File(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
 											xslt = new StreamSource(new File(getXSLTPath() + getXSLTFilename()));
 
 											processor = new Processor(Configuration.readConfiguration(xmlSource));
 											compiler = processor.newXsltCompiler();
 											stylesheet = compiler.compile(xslt);
-											out = processor.newSerializer(new File(Common.logDir + File.separator + filename_transformed));
+											out = processor.newSerializer(new File(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
 											out.setOutputProperty(Serializer.Property.METHOD, "xml");
 											out.setOutputProperty(Serializer.Property.INDENT, "yes");
 
@@ -141,7 +142,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											transformer.transform(source, out);
 
 											doc = new JXMLDocument();
-											loadFileResult = doc.setDocument(Common.logDir + File.separator + filename_transformed);
+											loadFileResult = doc.setDocument(Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed);
 											data = doc.getDocument();
 
 										}
@@ -162,7 +163,15 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											{
 												logger.error("Error Map [" + map.getId() + "] Unable to save inbound xml" + " " + filename_imported);
 
-												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", "Unable to save inbound xml" + "\n\n", filename_imported);
+												ExceptionHTML ept = new ExceptionHTML("Unable to save inbound xml","Description","10%","Detail","30%");
+												ept.clear();
+												ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
+												ept.addRow(new ExceptionMsg("Type",getType()));
+												ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
+												ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+												ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+												ept.addRow(new ExceptionMsg("Exception","Unable to save inbound xml"));
+												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 											}
 
@@ -170,7 +179,16 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											{
 												logger.error("Error Map [" + map.getId() + "] Unable to load inbound xml" + " " + filename_imported);
 
-												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "]", "Unable to load inbound xml" + "\n\n", filename_imported);
+												ExceptionHTML ept = new ExceptionHTML("Unable to load inbound xml","Description","10%","Detail","30%");
+												ept.clear();
+												ept.addRow(new ExceptionMsg("Stage","InboundInterface"));
+												ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
+												ept.addRow(new ExceptionMsg("Type",getType()));
+												ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
+												ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+												ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+												ept.addRow(new ExceptionMsg("Exception","Unable to load inbound xml"));
+												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 											}
 
@@ -194,7 +212,16 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 			logger.error("InboundInterface Map [" + map.getId() + "] error :" + ex.getMessage());
 
-			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "InboundInterface Map [" + map.getId() + "]", " error :" + ex.getMessage(), "");
+			ExceptionHTML ept = new ExceptionHTML("Inbound Map Exception","Description","10%","Detail","30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Stage","InboundInterface"));
+			ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
+			ept.addRow(new ExceptionMsg("Type",getType()));
+			ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
+			ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+			ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+			ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map Exception",ept.getHTML(), "");
 
 		}
 		finally

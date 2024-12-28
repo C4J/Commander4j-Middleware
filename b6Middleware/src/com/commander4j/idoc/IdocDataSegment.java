@@ -3,11 +3,11 @@ package com.commander4j.idoc;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataSegment {
+public class IdocDataSegment {
 	public String SegmentName;
 	public Map<String,String> Properties;
 	
-	public DataSegment(String name)
+	public IdocDataSegment(String name)
 	{
 		SegmentName = name;
 		Properties = new HashMap<String,String>();

@@ -8,11 +8,8 @@ import java.util.Date;
 import org.apache.commons.io.filefilter.AgeFileFilter;
 import org.apache.logging.log4j.Logger;
 
-import com.commander4j.sys.Common;
-
 public class JArchive
 {
-
 	Utility util = new Utility();
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((JArchive.class));
 
@@ -24,21 +21,6 @@ public class JArchive
 		cal.setTime(new Date());
 		cal.add(Calendar.DATE, -1 * daysToKeep);
 		Date cutoffDate = cal.getTime();
-
-		if (util.replaceNullStringwithBlank(path).equals(""))
-		{
-			path = Common.logDir;
-		}
-
-		if (util.replaceNullStringwithBlank(path).equals("."))
-		{
-			path = Common.logDir;
-		}
-
-		if (daysToKeep <= 0)
-		{
-			daysToKeep = 1;
-		}
 
 		File directory = new File(path);
 

@@ -9,6 +9,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JXMLDocument;
 
@@ -115,7 +117,16 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 		{
 			logger.error(err.getMessage());
 
-			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error writing to socket [" + fullPath + "]", err.getMessage() + "\n\n", "");
+			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
+			ept.addRow(new ExceptionMsg("Map Id",outint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id",outint.getId()));
+			ept.addRow(new ExceptionMsg("Type",getType()));
+			ept.addRow(new ExceptionMsg("Source",fullPath));
+			ept.addRow(new ExceptionMsg("Exception",err.getMessage()));
+			
+			Common.emailqueue.addToQueue(outint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 		}
 		finally

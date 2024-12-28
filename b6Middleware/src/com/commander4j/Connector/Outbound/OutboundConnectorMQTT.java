@@ -11,6 +11,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import com.commander4j.Interface.Outbound.OutboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JXMLDocument;
 
@@ -116,7 +118,16 @@ public class OutboundConnectorMQTT extends OutboundConnectorABSTRACT
 		{
 			logger.error("Message failed to process.");
 
-			Common.emailqueue.addToQueue(outint.isMapEmailEnabled(), "Error", "Error with MQTT message send [" + tempFilename + "]", ex.getMessage() + "\n\n", "");
+			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
+			ept.addRow(new ExceptionMsg("Map Id",outint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id",outint.getId()));
+			ept.addRow(new ExceptionMsg("Type",getType()));
+			ept.addRow(new ExceptionMsg("Source",fullPath));
+			ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+			
+			Common.emailqueue.addToQueue(outint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 		}
 		finally

@@ -10,6 +10,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 
 import ABSTRACT.com.commander4j.Connector.InboundConnectorABSTRACT;
@@ -18,7 +21,8 @@ public class InboundConnectorXML extends InboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorXML.class));
-
+	private JPropQuickAccess qa = new JPropQuickAccess();
+	
 	public InboundConnectorXML(InboundInterface inter)
 	{
 		super(Connector_XML, inter);
@@ -29,12 +33,13 @@ public class InboundConnectorXML extends InboundConnectorABSTRACT
 	{
 
 		logger.debug("connectorLoad [" + fullFilename + "]");
+		
 		boolean result = false;
 
 		if (backupInboundFile(fullFilename))
 		{
 
-			Integer retries = Common.retryOpenFileCount;
+			Integer retries = qa.getInteger(Common.props,qa.getRootURL()+"//retryOpenFileCount");
 			Integer count = 0;
 
 			do
@@ -69,8 +74,17 @@ public class InboundConnectorXML extends InboundConnectorABSTRACT
 
 						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 
-						Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to " + fullFilename + ".error", "");
-
+						ExceptionHTML ept = new ExceptionHTML("Error opening file","Description","10%","Detail","30%");
+						ept.clear();
+						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+						ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+						ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+						ept.addRow(new ExceptionMsg("Type",getType()));
+						ept.addRow(new ExceptionMsg("Source",fullFilename));
+						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+						
+						Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error reading " + getType(),ept.getHTML(), "");
+						
 					}
 					else
 					{

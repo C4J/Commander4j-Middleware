@@ -4,19 +4,17 @@ import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
-import com.commander4j.sys.MiddlewareConfig;
-
 public class StartTest
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartTest.class));
-	public MiddlewareConfig cfg;
+	public ConfigLoad cfg;
 
 	public boolean runTest()
 	{
 		boolean result = true;
 
-		cfg = new MiddlewareConfig();
+		cfg = new ConfigLoad();
 
 		cfg.loadMaps(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "config.xml");
 

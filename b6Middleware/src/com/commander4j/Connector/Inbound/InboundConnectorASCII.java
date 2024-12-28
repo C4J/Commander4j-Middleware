@@ -14,6 +14,9 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.commander4j.Interface.Inbound.InboundInterface;
+import com.commander4j.exception.ExceptionHTML;
+import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.sys.FixedASCIIColumns;
 import com.commander4j.sys.FixedASCIIData;
@@ -25,6 +28,7 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorASCII.class));
+	private JPropQuickAccess qa = new JPropQuickAccess();
 
 	private LinkedList<FixedASCIIColumns> parseCols = new LinkedList<FixedASCIIColumns>();
 
@@ -96,7 +100,7 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
-			Integer retries = Common.retryOpenFileCount;
+			Integer retries = qa.getInteger(Common.props,qa.getRootURL()+"//retryOpenFileCount");
 			Integer count = 0;
 
 			do
@@ -133,15 +137,15 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 						xmlrow.setAttribute("cols", String.valueOf(getPatternColumnCount()));
 						xmlrow.setNodeValue(String.valueOf(row));
 
-						System.out.println(line);
+						logger.debug(line);
 
 						LinkedList<FixedASCIIData> nextLine = getASCIIColumnData(line);
 
 						for (int x = 0; x < getPatternColumnCount(); x++)
 						{
 
-							System.out.println(nextLine.get(x).columnId);
-							System.out.println(nextLine.get(x).columnData);
+							logger.debug(nextLine.get(x).columnId);
+							logger.debug(nextLine.get(x).columnData);
 
 							Element xmlcol = addElement(data, "col", nextLine.get(x).columnData);
 							xmlcol.setAttribute("id", String.valueOf(nextLine.get(x).columnId));
@@ -178,10 +182,19 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 
 						}
 
-						System.out.println("Unable to open file '" + fullFilename + "'");
 						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 
-						Common.emailqueue.addToQueue(inint.isMapEmailEnabled(), "Error", "Error reading " + getType(), "connectorLoad " + getType() + " " + ex.getMessage() + "\n\n" + fullFilename + "\n\nrenamed to " + fullFilename + ".error", "");
+						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
+						ept.clear();
+						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
+						ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
+						ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+						ept.addRow(new ExceptionMsg("Type",getType()));
+						ept.addRow(new ExceptionMsg("Source",fullFilename));
+						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
+						ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
+						
+						Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 					}
 					else
