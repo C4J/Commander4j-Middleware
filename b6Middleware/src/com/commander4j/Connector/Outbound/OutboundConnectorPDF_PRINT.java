@@ -8,6 +8,7 @@ import javax.print.PrintServiceLookup;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
 
@@ -97,7 +98,7 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 			if (getOutboundInterface().getQueueName().equals("") == false)
 			{
 
-				pdfdocument = PDDocument.load(new File(outputFilename));
+				pdfdocument = Loader.loadPDF(new File(outputFilename));
 
 				printerjob = PrinterJob.getPrinterJob();
 
@@ -141,13 +142,18 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 			ept.clear();
 			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
-			ept.addRow(new ExceptionMsg("Map Id",outint.getMap().getId()));
-			ept.addRow(new ExceptionMsg("Connector Id",outint.getId()));
+			ept.addRow(new ExceptionMsg("Map Id",getOutboundInterface().getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id",getOutboundInterface().getId()));
 			ept.addRow(new ExceptionMsg("Type",getType()));
 			ept.addRow(new ExceptionMsg("Source",fullPath));
+			if (getOutboundInterface().getXSLTFilename().equals("")==false)
+			{
+				ept.addRow(new ExceptionMsg("XSLT Path",getOutboundInterface().getXSLTPath()));
+				ept.addRow(new ExceptionMsg("XSLT File",getOutboundInterface().getXSLTFilename()));
+			}
 			ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
 			
-			Common.emailqueue.addToQueue(outint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+			Common.emailqueue.addToQueue(getOutboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 		}
 		finally
 		{

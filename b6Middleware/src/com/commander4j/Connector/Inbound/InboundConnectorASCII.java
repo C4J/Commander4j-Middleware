@@ -191,6 +191,12 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 						ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
 						ept.addRow(new ExceptionMsg("Type",getType()));
 						ept.addRow(new ExceptionMsg("Source",fullFilename));
+						if (inint.getXSLTFilename().equals("")==false)
+						{
+							ept.addRow(new ExceptionMsg("XSLT Path",inint.getXSLTPath()));
+							ept.addRow(new ExceptionMsg("XSLT File",inint.getXSLTFilename()));
+						}
+						ept.addRow((new ExceptionMsg("Input Pattern",getInboundInterface().getInputPattern())));
 						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 						ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
 						

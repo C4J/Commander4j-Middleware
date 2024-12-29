@@ -73,13 +73,18 @@ public class OutboundConnectorRAW extends OutboundConnectorABSTRACT
 				ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 				ept.clear();
 				ept.addRow(new ExceptionMsg("Stage","connectorSave"));
-				ept.addRow(new ExceptionMsg("Map Id",outint.getMap().getId()));
-				ept.addRow(new ExceptionMsg("Connector Id",outint.getId()));
+				ept.addRow(new ExceptionMsg("Map Id",getOutboundInterface().getMap().getId()));
+				ept.addRow(new ExceptionMsg("Connector Id",getOutboundInterface().getId()));
 				ept.addRow(new ExceptionMsg("Type",getType()));
 				ept.addRow(new ExceptionMsg("Source",fullPath));
+				if (getOutboundInterface().getXSLTFilename().equals("")==false)
+				{
+					ept.addRow(new ExceptionMsg("XSLT Path",getOutboundInterface().getXSLTPath()));
+					ept.addRow(new ExceptionMsg("XSLT File",getOutboundInterface().getXSLTFilename()));
+				}
 				ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 				
-				Common.emailqueue.addToQueue(outint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+				Common.emailqueue.addToQueue(getOutboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 			}
 			finally

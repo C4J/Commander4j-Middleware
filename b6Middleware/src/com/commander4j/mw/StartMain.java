@@ -1,7 +1,13 @@
 package com.commander4j.mw;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.email.EmailHTML;
@@ -20,7 +26,7 @@ public class StartMain
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "6.04";
+	public static String appVersion = "6.05";
 	public static int configVersion = 2;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
@@ -69,6 +75,50 @@ public class StartMain
 		logger.debug("**     MAPS LOADED     **");
 		logger.debug("*************************");
 		
+		//check if config.xml has been updated
+		
+		try
+		{
+			String activeS = System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "config.xml";
+			
+			File active = new File(activeS);
+			
+			long activeLastModified = FileUtils.lastModified(active);
+			
+			Timestamp ts = new Timestamp(activeLastModified);
+			
+			System.out.println(util.getISOTimeStampStringFormat(ts).replace("-", "_").replace("T", "_").replace(":", "_"));
+			
+			String activeB = "config_updated_"+util.getISOTimeStampStringFormat(ts).replace("-", "_").replace("T", "_").replace(":", "_")+".xml";
+			
+			String backupS = System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "backup" + File.separator + activeB;
+			
+			Path path = Paths.get(backupS);
+			
+			File backup = new File(backupS);
+			
+			if (Files.exists(path)==false)
+			{
+				FileUtils.copyFile(active, backup, true);
+				String messageContent = EmailHTML.header+"<p>Updated config attached</p><br>Updated : "+util.getISOTimeStampStringFormat(ts).replace("T", " ")+"<br><br>"+EmailHTML.footer;
+				Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Updated config.xml for ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+StartMain.appVersion+" on "+ util.getClientName(),messageContent, activeS);
+			}
+			else
+			{
+				
+			}
+			
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		
+		
+		
 		return result;	
 	}
 	
@@ -110,7 +160,6 @@ public class StartMain
 			ept.addRow(new ExceptionMsg("retryOpenFileDelay",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileDelay")));
 			ept.addRow(new ExceptionMsg("enableEmailNotifications",qa.getString(Common.props, qa.getRootURL()+"//enableEmailNotifications")));
 			ept.addRow(new ExceptionMsg("statusReportTime",qa.getString(Common.props, qa.getRootURL()+"//statusReportTime")));
-
 			
 			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Starting ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+StartMain.appVersion+" on "+ util.getClientName(),ept.getHTML(), "");
 			

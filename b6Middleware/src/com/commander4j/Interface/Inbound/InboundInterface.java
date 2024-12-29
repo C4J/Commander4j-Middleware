@@ -41,8 +41,8 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 	Transformer transformer;
 	Boolean writeSuccess;
 	Boolean loadFileResult;
-	String filename_imported;
-	String filename_transformed;
+	String filename_imported = "";
+	String filename_transformed = "";
 
 	public InboundInterface(Map map)
 	{
@@ -167,9 +167,20 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 												ept.clear();
 												ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
 												ept.addRow(new ExceptionMsg("Type",getType()));
-												ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
-												ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
-												ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+												if (getXSLTFilename().equals("")==false)
+												{
+													ept.addRow(new ExceptionMsg("XSLT Path",getXSLTPath()));
+													ept.addRow(new ExceptionMsg("XSLT File",getXSLTFilename()));
+												}
+												if (util.replaceNullStringwithBlank(filename_imported).equals("")==false)
+												{
+													ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+												}
+												if (util.replaceNullStringwithBlank(filename_transformed).equals("")==false)
+												{
+													ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+												}
+
 												ept.addRow(new ExceptionMsg("Exception","Unable to save inbound xml"));
 												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
@@ -184,9 +195,20 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 												ept.addRow(new ExceptionMsg("Stage","InboundInterface"));
 												ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
 												ept.addRow(new ExceptionMsg("Type",getType()));
-												ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
-												ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
-												ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+												if (getXSLTFilename().equals("")==false)
+												{
+													ept.addRow(new ExceptionMsg("XSLT Path",getXSLTPath()));
+													ept.addRow(new ExceptionMsg("XSLT File",getXSLTFilename()));
+												}
+												if (util.replaceNullStringwithBlank(filename_imported).equals("")==false)
+												{
+													ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+												}
+												if (util.replaceNullStringwithBlank(filename_transformed).equals("")==false)
+												{
+													ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+												}
+
 												ept.addRow(new ExceptionMsg("Exception","Unable to load inbound xml"));
 												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
@@ -217,11 +239,21 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 			ept.addRow(new ExceptionMsg("Stage","InboundInterface"));
 			ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
 			ept.addRow(new ExceptionMsg("Type",getType()));
-			ept.addRow(new ExceptionMsg("XSLT File",getXSLTPath() + getXSLTFilename()));
-			ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
-			ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+			if (getXSLTFilename().equals("")==false)
+			{
+				ept.addRow(new ExceptionMsg("XSLT Path",getXSLTPath()));
+				ept.addRow(new ExceptionMsg("XSLT File",getXSLTFilename()));
+			}
+			if (util.replaceNullStringwithBlank(filename_imported).equals("")==false)
+			{
+				ept.addRow(new ExceptionMsg("Source",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_imported));
+			}
+			if (util.replaceNullStringwithBlank(filename_transformed).equals("")==false)
+			{
+				ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_transformed));
+			}
 			ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
-			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map Exception",ept.getHTML(), "");
+			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map [" + map.getId() + "] Exception",ept.getHTML(), "");
 
 		}
 		finally

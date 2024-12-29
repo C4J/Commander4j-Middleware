@@ -71,7 +71,7 @@ public class ConfigUpdate
 			
 			try
 			{
-				config_backup = config_home_dir + File.separator +"backup"+ File.separator +"config_v"+String.valueOf(x)+"_"+utils.getISODateTimeString().replace("T", "_").replace(" ", "_").replace("-", "_").replace(":", "_")+".xml";
+				config_backup = config_home_dir + File.separator +"backup"+ File.separator +"config_backup_v"+String.valueOf(x)+"_"+utils.getISODateTimeString().replace("T", "_").replace(" ", "_").replace("-", "_").replace(":", "_")+".xml";
 				
 				processor = new Processor(Configuration.readConfiguration(xmlSource));
 				compiler = processor.newXsltCompiler();

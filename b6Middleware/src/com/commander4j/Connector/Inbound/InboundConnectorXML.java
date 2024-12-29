@@ -77,13 +77,18 @@ public class InboundConnectorXML extends InboundConnectorABSTRACT
 						ExceptionHTML ept = new ExceptionHTML("Error opening file","Description","10%","Detail","30%");
 						ept.clear();
 						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
-						ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
-						ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+						ept.addRow(new ExceptionMsg("Map Id",getInboundInterface().getMap().getId()));
+						ept.addRow(new ExceptionMsg("Connector Id",getInboundInterface().getId()));
 						ept.addRow(new ExceptionMsg("Type",getType()));
 						ept.addRow(new ExceptionMsg("Source",fullFilename));
+						if (getInboundInterface().getXSLTFilename().equals("")==false)
+						{
+							ept.addRow(new ExceptionMsg("XSLT Path",getInboundInterface().getXSLTPath()));
+							ept.addRow(new ExceptionMsg("XSLT File",getInboundInterface().getXSLTFilename()));
+						}
 						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 						
-						Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error reading " + getType(),ept.getHTML(), "");
+						Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error reading " + getType(),ept.getHTML(), "");
 						
 					}
 					else
