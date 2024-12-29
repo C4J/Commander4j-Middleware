@@ -182,7 +182,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 												}
 
 												ept.addRow(new ExceptionMsg("Exception","Unable to save inbound xml"));
-												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "] Unable to save inbound xml",ept.getHTML(), "");
 
 											}
 
@@ -210,7 +210,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 												}
 
 												ept.addRow(new ExceptionMsg("Exception","Unable to load inbound xml"));
-												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+												Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "] Unable to load inbound xml",ept.getHTML(), "");
 
 											}
 
@@ -234,7 +234,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 			logger.error("InboundInterface Map [" + map.getId() + "] error :" + ex.getMessage());
 
-			ExceptionHTML ept = new ExceptionHTML("Inbound Map Exception","Description","10%","Detail","30%");
+			ExceptionHTML ept = new ExceptionHTML("Inbound Map ["+getMap().getId()+"] Exception","Description","10%","Detail","30%");
 			ept.clear();
 			ept.addRow(new ExceptionMsg("Stage","InboundInterface"));
 			ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));

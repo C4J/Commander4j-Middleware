@@ -96,6 +96,7 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 		if (backupInboundFile(fullFilename))
 		{
 
+			Integer delay = qa.getInteger(Common.props, qa.getRootURL()+"//retryOpenFileDelay");
 			Integer retries = qa.getInteger(Common.props,qa.getRootURL()+"//retryOpenFileCount");
 			Integer count = 0;
 
@@ -195,6 +196,8 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 							ept.addRow(new ExceptionMsg("XSLT Path",getInboundInterface().getXSLTPath()));
 							ept.addRow(new ExceptionMsg("XSLT File",getInboundInterface().getXSLTFilename()));
 						}
+						ept.addRow(new ExceptionMsg("Retry Delay",String.valueOf(delay)));
+						ept.addRow(new ExceptionMsg("Retries",String.valueOf(count)+" of "+String.valueOf(retries)));
 						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 						ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
 						
@@ -206,7 +209,7 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 					{
 						logger.error("connectorLoad " + getType() + " parse attempt (" + count + " of " + retries + ") of [" + fullFilename + " [" + ex.getMessage() + "]", "");
 
-						util.retryDelay();
+						util.retryDelay(delay);
 
 					}
 				}

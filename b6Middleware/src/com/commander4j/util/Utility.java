@@ -24,8 +24,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.w3c.dom.Document;
 
-import com.commander4j.sys.Common;
-
 public class Utility
 {
 	
@@ -150,13 +148,13 @@ public class Utility
 
 		return result;
 	}
-	
-	public void retryDelay()
+		
+	public void retryDelay(int milliseconds)
 	{
 		
 		try
 		{
-			Thread.sleep(Common.props.getChildById("retryOpenFileDelay").getValueAsInteger());
+			Thread.sleep(milliseconds);
 		}
 		catch (Exception e)
 		{

@@ -42,6 +42,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	{
 		Boolean result = false;
 
+		Integer delay = qa.getInteger(Common.props, qa.getRootURL()+"//retryOpenFileDelay");
 		Integer retries = qa.getInteger(Common.props, qa.getRootURL()+"//retryOpenFileCount");
 		Integer count = 0;
 
@@ -61,7 +62,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 				FileUtils.deleteQuietly(toFile);
 
-				FileUtils.copyFile(fromFile, toFile, false);
+				FileUtils.copyFile(fromFile, toFile, true);
 
 				fromFile = null;
 				toFile = null;
@@ -83,9 +84,11 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 					ept.clear();
 					ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
 					ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
-					ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 					ept.addRow(new ExceptionMsg("Source",fullFilename));
 					ept.addRow(new ExceptionMsg("Destination",destination));
+					ept.addRow(new ExceptionMsg("Retry Delay",String.valueOf(delay)));
+					ept.addRow(new ExceptionMsg("Retries",String.valueOf(count)+" of "+String.valueOf(retries)));
+					ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 
 					Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
 
@@ -94,7 +97,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 				{
 					logger.error("backupInboundFile backup attempt (" + count + " of " + retries + ") for [" + fullFilename + "[" + ex.getMessage() + "]", "");
 
-					util.retryDelay();
+					util.retryDelay(delay);
 
 				}
 
@@ -236,9 +239,9 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			ept.clear();
 			ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
 			ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
-			ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
 			ept.addRow(new ExceptionMsg("Source",filename));
 			ept.addRow(new ExceptionMsg("Destination",destination));
+			ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
 
 			Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
 
