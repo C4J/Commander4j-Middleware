@@ -2,6 +2,7 @@ package ABSTRACT.com.commander4j.Connector;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.LinkOption;
 
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
@@ -15,6 +16,7 @@ import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
+import com.commander4j.util.RemoteShareChecker;
 import com.commander4j.util.Utility;
 
 import INTERFACE.com.commander4j.Connector.InboundConnectorINTERFACE;
@@ -30,6 +32,8 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	protected Utility util = new Utility();
 	protected Document data;
 	private JPropQuickAccess qa = new JPropQuickAccess();
+	private String errorMessage = "";
+	private RemoteShareChecker rsc = new RemoteShareChecker();
 
 	protected InboundInterface inint;
 
@@ -38,86 +42,87 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		return inint.isBinaryFile();
 	}
 
-	public Boolean backupInboundFile(String fullFilename)
+	public Boolean backupInboundFile(String sourceFile)
 	{
 		Boolean result = false;
 
-		Integer delay = qa.getInteger(Common.props, qa.getRootURL()+"//retryOpenFileDelay");
-		Integer retries = qa.getInteger(Common.props, qa.getRootURL()+"//retryOpenFileCount");
-		Integer count = 0;
+		Integer delay = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileDelay");
+		Integer retries = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileCount");
+		
+		String destinationFile = qa.getString(Common.props, qa.getRootURL() + "//logDir") + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(sourceFile)).getName();
+	
+		int attempt = 0;
+
+		File fromFile = new File(sourceFile);
+		File toFile = new File(destinationFile);
 
 		do
 		{
-
-			try
-			{
-				count++;
-
-				destination = qa.getString(Common.props, qa.getRootURL()+"//logDir") + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(fullFilename)).getName();
-
-				logger.debug("connectorLoad Backup [" + fullFilename + "] to [" + destination + "]");
-
-				File fromFile = new File(fullFilename);
-				File toFile = new File(destination);
-
-				FileUtils.deleteQuietly(toFile);
-
-				FileUtils.copyFile(fromFile, toFile, true);
-
-				fromFile = null;
-				toFile = null;
-
-				count = retries;
-				result = true;
-
-			}
-			catch (Exception ex)
+			if (rsc.isValidPath(sourceFile))
 			{
 
-				if (count >= retries)
+				if (FileUtils.isRegularFile(toFile, LinkOption.NOFOLLOW_LINKS))
 				{
-					logger.error("backupInboundFile unable to backup attempt (" + count + " attempts) for [" + fullFilename + "]");
-
-					logger.error("Error message [" + ex.getMessage() + "]");
-					
-					ExceptionHTML ept = new ExceptionHTML("Error backing up file","Description","10%","Detail","30%");
-					ept.clear();
-					ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
-					ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
-					ept.addRow(new ExceptionMsg("Source",fullFilename));
-					ept.addRow(new ExceptionMsg("Destination",destination));
-					ept.addRow(new ExceptionMsg("Retry Delay",String.valueOf(delay)));
-					ept.addRow(new ExceptionMsg("Retries",String.valueOf(count)+" of "+String.valueOf(retries)));
-					ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
-
-					Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
-
-				}
-				else
-				{
-					logger.error("backupInboundFile backup attempt (" + count + " of " + retries + ") for [" + fullFilename + "[" + ex.getMessage() + "]", "");
-
-					util.retryDelay(delay);
-
+					FileUtils.deleteQuietly(toFile);
 				}
 
-			}
-			finally
-			{
 				try
 				{
-
+					FileUtils.copyFile(fromFile, toFile, true);
+					result = true;
 				}
-				catch (Exception ex)
+				catch (IOException e)
 				{
-
+					setErrorMessage(e.getMessage());
 				}
+			}
+			else
+			{
+				setErrorMessage(rsc.getErrorMessage());
+			}
+
+			attempt++;
+			
+			if (result == false)
+			{
+				util.retryDelay(delay);
 			}
 
 		}
-		while (count < retries);
+		while ((attempt <= retries) && (result == false));
+		
+		fromFile = null;
+		toFile = null;
+		
+		if (result == false)
+		{
+
+			logger.error("Error message [" + getErrorMessage() + "]");
+
+			ExceptionHTML ept = new ExceptionHTML("Error backing up file", "Description", "10%", "Detail", "30%");
+			ept.clear();
+			ept.addRow(new ExceptionMsg("Map Id", inint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id", inint.getId()));
+			ept.addRow(new ExceptionMsg("Source", sourceFile));
+			ept.addRow(new ExceptionMsg("Destination", destination));
+			ept.addRow(new ExceptionMsg("Retry Delay", String.valueOf(delay)));
+			ept.addRow(new ExceptionMsg("Retries", String.valueOf(retries)));
+			ept.addRow(new ExceptionMsg("Exception", getErrorMessage()));
+
+			Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
+		}
 
 		return result;
+	}
+
+	private void setErrorMessage(String msg)
+	{
+		errorMessage = msg;
+	}
+
+	public String getErrorMessage()
+	{
+		return errorMessage;
 	}
 
 	public Long getInboundConnectorMessageCount()
@@ -150,7 +155,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	{
 		inboundConnectorMessageCount = (long) 0;
 	}
-	
+
 	public Boolean processInboundFile(String filename)
 	{
 		Boolean result = false;
@@ -227,21 +232,21 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 		try
 		{
-			logger.debug(qa.getString(Common.props, qa.getMapInputURL(inint.getMapId(), inint.getId())+"//description") + " Delete input file :" + source.getAbsolutePath());
+			logger.debug(qa.getString(Common.props, qa.getMapInputURL(inint.getMapId(), inint.getId()) + "//description") + " Delete input file :" + source.getAbsolutePath());
 			FileDeleteStrategy.NORMAL.delete(source);
 			result = true;
 		}
 		catch (IOException | NullPointerException e)
 		{
 			logger.error("Error deleting file " + filename + "[" + e.getMessage() + "]");
-			
-			ExceptionHTML ept = new ExceptionHTML("Error deleting file","Description","10%","Detail","30%");
+
+			ExceptionHTML ept = new ExceptionHTML("Error deleting file", "Description", "10%", "Detail", "30%");
 			ept.clear();
-			ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
-			ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
-			ept.addRow(new ExceptionMsg("Source",filename));
-			ept.addRow(new ExceptionMsg("Destination",destination));
-			ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
+			ept.addRow(new ExceptionMsg("Map Id", inint.getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id", inint.getId()));
+			ept.addRow(new ExceptionMsg("Source", filename));
+			ept.addRow(new ExceptionMsg("Destination", destination));
+			ept.addRow(new ExceptionMsg("Exception", e.getMessage()));
 
 			Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
 
