@@ -39,7 +39,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 	public boolean isBinaryFile()
 	{
-		return inint.isBinaryFile();
+		return getInboundInterface().isBinaryFile();
 	}
 
 	public Boolean backupInboundFile(String sourceFile)
@@ -101,15 +101,15 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 			ExceptionHTML ept = new ExceptionHTML("Error backing up file", "Description", "10%", "Detail", "30%");
 			ept.clear();
-			ept.addRow(new ExceptionMsg("Map Id", inint.getMap().getId()));
-			ept.addRow(new ExceptionMsg("Connector Id", inint.getId()));
+			ept.addRow(new ExceptionMsg("Map Id", getInboundInterface().getMap().getId()));
+			ept.addRow(new ExceptionMsg("Connector Id", getInboundInterface().getId()));
 			ept.addRow(new ExceptionMsg("Source", sourceFile));
 			ept.addRow(new ExceptionMsg("Destination", destination));
 			ept.addRow(new ExceptionMsg("Retry Delay", String.valueOf(delay)));
 			ept.addRow(new ExceptionMsg("Retries", String.valueOf(retries)));
 			ept.addRow(new ExceptionMsg("Exception", getErrorMessage()));
 
-			Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
+			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
 		}
 
 		return result;
@@ -163,7 +163,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		inboundConnectorMessageCount++;
 
 		setFilename(filename);
-		if (connectorLoad(inint.getInputPath() + File.separator + filename))
+		if (connectorLoad(getInboundInterface().getInputPath() + File.separator + filename))
 		{
 			if (isBinaryFile() == false)
 			{
@@ -228,11 +228,11 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	public boolean connectorDelete(String filename)
 	{
 		Boolean result = false;
-		File source = new File(inint.getInputPath() + File.separator + filename);
+		File source = new File(getInboundInterface().getInputPath() + File.separator + filename);
 
 		try
 		{
-			logger.debug(qa.getString(Common.props, qa.getMapInputURL(inint.getMapId(), inint.getId()) + "//description") + " Delete input file :" + source.getAbsolutePath());
+			logger.debug(qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMapId(), getInboundInterface().getId()) + "//description") + " Delete input file :" + source.getAbsolutePath());
 			FileDeleteStrategy.NORMAL.delete(source);
 			result = true;
 		}
@@ -242,13 +242,16 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 			ExceptionHTML ept = new ExceptionHTML("Error deleting file", "Description", "10%", "Detail", "30%");
 			ept.clear();
-			ept.addRow(new ExceptionMsg("Map Id", inint.getMap().getId()));
-			ept.addRow(new ExceptionMsg("Connector Id", inint.getId()));
+			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
+			ept.addRow(new ExceptionMsg("Map Id", getInboundInterface().getMap().getId()));
+			ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getInboundInterface().getMap().getId())+"//description")));
+			ept.addRow(new ExceptionMsg("Connector Id", getInboundInterface().getId()));
+			ept.addRow(new ExceptionMsg("Connector Description",qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMap().getId(), getInboundInterface().getId()))+"//description"));
 			ept.addRow(new ExceptionMsg("Source", filename));
 			ept.addRow(new ExceptionMsg("Destination", destination));
 			ept.addRow(new ExceptionMsg("Exception", e.getMessage()));
 
-			Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
+			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
 
 			result = false;
 		}

@@ -152,7 +152,7 @@ public class StartMain
 			ept.clear();
 			
 		
-			ept.addRow(new ExceptionMsg("description",qa.getString(Common.props, qa.getRootURL()+"//description")));
+			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("home folder",System.getProperty("user.dir")));
 			ept.addRow(new ExceptionMsg("version",qa.getString(Common.props, qa.getRootURL()+"//version")));
 			ept.addRow(new ExceptionMsg("logArchiveRetentionDays",qa.getString(Common.props, qa.getRootURL()+"//logArchiveRetentionDays")));

@@ -187,15 +187,18 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 
 						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 						ept.clear();
+						ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
-						ept.addRow(new ExceptionMsg("Map Id",inint.getMap().getId()));
-						ept.addRow(new ExceptionMsg("Connector Id",inint.getId()));
+						ept.addRow(new ExceptionMsg("Map Id",getInboundInterface().getMap().getId()));
+						ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getInboundInterface().getMap().getId())+"//description")));
+						ept.addRow(new ExceptionMsg("Connector Id",getInboundInterface().getId()));
+						ept.addRow(new ExceptionMsg("Connector Description",qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMap().getId(), getInboundInterface().getId()))+"//description"));
 						ept.addRow(new ExceptionMsg("Type",getType()));
 						ept.addRow(new ExceptionMsg("Source",fullFilename));
-						if (inint.getXSLTFilename().equals("")==false)
+						if (getInboundInterface().getXSLTFilename().equals("")==false)
 						{
-							ept.addRow(new ExceptionMsg("XSLT Path",inint.getXSLTPath()));
-							ept.addRow(new ExceptionMsg("XSLT File",inint.getXSLTFilename()));
+							ept.addRow(new ExceptionMsg("XSLT Path",getInboundInterface().getXSLTPath()));
+							ept.addRow(new ExceptionMsg("XSLT File",getInboundInterface().getXSLTFilename()));
 						}
 						ept.addRow((new ExceptionMsg("Input Pattern",getInboundInterface().getInputPattern())));
 						ept.addRow(new ExceptionMsg("Retry Delay",String.valueOf(delay)));
@@ -203,7 +206,7 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 						ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
 						
-						Common.emailqueue.addToQueue(inint.getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+						Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
 
 					}
 					else

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.commander4j.Interface.Outbound.OutboundInterface;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JXMLDocument;
 
@@ -20,6 +21,7 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 {
 
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((OutboundConnectorSOCKET.class));
+	private JPropQuickAccess qa = new JPropQuickAccess();
 
 	public OutboundConnectorSOCKET(OutboundInterface inter)
 	{
@@ -119,9 +121,12 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 
 			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 			ept.clear();
+			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
 			ept.addRow(new ExceptionMsg("Map Id",getOutboundInterface().getMap().getId()));
+			ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getOutboundInterface().getMap().getId())+"//description")));
 			ept.addRow(new ExceptionMsg("Connector Id",getOutboundInterface().getId()));
+			ept.addRow(new ExceptionMsg("Connector Description",qa.getString(Common.props, qa.getMapInputURL(getOutboundInterface().getMap().getId(), getOutboundInterface().getId()))+"//description"));
 			ept.addRow(new ExceptionMsg("Type",getType()));
 			ept.addRow(new ExceptionMsg("Source",fullPath));
 			if (getOutboundInterface().getXSLTFilename().equals("")==false)

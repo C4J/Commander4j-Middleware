@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
 import com.commander4j.util.JXMLDocument;
@@ -41,6 +42,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 	Boolean writeSuccess;
 	String filename_outputImported;
 	String filename_outputTransformed;
+	private JPropQuickAccess qa = new JPropQuickAccess();
 
 	Document data;
 	boolean enabled = false;
@@ -112,6 +114,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 						
 						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 						ept.clear();
+						ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 						ept.addRow(new ExceptionMsg("Stage","OutboundInterface - SaxonAPI"));
 						ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
 						ept.addRow(new ExceptionMsg("Type",getType()));
@@ -131,6 +134,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 
 					ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 					ept.clear();
+					ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 					ept.addRow(new ExceptionMsg("Stage","OutboundInterface - XPath"));
 					ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
 					ept.addRow(new ExceptionMsg("Type",getType()));

@@ -186,9 +186,12 @@ public class InboundConnectorCSV extends InboundConnectorABSTRACT
 
 						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 						ept.clear();
+						ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
 						ept.addRow(new ExceptionMsg("Map Id",getInboundInterface().getMap().getId()));
+						ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getInboundInterface().getMap().getId())+"//description")));
 						ept.addRow(new ExceptionMsg("Connector Id",getInboundInterface().getId()));
+						ept.addRow(new ExceptionMsg("Connector Description",qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMap().getId(), getInboundInterface().getId()))+"//description"));
 						ept.addRow(new ExceptionMsg("Type",getType()));
 						ept.addRow(new ExceptionMsg("Source",fullFilename));
 						if (getInboundInterface().getXSLTFilename().equals("")==false)

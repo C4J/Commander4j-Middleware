@@ -141,9 +141,12 @@ public class OutboundConnectorPDF_PRINT extends OutboundConnectorABSTRACT
 
 			ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 			ept.clear();
+			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("Stage","connectorSave"));
 			ept.addRow(new ExceptionMsg("Map Id",getOutboundInterface().getMap().getId()));
+			ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getOutboundInterface().getMap().getId())+"//description")));
 			ept.addRow(new ExceptionMsg("Connector Id",getOutboundInterface().getId()));
+			ept.addRow(new ExceptionMsg("Connector Description",qa.getString(Common.props, qa.getMapInputURL(getOutboundInterface().getMap().getId(), getOutboundInterface().getId()))+"//description"));
 			ept.addRow(new ExceptionMsg("Type",getType()));
 			ept.addRow(new ExceptionMsg("Source",fullPath));
 			if (getOutboundInterface().getXSLTFilename().equals("")==false)

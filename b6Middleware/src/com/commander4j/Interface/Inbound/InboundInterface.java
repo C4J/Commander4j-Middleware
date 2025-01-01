@@ -18,6 +18,7 @@ import org.w3c.dom.Document;
 import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
 import com.commander4j.util.JXMLDocument;
@@ -46,6 +47,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 	String filename_imported = "";
 	String filename_transformed = "";
 	RemoteShareChecker rsc = new RemoteShareChecker();
+	private JPropQuickAccess qa = new JPropQuickAccess();
 
 	public InboundInterface(Map map)
 	{
@@ -171,6 +173,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 													ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + map.getId() + "] XML Save Failure", "Description", "10%", "Detail", "30%");
 													ept.clear();
+													ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 													ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
 													ept.addRow(new ExceptionMsg("Type", getType()));
 													if (getXSLTFilename().equals("") == false)
@@ -198,6 +201,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 													ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + map.getId() + "] XML Load Failure", "Description", "10%", "Detail", "30%");
 													ept.clear();
+													ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 													ept.addRow(new ExceptionMsg("Stage", "InboundInterface"));
 													ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
 													ept.addRow(new ExceptionMsg("Type", getType()));
@@ -239,8 +243,10 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 				ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + getMap().getId() + "] Exception", "Description", "10%", "Detail", "30%");
 				ept.clear();
+				ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 				ept.addRow(new ExceptionMsg("Stage", "InboundInterface"));
 				ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
+				ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getMap().getId())+"//description")));
 				ept.addRow(new ExceptionMsg("Type", getType()));
 				
 				if (getXSLTFilename().equals("") == false)
@@ -272,8 +278,11 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 			ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + getMap().getId() + "] Exception", "Description", "10%", "Detail", "30%");
 			ept.clear();
+			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("Stage", "InboundInterface"));
 			ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
+			ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getMap().getId())+"//description")));
+
 			ept.addRow(new ExceptionMsg("Type", getType()));
 			if (getXSLTFilename().equals("") == false)
 			{

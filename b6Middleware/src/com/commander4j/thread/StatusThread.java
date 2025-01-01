@@ -50,6 +50,8 @@ public class StatusThread extends Thread
 				{
 					lastRunDate = currentDate;
 					
+					String description = qa.getString(Common.props, qa.getRootURL()+"//description");
+					
 					String report = EmailHTML.header + Common.smw.cfg.getInterfaceStatistics() + EmailHTML.footer;
 
 					Common.smw.cfg.resetInterfaceStatistics();
@@ -117,7 +119,7 @@ public class StatusThread extends Thread
 							+ "</table> \n"
 							+ "</div>";
 					
-					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+statusReportTime+"] "+StartMain.appVersion+" on "+ util.getClientName(), report, "");
+					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+description+"] "+StartMain.appVersion+" on "+ util.getClientName(), report, "");
 					
 					logger.debug(report);
 				}
