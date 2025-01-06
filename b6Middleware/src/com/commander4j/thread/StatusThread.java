@@ -1,5 +1,8 @@
 package com.commander4j.thread;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.email.EmailHTML;
@@ -40,7 +43,11 @@ public class StatusThread extends Thread
 		{
 
 			JWait.oneSec();
-			currentDateTime = util.getDateTimeString("yyyy-MM-dd HH:mm:ss");
+			ZonedDateTime instant = ZonedDateTime.now();
+
+			ZonedDateTime instantInUTC = instant.withZoneSameInstant(ZoneId.of("UTC"));
+
+			currentDateTime = instantInUTC.toString();
 			currentDate = currentDateTime.substring(0, 10);
 			currentTime = currentDateTime.substring(11, 19);
 			
@@ -52,7 +59,7 @@ public class StatusThread extends Thread
 					
 					String description = qa.getString(Common.props, qa.getRootURL()+"//description");
 					
-					String report = EmailHTML.header + Common.smw.cfg.getInterfaceStatistics() + EmailHTML.footer;
+					String report = EmailHTML.header + Common.smw.cfg.getInterfaceStatistics();
 
 					Common.smw.cfg.resetInterfaceStatistics();
 					
@@ -118,6 +125,8 @@ public class StatusThread extends Thread
 							+ " </tbody>\n"
 							+ "</table> \n"
 							+ "</div>";
+					
+					report = report +  EmailHTML.footer;
 					
 					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+description+"] "+StartMain.appVersion+" on "+ util.getClientName(), report, "");
 					
