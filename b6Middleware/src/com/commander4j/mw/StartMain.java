@@ -26,7 +26,7 @@ public class StartMain
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "6.10";
+	public static String appVersion = "6.11";
 	public static int configVersion = 2;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
@@ -154,7 +154,7 @@ public class StartMain
 		
 			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("home folder",System.getProperty("user.dir")));
-			ept.addRow(new ExceptionMsg("version",qa.getString(Common.props, qa.getRootURL()+"//version")));
+			ept.addRow(new ExceptionMsg("Config Version",qa.getString(Common.props, qa.getRootURL()+"//version")));
 			ept.addRow(new ExceptionMsg("logArchiveRetentionDays",qa.getString(Common.props, qa.getRootURL()+"//logArchiveRetentionDays")));
 			ept.addRow(new ExceptionMsg("retryOpenFileCount",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileCount")));
 			ept.addRow(new ExceptionMsg("retryOpenFileDelay",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileDelay")));

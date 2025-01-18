@@ -50,7 +50,26 @@
         <property name="mail.debug" value="true"/>
     </configuration1>
 
-
+    <!-- Windows Domain -->
+    
+    <configuration2>
+        <property name="mail.smtp.starttls.enable" value="false"/>
+        <property name="mail.smtp.host" value="smtp.email.com"/>
+        <property name="mail.smtp.socketFactory.port" value="587"/>
+        <property name="mail.smtp.user" value="user@domain.com"/>
+        <property name="mail.smtp.socketFactory.fallback" value="true"/>
+        <property name="mail.mime.charset" value="utf-8"/>
+        <property name="mail.smtp.password" encrypted="no" value="password"/>
+        <property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory"/>
+        <property name="mail.smtp.ssl.enable" value="false"/>
+        <property name="mail.smtp.ssl.protocols" value="TLSv1.2"/>
+        <property name="mail.smtp.ssl.trust" value="smtp.email.com"/>
+        <property name="mail.smtp.auth" value="true"/>
+        <property name="mail.smtp.port" value="587"/>
+        <property name="mail.smtp.from" value="user@domain.com"/>
+        <property name="mail.debug" value="true"/>
+    </configuration2>
+    
     <!-- Distribution Lists are referred to within message mapping Config.xml -->
 
     <distributionList id="Monitor" enabled="Y" maxFrequencyMins="5">

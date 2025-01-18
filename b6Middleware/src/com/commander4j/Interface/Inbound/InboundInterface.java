@@ -82,7 +82,10 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 					extensions = null;
 				}
 			}
-
+			
+			filename_imported = "";
+			filename_transformed = "";
+			
 			if (rsc.isValidPath(getInputPath()))
 			{
 
