@@ -2,11 +2,7 @@ package com.commander4j.mw;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,9 +28,10 @@ import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.gui.JList4j;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
+import com.commander4j.util.JHelp;
 import com.commander4j.util.Utility;
 
-public class StartGUI extends JFrame
+public class GUI extends JFrame
 {
 
 	private static final long serialVersionUID = 1L;
@@ -47,25 +44,21 @@ public class StartGUI extends JFrame
 	private final JLabel lblDescription = new JLabel("Description :");
 	private JLabel label_NoOfMaps = new JLabel("");
 	private JList4j<Map> listMaps = new JList4j<Map>();
-	private static StartGUI frame;
+	private static GUI frame;
 	private JCheckBox checkboxEmailEnabled = new JCheckBox("");
 	JPropQuickAccess qa = new JPropQuickAccess();
 	Utility util = new Utility();
 	private JLabel textFieldDescription;
 
-	/**
-	 * Launch the application.
-	 */
-
 	private void ConfirmExit()
 	{
-		if (Common.smw.isRunning())
+		if (Common.core.isRunning())
 		{
 			int question = JOptionPane.showConfirmDialog(frame, "Closing application with stop interfaces ?", "Confirm", JOptionPane.YES_NO_OPTION, 0, Common.icon_confirm);
 
 			if (question == 0)
 			{
-				Common.smw.stopMaps();
+				Common.core.stopMaps();
 				System.exit(0);
 			}
 		}
@@ -89,9 +82,9 @@ public class StartGUI extends JFrame
 		DefaultComboBoxModel<Map> defComboBoxMod = new DefaultComboBoxModel<Map>();
 		int sel = -1;
 
-		for (int j = 0; j < Common.smw.cfg.getMaps().size(); j++)
+		for (int j = 0; j < Common.core.cfg.getMaps().size(); j++)
 		{
-			defComboBoxMod.addElement(Common.smw.cfg.getMaps().get(j));
+			defComboBoxMod.addElement(Common.core.cfg.getMaps().get(j));
 
 		}
 
@@ -102,46 +95,16 @@ public class StartGUI extends JFrame
 		listMaps.ensureIndexIsVisible(sel);
 		label_NoOfMaps.setBounds(836, 12, 60, 22);
 
-		label_NoOfMaps.setText(String.valueOf(Common.smw.cfg.getMaps().size()));
-	}
-
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					frame = new StartGUI();
-
-					GraphicsDevice gd = Utility.getGraphicsDevice();
-
-					GraphicsConfiguration gc = gd.getDefaultConfiguration();
-
-					Rectangle screenBounds = gc.getBounds();
-
-					frame.setBounds(screenBounds.x + ((screenBounds.width - frame.getWidth()) / 2), screenBounds.y + ((screenBounds.height - frame.getHeight()) / 2), frame.getWidth(), frame.getHeight());
-
-					frame.setVisible(true);
-
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
+		label_NoOfMaps.setText(String.valueOf(Common.core.cfg.getMaps().size()));
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public StartGUI()
+	public GUI()
 	{
 		setResizable(false);
-		setTitle("Commander4j Middleware" + " " + StartMain.appVersion);
-		util.initLogging("");
+		setTitle("Commander4j Middleware" + " " + Core.appVersion);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		setSize(1185, 662);
@@ -176,19 +139,19 @@ public class StartGUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Common.smw.loadMaps();
+				Common.core.loadMaps();
 				
 				checkboxEmailEnabled.setSelected(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"));
 				textFieldDescription.setText(qa.getString(Common.props, qa.getRootURL() +"//description"));
 				
-				Common.smw.runMaps();
-				if (Common.smw.cfg.getMapDirectoryErrorCount() > 0)
+				Common.core.runMaps();
+				if (Common.core.cfg.getMapDirectoryErrorCount() > 0)
 				{
 					String errorMessage = "";
 
-					for (int x = 0; x < Common.smw.cfg.getMapDirectoryErrorCount(); x++)
+					for (int x = 0; x < Common.core.cfg.getMapDirectoryErrorCount(); x++)
 					{
-						errorMessage = errorMessage + Common.smw.cfg.getMapDirectoryErrors().get(x) + "\n";
+						errorMessage = errorMessage + Common.core.cfg.getMapDirectoryErrors().get(x) + "\n";
 					}
 
 					JOptionPane.showMessageDialog(frame, errorMessage, "Map Errors", JOptionPane.ERROR_MESSAGE);
@@ -255,7 +218,7 @@ public class StartGUI extends JFrame
 		desktopPane.add(lblEmailEnabled);
 
 		JScrollPane scrollPaneMaps = new JScrollPane();
-		scrollPaneMaps.setBounds(5, 80, StartGUI.this.getWidth()-15, 503);
+		scrollPaneMaps.setBounds(5, 80, GUI.this.getWidth()-15, 503);
 		desktopPane.add(scrollPaneMaps);
 		listMaps.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -265,6 +228,10 @@ public class StartGUI extends JFrame
 		buttonHelp.setBounds(701, 586, 150, 38);
 		buttonHelp.setFont(new Font("Dialog", Font.PLAIN, 12));
 		buttonHelp.setText("Help");
+		
+		final JHelp help = new JHelp();
+		help.enableHelpOnButton(buttonHelp, "https://wiki.commander4j.com/index.php?title=Middleware4j");
+		
 		desktopPane.add(buttonHelp);
 
 		JLabel lblIdDescriptionType_1 = new   JLabel("                                           Email   Map    Map     Connector   Connector   Path(s)");
@@ -300,7 +267,7 @@ public class StartGUI extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				populateList("");
-				Common.smw.stopMaps();
+				Common.core.stopMaps();
 
 				btnStart.setEnabled(true);
 				btnStop.setEnabled(false);
@@ -335,9 +302,6 @@ public class StartGUI extends JFrame
 		});
 		checkboxEmailEnabled.setFocusable(false);
 		desktopPane.add(checkboxEmailEnabled);
-
-		Common.smw.init();
-		Common.smw.loadMaps();
 		
 		checkboxEmailEnabled.setSelected(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"));
 		textFieldDescription.setText(qa.getString(Common.props, qa.getRootURL() +"//description"));

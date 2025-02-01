@@ -9,8 +9,7 @@ import javax.swing.Icon;
 
 import com.commander4j.email.EmailQueue;
 import com.commander4j.gui.JListRenderer;
-import com.commander4j.mw.StartMain;
-import com.commander4j.mw.StartService;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JProp;
 import com.commander4j.util.JImageIconLoader;
 
@@ -18,8 +17,6 @@ public class Common
 {
 
 	public static final JImageIconLoader imageIconloader = new JImageIconLoader();
-
-
 	
 	public final static String image_path = System.getProperty("user.dir") + File.separator + "images" + File.separator;
 
@@ -29,7 +26,8 @@ public class Common
 	public final static String image_close = "exit.gif";
 	public final static String image_confirm = "CMD_Icon.gif";
 	public final static String image_interface = "interface.gif";
-
+	public static String helpURL = "http://wiki.commander4j.com";
+	
 	public final static Icon icon_ok = Common.imageIconloader.getImageIcon(Common.image_ok);
 	public final static Icon icon_cancel = Common.imageIconloader.getImageIcon(Common.image_cancel);
 	public final static Icon icon_error = Common.imageIconloader.getImageIcon(Common.image_error);
@@ -46,9 +44,8 @@ public class Common
 	public final static Color color_listFontSelected = Color.BLACK;
 	public final static Color color_listFontStandard = Color.BLUE;
 
-	public final static StartMain smw = new StartMain();
-
-	public static StartService sservice;
+	public final static Core core = new Core();
+	
 	public static CheckboxMenuItem runningStatus = new CheckboxMenuItem("Running...");
 	public static String runMode = "";
 

@@ -20,13 +20,13 @@ import com.commander4j.thread.LogArchiveThread;
 import com.commander4j.thread.StatusThread;
 import com.commander4j.util.Utility;
 
-public class StartMain
+public class Core
 {
 
-	Logger logger = org.apache.logging.log4j.LogManager.getLogger((StartMain.class));
+	Logger logger = org.apache.logging.log4j.LogManager.getLogger((Core.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "6.11";
+	public static String appVersion = "6.20";
 	public static int configVersion = 2;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
@@ -101,7 +101,7 @@ public class StartMain
 			{
 				FileUtils.copyFile(active, backup, true);
 				String messageContent = EmailHTML.header+"<p>Updated config attached</p><br>Updated : "+util.getISOTimeStampStringFormat(ts).replace("T", " ")+"<br><br>"+EmailHTML.footer;
-				Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Updated config.xml for ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+StartMain.appVersion+" on "+ util.getClientName(),messageContent, activeS);
+				Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Updated config.xml for ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+Core.appVersion+" on "+ util.getClientName(),messageContent, activeS);
 			}
 			else
 			{
@@ -161,7 +161,7 @@ public class StartMain
 			ept.addRow(new ExceptionMsg("enableEmailNotifications",qa.getString(Common.props, qa.getRootURL()+"//enableEmailNotifications")));
 			ept.addRow(new ExceptionMsg("statusReportTime",qa.getString(Common.props, qa.getRootURL()+"//statusReportTime")));
 			
-			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Starting ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+StartMain.appVersion+" on "+ util.getClientName(),ept.getHTML(), "");
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Starting ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+Core.appVersion+" on "+ util.getClientName(),ept.getHTML(), "");
 			
 			running = true;
 
@@ -233,7 +233,7 @@ public class StartMain
 		{
 			String statistics = EmailHTML.header + cfg.getInterfaceStatistics() + EmailHTML.footer;
 			logger.info(statistics);
-			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"),"Monitor", "Stopping ["+Common.props.getChildById("description").getValueAsString()+"] "+StartMain.appVersion+" on "+ util.getClientName(), statistics, "");
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"),"Monitor", "Stopping ["+Common.props.getChildById("description").getValueAsString()+"] "+Core.appVersion+" on "+ util.getClientName(), statistics, "");
 		}
 
 		logger.debug("*************************");
@@ -258,40 +258,5 @@ public class StartMain
 		running = false;
 
 		return result;
-	}
-
-	public static void main(String[] args)
-	{
-
-		String parameter = "";
-
-		if (args.length > 0)
-		{
-			parameter = args[0];
-		}
-
-		if (parameter.equals(""))
-		{
-			parameter = "GUI";
-		}
-
-		if (parameter.equals("GUI"))
-		{
-			Common.runMode = "GUI";
-			StartGUI.main(args);
-		}
-
-		if (parameter.equals("Service"))
-		{
-			Common.runMode = "Service";
-			StartService.main(args);
-		}
-		
-		if (parameter.equals("Test"))
-		{
-			Common.runMode = "Test";
-			StartTest.main(args);
-		}		
-
 	}
 }

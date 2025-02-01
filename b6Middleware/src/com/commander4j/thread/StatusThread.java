@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.email.EmailHTML;
-import com.commander4j.mw.StartMain;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JWait;
@@ -59,9 +59,9 @@ public class StatusThread extends Thread
 					
 					String description = qa.getString(Common.props, qa.getRootURL()+"//description");
 					
-					String report = EmailHTML.header + Common.smw.cfg.getInterfaceStatistics();
+					String report = EmailHTML.header + Common.core.cfg.getInterfaceStatistics();
 
-					Common.smw.cfg.resetInterfaceStatistics();
+					Common.core.cfg.resetInterfaceStatistics();
 					
 					
 					report = report + "<br>\n"
@@ -128,7 +128,7 @@ public class StatusThread extends Thread
 					
 					report = report +  EmailHTML.footer;
 					
-					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+description+"] "+StartMain.appVersion+" on "+ util.getClientName(), report, "");
+					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+description+"] "+Core.appVersion+" on "+ util.getClientName(), report, "");
 					
 					logger.debug(report);
 				}
