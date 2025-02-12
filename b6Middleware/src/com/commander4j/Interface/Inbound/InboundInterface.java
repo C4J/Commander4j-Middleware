@@ -1,7 +1,6 @@
 package com.commander4j.Interface.Inbound;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.transform.Source;
@@ -81,6 +80,11 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 				{
 					extensions = null;
 				}
+				
+				if (extensions[0].equals(""))
+				{
+					extensions = null;
+				}
 			}
 			
 			filename_imported = "";
@@ -93,8 +97,6 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 				if (files.size() > 0)
 				{
-					logger.debug("Checked for files with extension " + Arrays.toString(extensions) + " found " + files.size());
-
 					for (File file : files)
 					{
 						if (file.length() > 0)

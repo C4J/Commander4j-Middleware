@@ -6,7 +6,7 @@
    <logArchiveRetentionDays>3</logArchiveRetentionDays>
    <retryOpenFileCount>3</retryOpenFileCount>
    <retryOpenFileDelay>1000</retryOpenFileDelay>
-   <enableEmailNotifications>false</enableEmailNotifications>
+   <enableEmailNotifications>true</enableEmailNotifications>
    <statusReportTime>09:00:00</statusReportTime>
    <maps>
       <map>

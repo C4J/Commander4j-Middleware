@@ -8,17 +8,19 @@ public class JPropStringArray
 
 	public String[] getValue(Object input)
 	{
-		String[] stringvalue;
+		String[] stringvalue = {""};
 		
 		if (input.getClass() == String[].class)
 		{
 			stringvalue = (String[]) input;
 		}
-		else
+		
+		if (input.getClass() == String.class)
 		{
-			stringvalue = new String[0];
+			String[] temp = {(String) input}; 
+			stringvalue  =temp;
 		}
-			
+
 		return stringvalue;
 	}
 	

@@ -264,8 +264,8 @@ public class ConfigLoad
 						String comparitor = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/condition/comparitor").trim();
 
 						String emailSubject = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/email/subject").trim();
-						String emailMessage = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]email/message").trim();
-						String emailListID = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]email/emailListID").trim();
+						String emailMessage = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/email/message").trim();
+						String emailListID = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/email/emailListID").trim();
 						String use83GUID = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/url/use83GUID").trim();
 						String queueName = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/print/queueName").trim();
 

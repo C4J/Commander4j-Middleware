@@ -67,6 +67,19 @@ public class JPropQuickAccess
 					// If String Array
 					if (value.getClass() == String[].class)
 					{
+						if (((String[]) value).length == 0)
+						{
+							value = defaultValue;
+						}
+						if (((String[]) value).length == 1)
+						{
+							String temp = ((String[]) value)[0];
+							if (temp.equals(""))
+							{
+								value = defaultValue;
+							}
+
+						}
 						if ((((String[]) value).length == 0) && (((String[]) defaultValue).length > 0))
 						{
 							value = defaultValue;
