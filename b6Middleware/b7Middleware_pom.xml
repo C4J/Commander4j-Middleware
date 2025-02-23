@@ -1,12 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.commander4j.middleware</groupId>
-	<artifactId>middleware-test</artifactId>
+	<artifactId>middleware</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
+
 	<properties>
-		<revision>7.0.0</revision>
-	</properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <revision>7.0.0</revision>
+    </properties>
 	<!-- 	<repositories>
 	    <repository>
 	      <id>com.install4j</id>
