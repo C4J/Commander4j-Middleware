@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?><config>
+   <version>2</version>
+   <description>c4jMiddleware Example</description>
+   <logPath/>
+   <XSLTPath/>
+   <logArchiveRetentionDays>3</logArchiveRetentionDays>
+   <retryOpenFileCount>3</retryOpenFileCount>
+   <retryOpenFileDelay>1000</retryOpenFileDelay>
+   <enableEmailNotifications>true</enableEmailNotifications>
+   <statusReportTime>09:00:00</statusReportTime>
+   <maps>
+      <map>
+         <id>Map01</id>
+         <enabled>true</enabled>
+         <description>ASCII File Fixed Column to CSV</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read ASCII Flat File</description>
+               <type>ASCII</type>
+               <url>
+                  <path>./interface/input/Map01 ASCII to CSV</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <ascii>
+                  <pattern>1-4,18-21</pattern>
+               </ascii>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write CSV</description>
+               <type>CSV</type>
+               <url>
+                  <path>./interface/output/Map01 ASCII to CSV</path>
+                  <prefix>X</prefix>
+                  <fileExtension>csv</fileExtension>
+                  <use83GUID>true</use83GUID>
+               </url>
+               <csv>
+                  <optionDelimeter>^</optionDelimeter>
+                  <csvOptions>separator=,^quote=none</csvOptions>
+               </csv>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map02</id>
+         <enabled>true</enabled>
+         <description>ASCII File Fixed Column to XML</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read ASCII Flat File</description>
+               <type>ASCII</type>
+               <url>
+                  <path>./interface/input/Map02 ASCII to XML</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <xsl>
+                  <XSLTPath/>
+                  <XSLT>Map02_ASCII_to_XML.xsl</XSLT>
+               </xsl>
+               <ascii>
+                  <pattern>1-4,18-21</pattern>
+               </ascii>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map02 ASCII to XML</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map03</id>
+         <enabled>true</enabled>
+         <description>CSV to ASCII File Fixed Column</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read CSV</description>
+               <type>CSV</type>
+               <url>
+                  <path>./interface/input/Map03 CSV to ASCII</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <csv>
+                  <optionDelimeter>^</optionDelimeter>
+                  <csvOptions>separator=,^quote=none</csvOptions>
+               </csv>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write ASCII</description>
+               <type>ASCII</type>
+               <url>
+                  <path>./interface/output/Map03 CSV to ASCII</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <ascii>
+                  <pattern>1-42,43-61,62-63,65-70,71-78,79-92,93-100,101-110,111-115,116-124</pattern>
+               </ascii>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map04</id>
+         <enabled>true</enabled>
+         <description>CSV to XML</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read CSV</description>
+               <type>CSV</type>
+               <url>
+                  <path>./interface/input/Map04 CSV to XML</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <csv>
+                  <optionDelimeter>^</optionDelimeter>
+                  <csvOptions>separator=,^quote=none</csvOptions>
+               </csv>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map04 CSV to XML</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <xsl>
+                  <XSLT>Map04_CSV_to_XML.xsl</XSLT>
+                  <XSLTPath/>
+               </xsl>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map05</id>
+         <enabled>true</enabled>
+         <description>Send File via Email</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read File</description>
+               <type>EMAIL</type>
+               <url>
+                  <path>./interface/input/Map05 File to EMAIL</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Email File</description>
+               <type>EMAIL</type>
+               <url>
+                  <path>./interface/output/Map05 File to EMAIL</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <email>
+                  <emailListID>Excel</emailListID>
+                  <subject>Test Email</subject>
+                  <message>See Attached File</message>
+               </email>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map06</id>
+         <enabled>true</enabled>
+         <description>Print PDF Document</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read PDF Document</description>
+               <type>PDF_PRINT</type>
+               <url>
+                  <path>./interface/input/Map06 PDF to PRINT</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Print PDF Document to HP8600</description>
+               <type>PDF_PRINT</type>
+               <url>
+                  <path>./interface/output/Map06 PDF to PRINT</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map07</id>
+         <enabled>true</enabled>
+         <description>RAW File Copy</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read RAW Input</description>
+               <type>RAW</type>
+               <url>
+                  <path>./interface/input/Map07 RAW to RAW</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>5000</pollingInterval>
+               </url>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write RAW Output</description>
+               <type>RAW</type>
+               <url>
+                  <path>./interface/output/Map07 RAW to RAW Copy 1;./interface/output/Map07 RAW to RAW Copy 2</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map08</id>
+         <enabled>true</enabled>
+         <description>XML to SOCKET</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read XML Document</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/input/Map08 XML to SOCKET</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Send to Host</description>
+               <type>SOCKET</type>
+               <url>
+                  <path>./interface/output/Map08 XML to SOCKET</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <host>
+                  <ip>127.0.0.1</ip>
+                  <port>8000</port>
+                  <repeat>2</repeat>
+               </host>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map09</id>
+         <enabled>true</enabled>
+         <description>XML to ASCII Flat File</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read XML File</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/input/Map09 XML to ASCII</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <xsl>
+                  <XSLTPath/>
+                  <XSLT>Map09_XML_to_ASCII.xsl</XSLT>
+               </xsl>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write ASCII File</description>
+               <type>ASCII</type>
+               <url>
+                  <path>./interface/output/Map09 XML to ASCII</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <ascii>
+                  <pattern>1-10,12-21,23-53</pattern>
+               </ascii>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map10</id>
+         <enabled>true</enabled>
+         <description>Transform XML</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read input XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/input/Map10 XML to XML</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <xsl>
+                  <XSLTPath/>
+                  <XSLT>Map10_XML_to_XML.xsl</XSLT>
+               </xsl>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write output XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map10 XML to XML</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map11</id>
+         <enabled>true</enabled>
+         <description>Idoc Material to XML</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read IDOC</description>
+               <type>IDOC</type>
+               <url>
+                  <path>./interface/input/Map11 IDOC to XML</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <xsl>
+                  <XSLTPath/>
+                  <XSLT>Map11_IDOC_to_XML.xsl</XSLT>
+               </xsl>
+               <idoc>
+                  <idocSchemaFilename>./idoc/schema/ZMATMAS03c.txt</idocSchemaFilename>
+               </idoc>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write XML File</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map11 IDOC to XML</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map12</id>
+         <enabled>true</enabled>
+         <description>XML to CSV</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read XML File</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/input/Map12 XML to CSV</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <xsl>
+                  <XSLTPath/>
+                  <XSLT>Map12_XML_to_CSV.xsl</XSLT>
+               </xsl>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write CSV</description>
+               <type>CSV</type>
+               <url>
+                  <path>./interface/output/Map12 XML to CSV</path>
+                  <prefix>X</prefix>
+                  <fileExtension>csv</fileExtension>
+                  <use83GUID>true</use83GUID>
+               </url>
+               <csv>
+                  <optionDelimeter>^</optionDelimeter>
+                  <csvOptions>separator=,^quote=none</csvOptions>
+               </csv>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map13</id>
+         <enabled>true</enabled>
+         <description>Conditional Output</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/input/Map13 XML Conditional</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>True - Folder 1</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map13 XML True</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <condition>
+                  <param1>/message/messageData[1]/productionDeclaration[1]/storageBin[1]</param1>
+                  <param1_Type>xquery</param1_Type>
+                  <param2>DESPATCH</param2>
+                  <param2_Type>literal</param2_Type>
+                  <comparitor>EQUAL</comparitor>
+               </condition>
+            </output>
+            <output>
+               <id>out2</id>
+               <enabled>true</enabled>
+               <description>False Folder 2</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map13 XML False</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+               <condition>
+                  <param1>/message/messageData[1]/productionDeclaration[1]/storageBin[1]</param1>
+                  <param1_Type>xquery</param1_Type>
+                  <param2>DESPATCH</param2>
+                  <param2_Type>literal</param2_Type>
+                  <comparitor>NOT EQUAL</comparitor>
+               </condition>
+            </output>
+         </connectors>
+      </map>
+      <map>
+         <id>Map14</id>
+         <enabled>true</enabled>
+         <description>External XSLT Functions</description>
+         <enableEmailNotifications>true</enableEmailNotifications>
+         <connectors>
+            <input>
+               <id>in1</id>
+               <description>Read input XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/input/Map14 External Functions</path>
+                  <mask/>
+                  <prefix/>
+                  <pollingInterval>1000</pollingInterval>
+               </url>
+               <xsl>
+                  <XSLTPath/>
+                  <XSLT>Map14_XML_Functions.xsl</XSLT>
+               </xsl>
+            </input>
+            <output>
+               <id>out1</id>
+               <enabled>true</enabled>
+               <description>Write output XML</description>
+               <type>XML</type>
+               <url>
+                  <path>./interface/output/Map14 External Functions</path>
+                  <prefix/>
+                  <fileExtension/>
+                  <use83GUID>false</use83GUID>
+               </url>
+            </output>
+         </connectors>
+      </map>
+   </maps>
+</config>

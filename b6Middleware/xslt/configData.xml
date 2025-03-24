@@ -12,5 +12,39 @@
     <item type="config" id="Plant_Central"><value>4321</value></item> 
     <item type="config" id="Procurement_Ind"><value>H0</value></item>
     <item type="config" id="SAPUsername"><value>FBLOGGS</value></item>  
+  
+    <!--  *****************  -->
+    <!--  NOT FOR EU CONFIG  -->
+    <!--  *****************  -->
+    <item type="non_eu" id="Enable">
+        <value>N</value>
+    </item>
+    <item type="non_eu" id="Criteria">
+        <value>GB</value>
+    </item>	
+    <item type="non_eu" id="Enable_Pack_Override">
+        <value>Y</value>
+    </item>
+    <item type="non_eu" id="Pack_Module_ID">
+        <value>RPT_PACK_LABEL_NON_EU</value>
+    </item>
+    <item type="non_eu" id="Enable_Pallet_Override">
+        <value>Y</value>
+    </item>
+    <item type="non_eu" id="Pallet_Module_ID">
+        <value>RPT_PALLET_LABEL_NON_EU</value>
+    </item>
+    <item type="non_eu" id="Enable_ALT_TEXT_1">
+        <value>Y</value>
+    </item>
+    <item type="non_eu" id="ALT_TEXT_1_Cust_ID">
+        <value>SELF</value>
+    </item>
+    <item type="non_eu" id="ALT_TEXT_1_Data_ID">
+        <value>ALT_TEXT_1</value>
+    </item>
+    <item type="non_eu" id="ALT_TEXT_1_Data">
+        <value>NOT FOR EU</value>
+    </item>
     
 </lookup>
