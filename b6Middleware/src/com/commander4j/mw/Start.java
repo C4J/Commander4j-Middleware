@@ -1,9 +1,5 @@
 package com.commander4j.mw;
 
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.Rectangle;
-
 import com.commander4j.sys.Common;
 import com.commander4j.util.JWait;
 import com.commander4j.util.Utility;
@@ -56,15 +52,12 @@ public class Start
 
 				try
 				{
+					System.setProperty("apple.laf.useScreenMenuBar", "true");
+					
+					Utility.setLookandFeel();
+					Utility.adjustForLookandFeel();
+					
 					GUI gui = new GUI();
-
-					GraphicsDevice gd = Utility.getGraphicsDevice();
-
-					GraphicsConfiguration gc = gd.getDefaultConfiguration();
-
-					Rectangle screenBounds = gc.getBounds();
-
-					gui.setBounds(screenBounds.x + ((screenBounds.width - gui.getWidth()) / 2), screenBounds.y + ((screenBounds.height - gui.getHeight()) / 2), gui.getWidth(), gui.getHeight());
 
 					gui.setVisible(true);
 

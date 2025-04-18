@@ -15,6 +15,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -24,8 +29,112 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.w3c.dom.Document;
 
+import com.commander4j.sys.Common;
+
 public class Utility
 {
+	public static void setLookandFeel()
+	{
+
+		try
+		{
+			SetLookAndFeel("Metal", "Ocean");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public static void SetLookAndFeel(String LOOKANDFEEL, String THEME)
+	{
+		try
+		{
+			if (LOOKANDFEEL.equals("Metal"))
+			{
+				if (THEME.equals("DefaultMetal"))
+					MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme());
+				else if (THEME.equals("Ocean"))
+					MetalLookAndFeel.setCurrentTheme(new OceanTheme());
+
+				UIManager.setLookAndFeel(new MetalLookAndFeel());
+
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static void adjustForLookandFeel()
+	{
+		LookAndFeel lf = UIManager.getLookAndFeel();
+		if (lf.getName().equals("Mac OS X"))
+		{
+			Common.LFAdjustWidth = 0;
+			Common.LFAdjustHeight = 0;
+			Common.LFTreeMenuAdjustWidth = 13;
+			Common.LFTreeMenuAdjustHeight = 13;
+
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Commander4j");
+
+		}
+		else
+		{
+			Common.LFAdjustWidth = -13;
+			Common.LFAdjustHeight = -13;
+			Common.LFTreeMenuAdjustWidth = 0;
+			Common.LFTreeMenuAdjustHeight = 0;
+		}
+	}
+
+	public static int getOSWidthAdjustment()
+	{
+		int result = 0;
+		if (OSValidator.isWindows())
+		{
+			result = 0;
+		}
+		if (OSValidator.isMac())
+		{
+			result = -15;
+		}
+		if (OSValidator.isSolaris())
+		{
+			result = 0;
+		}
+		if (OSValidator.isUnix())
+		{
+			result = 0;
+		}
+		return result;
+	}
+	
+	public static int getOSHeightAdjustment()
+	{
+		int result = 0;
+		if (OSValidator.isWindows())
+		{
+			result = 0;
+		}
+		if (OSValidator.isMac())
+		{
+			result = -13;
+		}
+		if (OSValidator.isSolaris())
+		{
+			result = 0;
+		}
+		if (OSValidator.isUnix())
+		{
+			result = 0;
+		}
+		return result;
+	}
+	
+	
 	
 	public static GraphicsDevice getGraphicsDevice()
 	{

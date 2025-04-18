@@ -3,20 +3,18 @@ package com.commander4j.mw;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.DefaultButtonModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -25,6 +23,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import com.commander4j.Interface.Mapping.Map;
+import com.commander4j.gui.JButton4j;
+import com.commander4j.gui.JCheckBox4j;
+import com.commander4j.gui.JLabel4j_std;
 import com.commander4j.gui.JList4j;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
@@ -36,19 +37,22 @@ public class GUI extends JFrame
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnStart;
-	private JButton btnStop;
+	private JButton4j btnStart;
+	private JButton4j btnStop;
 
-	private JLabel lblStatus = new JLabel();
-	private final JLabel lblInterfaceStatus = new JLabel("Interface Status :");
-	private final JLabel lblDescription = new JLabel("Description :");
-	private JLabel label_NoOfMaps = new JLabel("");
+	private JLabel4j_std lblStatus = new JLabel4j_std();
+	private final JLabel4j_std lblInterfaceStatus = new JLabel4j_std("Interface Status :");
+	private final JLabel4j_std lblDescription = new JLabel4j_std("Description :");
+	private JLabel4j_std label_NoOfMaps = new JLabel4j_std("");
 	private JList4j<Map> listMaps = new JList4j<Map>();
 	private static GUI frame;
-	private JCheckBox checkboxEmailEnabled = new JCheckBox("");
-	JPropQuickAccess qa = new JPropQuickAccess();
-	Utility util = new Utility();
-	private JLabel textFieldDescription;
+	private JCheckBox4j checkboxEmailEnabled = new JCheckBox4j("");
+	private JPropQuickAccess qa = new JPropQuickAccess();
+	private JLabel4j_std textFieldDescription;
+	private Font defaultfont = new Font("Courier New", Font.BOLD, 12);
+	private static int widthadjustment = 0;
+	private static int heightadjustment = 0;
+
 
 	private void ConfirmExit()
 	{
@@ -93,8 +97,8 @@ public class GUI extends JFrame
 
 		listMaps.setCellRenderer(Common.renderer_list);
 		listMaps.ensureIndexIsVisible(sel);
-		label_NoOfMaps.setBounds(836, 12, 60, 22);
-
+		label_NoOfMaps.setBounds(889, 12, 60, 22);
+		label_NoOfMaps.setFont(defaultfont);
 		label_NoOfMaps.setText(String.valueOf(Common.core.cfg.getMaps().size()));
 	}
 
@@ -105,23 +109,34 @@ public class GUI extends JFrame
 	{
 		setResizable(false);
 		setTitle("Commander4j Middleware" + " " + Core.appVersion);
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		widthadjustment = Utility.getOSWidthAdjustment();
+		heightadjustment = Utility.getOSHeightAdjustment();
+		
+		GraphicsDevice gd = Utility.getGraphicsDevice();
 
-		setSize(1185, 662);
+		GraphicsConfiguration gc = gd.getDefaultConfiguration();
+
+		Rectangle screenBounds = gc.getBounds();
+
+		setSize(1200+widthadjustment, 680+heightadjustment);
+		
+		setBounds(screenBounds.x + ((screenBounds.width - GUI.this.getWidth()) / 2), screenBounds.y + ((screenBounds.height - GUI.this.getHeight()) / 2), GUI.this.getWidth()+widthadjustment, GUI.this.getHeight()+heightadjustment);
 
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		JDesktopPane desktopPane = new JDesktopPane();
-		desktopPane.setBackground(new Color(254, 255, 255));
-		desktopPane.setBounds(0, 0, 1180, 634);
+		desktopPane.setBackground(Common.color_app_window);
+		desktopPane.setBounds(0, 0,  GUI.this.getWidth(), GUI.this.getHeight());
 		contentPane.add(desktopPane);
 		desktopPane.setLayout(null);
 		
 		addWindowListener(new WindowListener());
 
-		JButton btnClose = new JButton(Common.icon_close);
-		btnClose.setBounds(863, 586, 150, 38);
-		btnClose.setFont(new Font("Dialog", Font.PLAIN, 12));
+		JButton4j btnClose = new JButton4j(Common.icon_close);
+		btnClose.setBounds(841, 586, 150, 36);
 		btnClose.setText("Close");
 		btnClose.addActionListener(new ActionListener()
 		{
@@ -133,8 +148,8 @@ public class GUI extends JFrame
 		contentPane.setLayout(null);
 		desktopPane.add(btnClose);
 
-		btnStart = new JButton(Common.icon_ok);
-		btnStart.setBounds(213, 586, 150, 35);
+		btnStart = new JButton4j(Common.icon_ok);
+		btnStart.setBounds(237, 586, 150, 36);
 		btnStart.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -165,68 +180,66 @@ public class GUI extends JFrame
 					populateList("");
 					btnClose.setEnabled(false);
 					lblStatus.setBackground(new Color(0, 128, 0));
+					lblStatus.setFont(defaultfont);
 					lblStatus.setText("Running");
 				}
 			}
 		});
-		btnStart.setFont(new Font("Dialog", Font.PLAIN, 12));
 		btnStart.setMnemonic(KeyEvent.VK_ENTER);
 		btnStart.setText("Start");
 		btnStart.setSelectedIcon(Common.icon_cancel);
 		btnStart.setOpaque(true);
 		desktopPane.add(btnStart);
-		lblStatus.setBounds(570, 12, 131, 22);
+		lblStatus.setBounds(607, 12, 131, 22);
 		
-		lblStatus.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
+		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStatus.setForeground(Color.BLACK);
 		lblStatus.setPreferredSize(new Dimension(40, 40));
 		lblStatus.setBackground(Color.WHITE);
 		lblStatus.setOpaque(true);
 		lblStatus.setText("Idle");
+		lblStatus.setFont(defaultfont);
 		
 		desktopPane.add(lblStatus);
-		lblInterfaceStatus.setBounds(431, 12, 131, 22);
-		lblInterfaceStatus.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblInterfaceStatus.setBounds(466, 12, 131, 22);
 		lblInterfaceStatus.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblInterfaceStatus.setFont(defaultfont);
 
 		desktopPane.add(lblInterfaceStatus);
 		
-		lblDescription.setBounds(5, 12, 131, 22);
-		lblDescription.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblDescription.setBounds(10, 12, 131, 22);
 		lblDescription.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblDescription.setFont(defaultfont);
 
 		desktopPane.add(lblDescription);
 		
-		textFieldDescription = new JLabel();
-		textFieldDescription.setBackground(Color.WHITE);
-		textFieldDescription.setBounds(142, 12, 305, 22);
-		textFieldDescription.setFont(new Font("Dialog", Font.BOLD, 12));
+		textFieldDescription = new JLabel4j_std();
+		textFieldDescription.setBounds(151, 12, 305, 22);
+		textFieldDescription.setFont(defaultfont);
 		desktopPane.add(textFieldDescription);
 
-		JLabel lblNumberOfMaps = new JLabel("Number of Maps :");
-		lblNumberOfMaps.setBounds(698, 12, 131, 22);
-		lblNumberOfMaps.setFont(new Font("Dialog", Font.BOLD, 12));
+		JLabel4j_std lblNumberOfMaps = new JLabel4j_std("Number of Maps :");
+		lblNumberOfMaps.setFont(defaultfont);
+		lblNumberOfMaps.setBounds(748, 12, 131, 22);
 		lblNumberOfMaps.setHorizontalAlignment(SwingConstants.TRAILING);
 		desktopPane.add(lblNumberOfMaps);
 		desktopPane.add(label_NoOfMaps);
 		
-		JLabel lblEmailEnabled = new JLabel("Email Notifications :");
-		lblEmailEnabled.setBounds(922, 12, 131, 22);
-		lblEmailEnabled.setFont(new Font("Dialog", Font.BOLD, 12));
+		JLabel4j_std lblEmailEnabled = new JLabel4j_std("Email Notifications :");
+		lblEmailEnabled.setFont(defaultfont);
+		lblEmailEnabled.setBounds(959, 12, 168, 22);
 		lblEmailEnabled.setHorizontalAlignment(SwingConstants.TRAILING);
 		desktopPane.add(lblEmailEnabled);
 
 		JScrollPane scrollPaneMaps = new JScrollPane();
-		scrollPaneMaps.setBounds(5, 80, GUI.this.getWidth()-15, 503);
+		scrollPaneMaps.setBounds(5, 80, 1157, 503);
 		desktopPane.add(scrollPaneMaps);
 		listMaps.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPaneMaps.setViewportView(listMaps);
 
-		JButton buttonHelp = new JButton((Icon) null);
-		buttonHelp.setBounds(701, 586, 150, 38);
-		buttonHelp.setFont(new Font("Dialog", Font.PLAIN, 12));
+		JButton4j buttonHelp = new JButton4j(Common.icon_help);
+		buttonHelp.setBounds(690, 586, 150, 36);
 		buttonHelp.setText("Help");
 		
 		final JHelp help = new JHelp();
@@ -234,21 +247,19 @@ public class GUI extends JFrame
 		
 		desktopPane.add(buttonHelp);
 
-		JLabel lblIdDescriptionType_1 = new   JLabel("                                           Email   Map    Map     Connector   Connector   Path(s)");
+		JLabel4j_std lblIdDescriptionType_1 = new   JLabel4j_std("                                           Email   Map    Map     Connector   Connector   Path(s)");
+		lblIdDescriptionType_1.setFont(defaultfont);
 		lblIdDescriptionType_1.setBounds(10, 42, 1300, 22);
-		JLabel lblIdDescriptionType = new     JLabel("Map Id   Description                       Notify   In    Out       Type        Count     Input / Output");
+		JLabel4j_std lblIdDescriptionType = new     JLabel4j_std("Map Id   Description                       Notify   In    Out       Type        Count     Input / Output");
 		lblIdDescriptionType.setBounds(10, 58, 1300, 22);
-		lblIdDescriptionType.setForeground(Color.BLACK);
-		lblIdDescriptionType.setFont(new Font("Courier New", Font.BOLD, 12));
+		lblIdDescriptionType.setFont(defaultfont);
 		desktopPane.add(lblIdDescriptionType);
 		
 
-		lblIdDescriptionType_1.setForeground(Color.BLACK);
-		lblIdDescriptionType_1.setFont(new Font("Courier New", Font.BOLD, 12));
 		desktopPane.add(lblIdDescriptionType_1);
 
-		JButton btnRefresh = new JButton((Icon) null);
-		btnRefresh.setBounds(539, 586, 150, 38);
+		JButton4j btnRefresh = new JButton4j(Common.icon_refresh);
+		btnRefresh.setBounds(539, 586, 150, 36);
 		btnRefresh.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -257,11 +268,10 @@ public class GUI extends JFrame
 			}
 		});
 		btnRefresh.setText("Refresh");
-		btnRefresh.setFont(new Font("Dialog", Font.PLAIN, 12));
 		desktopPane.add(btnRefresh);
 
-		btnStop = new JButton(Common.icon_cancel);
-		btnStop.setBounds(375, 586, 150, 38);
+		btnStop = new JButton4j(Common.icon_cancel);
+		btnStop.setBounds(388, 586, 150, 36);
 		btnStop.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -280,26 +290,12 @@ public class GUI extends JFrame
 		btnStop.setText("Stop");
 		btnStop.setOpaque(true);
 		btnStop.setMnemonic(KeyEvent.VK_ENTER);
-		btnStop.setFont(new Font("Dialog", Font.PLAIN, 12));
+
 		desktopPane.add(btnStop);
-		checkboxEmailEnabled.setBackground(Color.WHITE);
+		checkboxEmailEnabled.setEnabled(false);
 		
-		checkboxEmailEnabled.setBounds(1061, 12, 25, 23);
-		checkboxEmailEnabled.setModel(new DefaultButtonModel() {
+		checkboxEmailEnabled.setBounds(1137, 12, 25, 23);
 
-		    private static final long serialVersionUID = 1L;
-
-			@Override
-		    public boolean isSelected() {
-		        return qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications");
-		    }
-
-		    @Override
-		    public void setSelected(boolean b) {
-		        // Stop events from being raised...
-		    }
-
-		});
 		checkboxEmailEnabled.setFocusable(false);
 		desktopPane.add(checkboxEmailEnabled);
 		
@@ -307,6 +303,8 @@ public class GUI extends JFrame
 		textFieldDescription.setText(qa.getString(Common.props, qa.getRootURL() +"//description"));
 
 		populateList("");
+		
+		setVisible(true);
 
 	}
 }
