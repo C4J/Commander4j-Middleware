@@ -48,9 +48,9 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 		Integer delay = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileDelay");
 		Integer retries = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileCount");
-		
+
 		String destinationFile = qa.getString(Common.props, qa.getRootURL() + "//logDir") + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(sourceFile)).getName();
-	
+
 		int attempt = 0;
 
 		File fromFile = new File(sourceFile);
@@ -82,7 +82,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			}
 
 			attempt++;
-			
+
 			if (result == false)
 			{
 				util.retryDelay(delay);
@@ -90,10 +90,10 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 		}
 		while ((attempt <= retries) && (result == false));
-		
+
 		fromFile = null;
 		toFile = null;
-		
+
 		if (result == false)
 		{
 
@@ -101,6 +101,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 			ExceptionHTML ept = new ExceptionHTML("Error backing up file", "Description", "10%", "Detail", "30%");
 			ept.clear();
+			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Map Id", getInboundInterface().getMap().getId()));
 			ept.addRow(new ExceptionMsg("Connector Id", getInboundInterface().getId()));
 			ept.addRow(new ExceptionMsg("Source", sourceFile));
@@ -228,32 +229,53 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	public boolean connectorDelete(String filename)
 	{
 		Boolean result = false;
+
+		Integer delay = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileDelay");
+		Integer retries = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileCount");
+		int attempt = 0;
+		String errorMessage = "";
+
 		File source = new File(getInboundInterface().getInputPath() + File.separator + filename);
 
-		try
+		do
 		{
-			logger.debug(qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMapId(), getInboundInterface().getId()) + "//description") + " Delete input file :" + source.getAbsolutePath());
-			FileDeleteStrategy.NORMAL.delete(source);
-			result = true;
+			try
+			{
+				attempt++;
+				errorMessage="";
+				
+				logger.debug(qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMapId(), getInboundInterface().getId()) + "//description") + " Delete input file :" + source.getAbsolutePath() + " attempt " + String.valueOf(attempt));
+				
+				FileDeleteStrategy.NORMAL.delete(source);
+				
+				result = true;
+			}
+			catch (IOException | NullPointerException e)
+			{
+				util.retryDelay(delay);
+				errorMessage = e.getMessage();
+				result = false;
+			}
 		}
-		catch (IOException | NullPointerException e)
+		while ((attempt <= retries) && (result == false));
+
+		if (result == false)
 		{
-			logger.error("Error deleting file " + filename + "[" + e.getMessage() + "]");
+			logger.error("Error deleting file " + filename + "[" + errorMessage + "]");
 
 			ExceptionHTML ept = new ExceptionHTML("Error deleting file", "Description", "10%", "Detail", "30%");
 			ept.clear();
-			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
+			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
+			ept.addRow(new ExceptionMsg("Description", qa.getString(Common.props, qa.getRootURL() + "//description")));
 			ept.addRow(new ExceptionMsg("Map Id", getInboundInterface().getMap().getId()));
-			ept.addRow(new ExceptionMsg("Map Description",qa.getString(Common.props, qa.getMapURL(getInboundInterface().getMap().getId())+"//description")));
+			ept.addRow(new ExceptionMsg("Map Description", qa.getString(Common.props, qa.getMapURL(getInboundInterface().getMap().getId()) + "//description")));
 			ept.addRow(new ExceptionMsg("Connector Id", getInboundInterface().getId()));
-			ept.addRow(new ExceptionMsg("Connector Description",qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMap().getId(), getInboundInterface().getId()))+"//description"));
+			ept.addRow(new ExceptionMsg("Connector Description", qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMapId(), getInboundInterface().getId()) + "//description")));
 			ept.addRow(new ExceptionMsg("Source", filename));
 			ept.addRow(new ExceptionMsg("Destination", destination));
-			ept.addRow(new ExceptionMsg("Exception", e.getMessage()));
+			ept.addRow(new ExceptionMsg("Exception", errorMessage));
 
 			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
-
-			result = false;
 		}
 
 		return result;

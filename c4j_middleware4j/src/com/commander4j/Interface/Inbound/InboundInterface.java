@@ -178,6 +178,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 													ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + map.getId() + "] XML Save Failure", "Description", "10%", "Detail", "30%");
 													ept.clear();
+													ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 													ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 													ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
 													ept.addRow(new ExceptionMsg("Type", getType()));
@@ -206,6 +207,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 													ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + map.getId() + "] XML Load Failure", "Description", "10%", "Detail", "30%");
 													ept.clear();
+													ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 													ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 													ept.addRow(new ExceptionMsg("Stage", "InboundInterface"));
 													ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
@@ -248,6 +250,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 				ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + getMap().getId() + "] Exception", "Description", "10%", "Detail", "30%");
 				ept.clear();
+				ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 				ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 				ept.addRow(new ExceptionMsg("Stage", "InboundInterface"));
 				ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));
@@ -283,6 +286,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 			ExceptionHTML ept = new ExceptionHTML("Inbound Map [" + getMap().getId() + "] Exception", "Description", "10%", "Detail", "30%");
 			ept.clear();
+			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("Stage", "InboundInterface"));
 			ept.addRow(new ExceptionMsg("Map Id", getMap().getId()));

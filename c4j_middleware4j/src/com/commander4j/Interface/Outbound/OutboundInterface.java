@@ -114,6 +114,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 						
 						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 						ept.clear();
+						ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 						ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 						ept.addRow(new ExceptionMsg("Stage","OutboundInterface - SaxonAPI"));
 						ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));
@@ -134,6 +135,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 
 					ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
 					ept.clear();
+					ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 					ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 					ept.addRow(new ExceptionMsg("Stage","OutboundInterface - XPath"));
 					ept.addRow(new ExceptionMsg("Map Id",getMap().getId()));

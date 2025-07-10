@@ -29,5 +29,54 @@
         <item type="StockUnitPerBase"><value>5</value></item> 
     </material>
     
+    <material id="8014348">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>96</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>
+    
+    <material id="8014336">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>96</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>
+    
+    <material id="8014337">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>96</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>
+    
+    <material id="8014338">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>96</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>
+    
+    <material id="8014339">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>96</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>
+    
+    <material id="8014340">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>36</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>
+    
+    <material id="8014341">
+        <item type="BaseUnitofMeasure"><value>BAG</value></item>
+        <item type="BasePerPAL"><value>36</value></item>  
+        <item type="BasePerLAG"><value></value></item>   
+        <item type="StockUnitPerBase"><value>1</value></item> 
+    </material>    
+    
 </lookup>
 

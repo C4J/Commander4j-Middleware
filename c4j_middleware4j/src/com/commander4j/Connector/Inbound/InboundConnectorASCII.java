@@ -186,7 +186,8 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 						logger.error("connectorLoad " + getType() + " " + ex.getMessage());
 
 						ExceptionHTML ept = new ExceptionHTML("Error processing message","Description","10%","Detail","30%");
-						ept.clear();
+						
+						ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 						ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 						ept.addRow(new ExceptionMsg("Stage","connectorLoad"));
 						ept.addRow(new ExceptionMsg("Map Id",getInboundInterface().getMap().getId()));

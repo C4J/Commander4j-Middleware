@@ -26,7 +26,7 @@ public class Core
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((Core.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "6.35";
+	public static String appVersion = "6.42";
 	public static int configVersion = 2;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
@@ -151,7 +151,7 @@ public class Core
 			ExceptionHTML ept = new ExceptionHTML("Middleware Properties","Property","10%","Value","30%");
 			ept.clear();
 			
-		
+			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("home folder",System.getProperty("user.dir")));
 			ept.addRow(new ExceptionMsg("Config Version",qa.getString(Common.props, qa.getRootURL()+"//version")));
@@ -173,6 +173,7 @@ public class Core
 
 			ExceptionHTML ept = new ExceptionHTML("Error during Middleware startup","Description","10%","Detail","60%");
 			ept.clear();
+			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Stage","Startup"));
 			
 			for (int x = 0; x < cfg.getMapDirectoryErrorCount(); x++)
