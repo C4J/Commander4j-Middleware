@@ -96,8 +96,14 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 					}
 				}
 
-				out.close();
-				socket.close();
+				if (out != null)
+				{
+					out.close();
+				}
+				if (socket != null)
+				{
+					socket.close();
+				}
 
 				FileUtils.deleteQuietly(new File(finalFilename));
 
@@ -140,6 +146,8 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 			ept.addRow(new ExceptionMsg("Exception",err.getMessage()));
 			
 			Common.emailqueue.addToQueue(getOutboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+			
+			FileUtils.deleteQuietly(new File(tempFilename));
 
 		}
 		finally
@@ -153,8 +161,15 @@ public class OutboundConnectorSOCKET extends OutboundConnectorABSTRACT
 
 			}
 
-			out.close();
+			try
+			{
+				out.close();
+			}
+			catch (Exception ex)
+			{
 
+			}
+			
 			try
 			{
 				socket.close();

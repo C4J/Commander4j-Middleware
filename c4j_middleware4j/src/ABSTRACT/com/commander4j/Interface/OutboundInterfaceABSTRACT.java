@@ -119,7 +119,12 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 		}
 		else
 		{
-			result = prefix+originalFilename;
+			String gap = "";
+			if (prefixLength>0)
+			{
+				gap = "_";
+			}
+			result = prefix+gap+map.getId()+"_"+getId()+"_"+originalFilename;
 		}
 		
 		return result;

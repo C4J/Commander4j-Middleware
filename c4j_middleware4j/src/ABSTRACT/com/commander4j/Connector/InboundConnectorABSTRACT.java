@@ -49,7 +49,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 		Integer delay = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileDelay");
 		Integer retries = qa.getInteger(Common.props, qa.getRootURL() + "//retryOpenFileCount");
 
-		String destinationFile = qa.getString(Common.props, qa.getRootURL() + "//logDir") + java.io.File.separator + util.getCurrentTimeStampString() + " INPUT_BACKUP_" + getType() + " " + (new File(sourceFile)).getName();
+		String destinationFile = qa.getString(Common.props, qa.getRootURL() + "//logDir") + java.io.File.separator + util.getTimeStampFilename() + "_INPUT_BACKUP_"+getInboundInterface().getMap().getId()+"_"+getInboundInterface().getId() +"_"+ getType() + "_" + (new File(sourceFile)).getName();
 
 		int attempt = 0;
 
@@ -68,7 +68,7 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 
 				try
 				{
-					FileUtils.copyFile(fromFile, toFile, true);
+					FileUtils.copyFile(fromFile, toFile, false);
 					result = true;
 				}
 				catch (IOException e)

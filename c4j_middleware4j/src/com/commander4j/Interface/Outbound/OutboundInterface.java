@@ -68,7 +68,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 		{
 			getDescription();
 
-			filename_outputImported = util.getCurrentTimeStampString() + " OUTPUT_IMPORTED_" + connector.getType() + "_" + getId() + "_" + filename;
+			filename_outputImported = util.getTimeStampFilename() + "_XSLT_INPUT_" + getMap().getId() +"_"+ getId() + "_" +connector.getType()+ "_" + filename;
 			if (filename_outputImported.endsWith(".xml") == false)
 			{
 				filename_outputImported = filename_outputImported + ".xml";
@@ -79,7 +79,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 			if (writeSuccess)
 			{
 
-				filename_outputTransformed = util.getCurrentTimeStampString() + " OUTPUT_TRANSFORMED_" + connector.getType() + "_" + getId() + "_" + filename;
+				filename_outputTransformed = util.getTimeStampFilename() + "_XSLT_OUTPUT_" + getMap().getId()+"_"+ getId() + "_"  + connector.getType() + "_" + filename;
 				if (filename_outputTransformed.endsWith(".xml") == false)
 				{
 					filename_outputTransformed = filename_outputTransformed + ".xml";

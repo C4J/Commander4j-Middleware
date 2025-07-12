@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.commander4j.Interface.Inbound.InboundInterface;
 import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.Interface.Outbound.OutboundInterface;
@@ -131,8 +133,35 @@ public class ConfigLoad
 
 		String version  =  doc.findXPath("//config/version");
 		String description =  doc.findXPath("//config/description");
-		String XSLTPath = doc.findXPath("//config/XSLTPath");
+
 		String logDir = doc.findXPath("//config/logPath");
+		
+		if (logDir.equals(""))
+		{
+			logDir = System.getProperty("user.dir") + java.io.File.separator + "interface" + java.io.File.separator + "log";
+		}
+		else
+		{
+			if (logDir.endsWith(File.separator)==true)
+			{
+				logDir = StringUtils.chop(logDir);
+			}
+		}
+		
+		String XSLTPath = doc.findXPath("//config/XSLTPath");
+		
+		if (XSLTPath.equals(""))
+		{
+			XSLTPath = System.getProperty("user.dir") + File.separator + "xslt" + File.separator;
+		}
+		else
+		{
+			if (XSLTPath.endsWith(File.separator)==false)
+			{
+				XSLTPath = XSLTPath + File.separator;
+			}
+		}
+		
 		String enableEmailNotifications = doc.findXPath("//config/enableEmailNotifications");
 		String retryOpenFileCount = doc.findXPath("//config/retryOpenFileCount");
 		String retryOpenFileDelay = doc.findXPath("//config/retryOpenFileDelay");
@@ -141,9 +170,9 @@ public class ConfigLoad
 
 		qa.setValue(Common.props,qa.getRootURL()+"//description",jPropString.getValue(description));
 		qa.setValue(Common.props,qa.getRootURL()+"//version",jPropString.getValue(version));
-		qa.setValue(Common.props,qa.getRootURL()+"//XSLTPath",jPropString.getValue(XSLTPath),jPropString.getValue(System.getProperty("user.dir") + File.separator + "xslt" + File.separator));
+		qa.setValue(Common.props,qa.getRootURL()+"//XSLTPath",jPropString.getValue(XSLTPath),jPropString.getValue(XSLTPath));
 		qa.setValue(Common.props,qa.getRootURL()+"//enableEmailNotifications",jPropBoolean.getValue(enableEmailNotifications));
-		qa.setValue(Common.props,qa.getRootURL()+"//logDir",jPropString.getValue(logDir),jPropString.getValue(System.getProperty("user.dir") + java.io.File.separator + "interface" + java.io.File.separator + "log"));
+		qa.setValue(Common.props,qa.getRootURL()+"//logDir",jPropString.getValue(logDir),jPropString.getValue(logDir));
 		qa.setValue(Common.props,qa.getRootURL()+"//statusReportTime",jPropString.getValue(statusReportTime),"09:00:00");
 		qa.setValue(Common.props,qa.getRootURL()+"//logArchiveRetentionDays",jPropInteger.getValue(ArchiveRetentionDays),3);
 		qa.setValue(Common.props,qa.getRootURL()+"//retryOpenFileDelay",jPropInteger.getValue(retryOpenFileDelay),1000);

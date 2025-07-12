@@ -440,6 +440,14 @@ public class Utility
 		return strDate;
 	}
 	
+	public String getTimeStampFilename()
+	{
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyyMMddHHmmssSSS");// dd/MM/yyyy
+		Date now = new Date();
+		String strDate = sdfDate.format(now);
+		return strDate;
+	}
+	
 	public Timestamp getSQLDateTime()
 	{
 		Calendar caldate = Calendar.getInstance();

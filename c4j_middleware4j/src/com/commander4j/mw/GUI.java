@@ -43,12 +43,16 @@ public class GUI extends JFrame
 	private JLabel4j_std lblStatus = new JLabel4j_std();
 	private final JLabel4j_std lblInterfaceStatus = new JLabel4j_std("Interface Status :");
 	private final JLabel4j_std lblDescription = new JLabel4j_std("Description :");
+	private final JLabel4j_std lblXSLTPath = new JLabel4j_std("XSLT Path :");
+	private final JLabel4j_std lblLogPath = new JLabel4j_std("Message Log Path :");
 	private JLabel4j_std label_NoOfMaps = new JLabel4j_std("");
 	private JList4j<Map> listMaps = new JList4j<Map>();
 	private static GUI frame;
 	private JCheckBox4j checkboxEmailEnabled = new JCheckBox4j("");
 	private JPropQuickAccess qa = new JPropQuickAccess();
 	private JLabel4j_std textFieldDescription;
+	private JLabel4j_std textFieldXSLTPath;
+	private JLabel4j_std textFieldLogPath;
 	private Font defaultfont = new Font("Courier New", Font.BOLD, 12);
 	private static int widthadjustment = 0;
 	private static int heightadjustment = 0;
@@ -97,6 +101,7 @@ public class GUI extends JFrame
 
 		listMaps.setCellRenderer(Common.renderer_list);
 		listMaps.ensureIndexIsVisible(sel);
+		label_NoOfMaps.setForeground(new Color(4, 50, 255));
 		label_NoOfMaps.setBounds(889, 12, 60, 22);
 		label_NoOfMaps.setFont(defaultfont);
 		label_NoOfMaps.setText(String.valueOf(Common.core.cfg.getMaps().size()));
@@ -207,16 +212,41 @@ public class GUI extends JFrame
 
 		desktopPane.add(lblInterfaceStatus);
 		
+		lblLogPath.setBounds(10, 62, 131, 22);
+		lblLogPath.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblLogPath.setFont(defaultfont);
+
+		desktopPane.add(lblLogPath);
+		
 		lblDescription.setBounds(10, 12, 131, 22);
 		lblDescription.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblDescription.setFont(defaultfont);
 
 		desktopPane.add(lblDescription);
 		
+		lblXSLTPath.setBounds(10, 37, 131, 22);
+		lblXSLTPath.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblXSLTPath.setFont(defaultfont);
+
+		desktopPane.add(lblXSLTPath);
+		
 		textFieldDescription = new JLabel4j_std();
+		textFieldDescription.setForeground(new Color(4, 50, 255));
 		textFieldDescription.setBounds(151, 12, 305, 22);
 		textFieldDescription.setFont(defaultfont);
 		desktopPane.add(textFieldDescription);
+		
+		textFieldXSLTPath = new JLabel4j_std();
+		textFieldXSLTPath.setForeground(new Color(4, 50, 255));
+		textFieldXSLTPath.setBounds(151, 37, 798, 22);
+		textFieldXSLTPath.setFont(defaultfont);
+		desktopPane.add(textFieldXSLTPath);
+		
+		textFieldLogPath = new JLabel4j_std();
+		textFieldLogPath.setForeground(new Color(4, 50, 255));
+		textFieldLogPath.setBounds(151, 62, 798, 22);
+		textFieldLogPath.setFont(defaultfont);
+		desktopPane.add(textFieldLogPath);
 
 		JLabel4j_std lblNumberOfMaps = new JLabel4j_std("Number of Maps :");
 		lblNumberOfMaps.setFont(defaultfont);
@@ -232,7 +262,7 @@ public class GUI extends JFrame
 		desktopPane.add(lblEmailEnabled);
 
 		JScrollPane scrollPaneMaps = new JScrollPane();
-		scrollPaneMaps.setBounds(5, 80, 1157, 503);
+		scrollPaneMaps.setBounds(5, 132, 1157, 445);
 		desktopPane.add(scrollPaneMaps);
 		listMaps.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -248,10 +278,12 @@ public class GUI extends JFrame
 		desktopPane.add(buttonHelp);
 
 		JLabel4j_std lblIdDescriptionType_1 = new   JLabel4j_std("                                           Email   Map    Map     Connector   Connector   Path(s)");
+		lblIdDescriptionType_1.setText("                                           Email   Map    Map    Connector  Connector  Path(s)");
 		lblIdDescriptionType_1.setFont(defaultfont);
-		lblIdDescriptionType_1.setBounds(10, 42, 1300, 22);
+		lblIdDescriptionType_1.setBounds(10, 90, 1300, 22);
 		JLabel4j_std lblIdDescriptionType = new     JLabel4j_std("Map Id   Description                       Notify   In    Out       Type        Count     Input / Output");
-		lblIdDescriptionType.setBounds(10, 58, 1300, 22);
+		lblIdDescriptionType.setText("Map Id   Description                       Notify   In    Out      Type       Count    Input / Output");
+		lblIdDescriptionType.setBounds(10, 108, 1300, 22);
 		lblIdDescriptionType.setFont(defaultfont);
 		desktopPane.add(lblIdDescriptionType);
 		
@@ -301,6 +333,8 @@ public class GUI extends JFrame
 		
 		checkboxEmailEnabled.setSelected(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"));
 		textFieldDescription.setText(qa.getString(Common.props, qa.getRootURL() +"//description"));
+		textFieldXSLTPath.setText(qa.getString(Common.props, qa.getRootURL() +"//XSLTPath"));
+		textFieldLogPath.setText(qa.getString(Common.props, qa.getRootURL() +"//logDir"));
 
 		populateList("");
 		

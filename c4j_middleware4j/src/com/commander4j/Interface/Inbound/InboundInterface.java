@@ -119,7 +119,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 
 										if (isBinaryFile() == false)
 										{
-											filename_imported = util.getCurrentTimeStampString() + " INPUT_IMPORTED_" + connector.getType() + "_" + getId() + "_" + file.getName();
+											filename_imported = util.getTimeStampFilename() + "_XSLT_INPUT_"+getMap().getId()+"_" + getId() + "_" + connector.getType() + "_" + file.getName();
 
 											if (filename_imported.endsWith(".xml") == false)
 											{
@@ -131,7 +131,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 											if (getXSLTFilename().equals("") == false)
 											{
 
-												filename_transformed = util.getCurrentTimeStampString() + " INPUT_TRANSFORMED_" + connector.getType() + "_" + getId() + "_" + file.getName();
+												filename_transformed = util.getTimeStampFilename() + "_XSLT_OUTPUT_"+getMap().getId() +"_"+ getId() + "_" + connector.getType() + "_" + file.getName();
 
 												if (filename_transformed.endsWith(".xml") == false)
 												{
