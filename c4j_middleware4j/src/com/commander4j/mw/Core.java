@@ -27,7 +27,7 @@ public class Core
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
 	public static String appVersion = "7.01";
-	public static int configVersion = 2;
+	public static int configVersion = 3;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><config>
-   <version>2</version>
+   <version>3</version>
    <description>c4jMiddleware Example</description>
-   <logPath></logPath>
-   <XSLTPath></XSLTPath>
+   <logPath/>
+   <XSLTPath/>
    <logArchiveRetentionDays>3</logArchiveRetentionDays>
    <retryOpenFileCount>3</retryOpenFileCount>
    <retryOpenFileDelay>1000</retryOpenFileDelay>
