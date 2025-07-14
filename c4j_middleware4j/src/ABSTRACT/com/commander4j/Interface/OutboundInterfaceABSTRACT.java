@@ -42,137 +42,149 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 
 	protected Utility util = new Utility();
 	private JPropQuickAccess qa = new JPropQuickAccess();
-	
+
 	public Map getMap()
 	{
 		return map;
 	}
-	
+
 	public String getHostIP()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//host//ip");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//host//ip");
 	}
 
 	public int getHostPort()
 	{
-		return qa.getInteger(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//host//port");
+		return qa.getInteger(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//host//port");
 	}
 
 	public int getHostRepeat()
 	{
-		return qa.getInteger(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//host//repeat");
+		return qa.getInteger(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//host//repeat");
 	}
-	
+
 	public String getMapId()
 	{
 		return this.map.getId();
 	}
-	
+
 	public String getMQTTTopic()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//mqtt//mqttTopic");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//mqtt//mqttTopic");
 	}
-	
+
 	public String getMQTTContentXPath()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//mqtt//mqttContentXPath");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//mqtt//mqttContentXPath");
 	}
-	
+
 	public String getMQTBroker()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//mqtt//mqttBroker");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//mqtt//mqttBroker");
 	}
-	
+
 	public int getMQTTQos()
 	{
-		return qa.getInteger(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//mqtt//mqttQos");
+		return qa.getInteger(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//mqtt//mqttQos");
 	}
-	
+
 	public String getMQTTClient()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//mqtt//mqttClient");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//mqtt//mqttClient");
 	}
-	
+
 	public String getQueueName()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//print//queueName");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//print//queueName");
 	}
 	
-	public String get83GUIDFilename(String prefix,String originalFilename)
+	public boolean retainOriginalFilename()
+	{
+		return qa.getBoolean(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//url//retainOriginalFilename");
+	}
+
+	public String get83GUIDFilename(String prefix, String originalFilename)
 	{
 		String result = originalFilename;
-		
+
 		prefix = util.replaceNullStringwithBlank(prefix);
-		
+
 		int prefixLength = prefix.length();
-		
+
 		if (is83GUIDFilenameReqd())
 		{
-			
+
 			String uuid = UUID.randomUUID().toString().replace("-", "");
-			
-			uuid = uuid.substring(0, 8-prefixLength);
-			
-			result = prefix+uuid;
-			
-			logger.debug("Filename changed from ["+originalFilename+"] to ["+result+"]");
+
+			uuid = uuid.substring(0, 8 - prefixLength);
+
+			result = prefix + uuid;
+
+			logger.debug("Filename changed from [" + originalFilename + "] to [" + result + "]");
 		}
 		else
 		{
-			String gap = "";
-			if (prefixLength>0)
+			if (retainOriginalFilename())
 			{
-				gap = "_";
+				result = prefix + originalFilename;
 			}
-			result = prefix+gap+map.getId()+"_"+getId()+"_"+originalFilename;
+			else
+			{
+				String gap = "";
+				if (prefixLength > 0)
+				{
+					gap = "_";
+				}
+				result = prefix + gap + map.getId() + "_" + getId() + "_" + originalFilename;
+			}
 		}
-		
+
 		return result;
 	}
 
 	public boolean is83GUIDFilenameReqd()
 	{
-		return qa.getBoolean(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//url//use83GUID");
+		return qa.getBoolean(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//url//use83GUID");
 	}
 
 	public String getCompareParam1()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//condition//param1");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//condition//param1");
 	}
 
 	public String getCompareParam1_Type()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//condition//param1_Type");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//condition//param1_Type");
 	}
 
 	public String getCompareParam2()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//condition//param2");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//condition//param2");
 	}
 
 	public String getCompareParam2_Type()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//condition//param2_Type");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//condition//param2_Type");
 	}
 
 	public String getComparator()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//condition//comparitor");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//condition//comparitor");
 	}
 
 	public String getPrefix()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//url//prefix");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//url//prefix");
 	}
 
 	public String getDescription()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//description");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//description");
 	}
 
 	public String getXSLTFilename()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//xsl//XSLT");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//xsl//XSLT");
 	}
 
 	public OutboundInterfaceABSTRACT(Map map)
@@ -192,12 +204,12 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 
 	public String getOutputFileExtension()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//url//fileExtension");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//url//fileExtension");
 	}
 
 	public String getOutputPath()
-	{		
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//url//path");
+	{
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//url//path");
 	}
 
 	public void setEnabled(boolean enable)
@@ -206,7 +218,7 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 		if ((enable == true) && (enabled == false) && (running == false))
 		{
 			// start
-			timer = new Timer("Output_"+getMapId()+"_"+getId());
+			timer = new Timer("Output_" + getMapId() + "_" + getId());
 			connector.setEnabled(enabled);
 			this.enabled = enable;
 			setRunning(true);
@@ -239,23 +251,23 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 
 	public String getOutputPattern()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//ascii//pattern");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//ascii//pattern");
 	}
 
 	public String getCSVOptions()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//csv//csvOptions");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//csv//csvOptions");
 	}
 
 	public String getOptionDelimeter()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//csv//optionDelimeter");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//csv//optionDelimeter");
 	}
 
 	public String getFileMask(String type)
 	{
 		String result = "";
-		
+
 		switch (type)
 		{
 		case OutboundConnectorINTERFACE.Connector_PDF_PRINT:
@@ -291,10 +303,10 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 		default:
 			throw new IllegalArgumentException();
 		}
-		
+
 		return result;
 	}
-	
+
 	public void setType(String type)
 	{
 		this.type = type;
@@ -333,34 +345,34 @@ public abstract class OutboundInterfaceABSTRACT extends TimerTask
 			break;
 		default:
 			throw new IllegalArgumentException();
-		}	
+		}
 
 	}
 
 	public String getEmailSubject()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//email//emailSubject");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//email//emailSubject");
 	}
 
 	public String getEmailMessage()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//email//emailMessage");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//email//emailMessage");
 	}
 
 	public String getEmailListID()
 	{
-		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId())+"//email//emailListID");
+		return qa.getString(Common.props, qa.getMapOutputURL(map.getId(), getId()) + "//email//emailListID");
 	}
 
 	public String getXSLTPath()
-	{		
-		String temp = qa.getString(Common.props, qa.getMapOutputURL(getMapId(), getId())+"//xsl//XSLTPath");
-		
-		if (temp.equals("")==true)
+	{
+		String temp = qa.getString(Common.props, qa.getMapOutputURL(getMapId(), getId()) + "//xsl//XSLTPath");
+
+		if (temp.equals("") == true)
 		{
-			temp = qa.getString(Common.props, qa.getRootURL()+"//XSLTPath");
+			temp = qa.getString(Common.props, qa.getRootURL() + "//XSLTPath");
 		}
-		
+
 		return temp;
 	}
 

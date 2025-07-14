@@ -39,6 +39,7 @@
                   <prefix>X</prefix>
                   <fileExtension>csv</fileExtension>
                   <use83GUID>true</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <csv>
                   <optionDelimeter>^</optionDelimeter>
@@ -81,6 +82,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
             </output>
          </connectors>
@@ -116,6 +118,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <ascii>
                   <pattern>1-42,43-61,62-63,65-70,71-78,79-92,93-100,101-110,111-115,116-124</pattern>
@@ -154,6 +157,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <xsl>
                   <XSLT>Map04_CSV_to_XML.xsl</XSLT>
@@ -189,6 +193,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>true</retainOriginalFilename>
                </url>
                <email>
                   <emailListID>Excel</emailListID>
@@ -225,6 +230,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
             </output>
          </connectors>
@@ -256,6 +262,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>true</retainOriginalFilename>
                </url>
             </output>
          </connectors>
@@ -287,6 +294,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <host>
                   <ip>127.0.0.1</ip>
@@ -327,6 +335,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <ascii>
                   <pattern>1-10,12-21,23-53</pattern>
@@ -365,6 +374,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
             </output>
          </connectors>
@@ -403,6 +413,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
             </output>
          </connectors>
@@ -438,6 +449,7 @@
                   <prefix>X</prefix>
                   <fileExtension>csv</fileExtension>
                   <use83GUID>true</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <csv>
                   <optionDelimeter>^</optionDelimeter>
@@ -473,6 +485,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <condition>
                   <param1>/message/messageData[1]/productionDeclaration[1]/storageBin[1]</param1>
@@ -492,6 +505,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
                <condition>
                   <param1>/message/messageData[1]/productionDeclaration[1]/storageBin[1]</param1>
@@ -534,6 +548,7 @@
                   <prefix/>
                   <fileExtension/>
                   <use83GUID>false</use83GUID>
+                  <retainOriginalFilename>false</retainOriginalFilename>
                </url>
             </output>
          </connectors>

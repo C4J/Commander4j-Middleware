@@ -26,7 +26,7 @@ public class Core
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((Core.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "7.00";
+	public static String appVersion = "7.01";
 	public static int configVersion = 2;
 	Boolean running = false;
 	LogArchiveThread archiveLog;

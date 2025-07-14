@@ -169,6 +169,11 @@
                         <xsl:if test="(($use83GUID = 'N') or ($use83GUID = 'n') or ($use83GUID = ''))">false</xsl:if>
                         <xsl:if test="(($use83GUID = 'Y') or ($use83GUID = 'y'))">true</xsl:if>
                     </use83GUID>
+                    <retainOriginalFilename>
+                        <xsl:variable name="type" select="string(type)"/>
+                        <xsl:if test="(($type = 'RAW') or ($type = 'EMAIL'))">true</xsl:if>
+                        <xsl:if test="(($type != 'RAW') and ($type != 'EMAIL'))">false</xsl:if>
+                    </retainOriginalFilename>
                 </url>
             </xsl:if>
 

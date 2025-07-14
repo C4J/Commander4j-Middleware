@@ -296,6 +296,7 @@ public class ConfigLoad
 						String emailMessage = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/email/message").trim();
 						String emailListID = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/email/emailListID").trim();
 						String use83GUID = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/url/use83GUID").trim();
+						String retainOriginalFilename = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/url/retainOriginalFilename").trim();
 						String queueName = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/print/queueName").trim();
 
 						String mqttBroker = doc.findXPath("//config/maps/map[" + String.valueOf(mapSeq) + "]/connectors/output[" + String.valueOf(outputSeq) + "]/mqtt/mqttBroker").trim();
@@ -323,6 +324,7 @@ public class ConfigLoad
 						qa.setValue(Common.props,qa.getMapOutputURL(mapId, outputId)+"//url", "");
 						qa.setValue(Common.props,qa.getMapOutputURL(mapId, outputId)+"//url//path", jPropString.getValue(outputPath),System.getProperty("user.dir") + File.separator + "interface" + File.separator + "output");
 						qa.setValue(Common.props,qa.getMapOutputURL(mapId, outputId)+"//url//use83GUID", jPropBoolean.getValue(use83GUID));
+						qa.setValue(Common.props,qa.getMapOutputURL(mapId, outputId)+"//url//retainOriginalFilename", jPropBoolean.getValue(retainOriginalFilename));
 						qa.setValue(Common.props,qa.getMapOutputURL(mapId, outputId)+"//url//prefix", jPropString.getValue(outputPrefix));
 						qa.setValue(Common.props,qa.getMapOutputURL(mapId, outputId)+"//url//fileExtension", jPropString.getValue(outputFileExtension),outboundInterface.getFileMask(outputType));
 						
