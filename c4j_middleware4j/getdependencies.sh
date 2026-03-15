@@ -1,1 +1,1 @@
-mvn -f b7Middleware_pom.xml clean dependency:copy-dependencies
+mvn -f pom.xml clean dependency:copy-dependencies

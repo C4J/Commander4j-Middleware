@@ -26,7 +26,7 @@ public class Core
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((Core.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "7.05";
+	public static String appVersion = "7.50";
 	public static int configVersion = 3;
 	Boolean running = false;
 	LogArchiveThread archiveLog;
@@ -43,60 +43,60 @@ public class Core
 	public Boolean init()
 	{
 		Boolean result = true;
-		
+
 		logger.debug("Application Initialisation");
-		
+
 		util.initLogging("");
-		
+
 		logger.debug("*************************");
 		logger.debug("**     STARTING        **");
 		logger.debug("*************************");
-		
+
 		return result;
 	}
-	
+
 	public Boolean loadMaps()
 	{
 		Boolean result = true;
-		
+
 		update = new ConfigUpdate();
-		
+
 		update.upgrade(configVersion);
-		
+
 		update = null;
-		
+
 		cfg = new ConfigLoad();
-		
+
 		cfg.resetErrors();
 
 		cfg.loadMaps(System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "config.xml");
-		
+
 		logger.debug("*************************");
 		logger.debug("**     MAPS LOADED     **");
 		logger.debug("*************************");
-		
+
 		//check if config.xml has been updated
-		
+
 		try
 		{
 			String activeS = System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "config.xml";
-			
+
 			File active = new File(activeS);
-			
+
 			long activeLastModified = FileUtils.lastModified(active);
-			
+
 			Timestamp ts = new Timestamp(activeLastModified);
-			
+
 			System.out.println(util.getISOTimeStampStringFormat(ts).replace("-", "_").replace("T", "_").replace(":", "_"));
-			
+
 			String activeB = "config_updated_"+util.getISOTimeStampStringFormat(ts).replace("-", "_").replace("T", "_").replace(":", "_")+".xml";
-			
+
 			String backupS = System.getProperty("user.dir") + File.separator + "xml" + File.separator + "config" + File.separator + "backup" + File.separator + activeB;
-			
+
 			Path path = Paths.get(backupS);
-			
+
 			File backup = new File(backupS);
-			
+
 			if (Files.exists(path)==false)
 			{
 				FileUtils.copyFile(active, backup, true);
@@ -105,52 +105,52 @@ public class Core
 			}
 			else
 			{
-				
+
 			}
-			
+
 		}
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-		
-		
-		
-		return result;	
+
+
+
+
+		return result;
 	}
-	
+
 	public Boolean runMaps()
 	{
-		
+
 		Boolean result = true;
-		
+
 		if ((cfg.getMapDirectoryErrorCount() == 0) || (Common.runMode.equals("Service")))
 		{
 
 			archiveLog = new LogArchiveThread();
 			archiveLog.setName("Log Archiver");
 			archiveLog.start();
-			
+
 			statusthread = new StatusThread();
 			statusthread.setName("Status Thread");
 			statusthread.start();
-			
+
 			emailthread = new EmailThread();
 			emailthread.setName("Email Thread");
-			emailthread.start();			
+			emailthread.start();
 
 			cfg.startMaps();
 
 			logger.debug("*************************");
 			logger.debug("**      STARTED        **");
 			logger.debug("*************************");
-			
+
 			ExceptionHTML ept = new ExceptionHTML("Middleware Properties","Property","10%","Value","30%");
 			ept.clear();
-			
+
 			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Description",qa.getString(Common.props, qa.getRootURL()+"//description")));
 			ept.addRow(new ExceptionMsg("home folder",System.getProperty("user.dir")));
@@ -160,9 +160,9 @@ public class Core
 			ept.addRow(new ExceptionMsg("retryOpenFileDelay",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileDelay")));
 			ept.addRow(new ExceptionMsg("enableEmailNotifications",qa.getString(Common.props, qa.getRootURL()+"//enableEmailNotifications")));
 			ept.addRow(new ExceptionMsg("statusReportTime",qa.getString(Common.props, qa.getRootURL()+"//statusReportTime")));
-			
+
 			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Starting ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+Core.appVersion+" on "+ util.getClientName(),ept.getHTML(), "");
-			
+
 			running = true;
 
 		} else
@@ -175,21 +175,21 @@ public class Core
 			ept.clear();
 			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Stage","Startup"));
-			
+
 			for (int x = 0; x < cfg.getMapDirectoryErrorCount(); x++)
 			{
 				ept.addRow(new ExceptionMsg("Exception",cfg.getMapDirectoryErrors().get(x)));
 				logger.error(cfg.getMapDirectoryErrors().get(x));
 			}
-			
+
 			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Error", "Error during Middleware startup",ept.getHTML(), "");
 
 			result = false;
 		}
-		
-		return result;	
+
+		return result;
 	}
-	
+
 	public Boolean stopMaps()
 	{
 		Boolean result = true;
@@ -225,7 +225,7 @@ public class Core
 		{
 
 		}
-		
+
 		logger.debug("Shutting down Maps");
 		cfg.stopMaps();
 		logger.debug("Maps Terminated");
@@ -240,7 +240,7 @@ public class Core
 		logger.debug("*************************");
 		logger.debug("**      STOPPED        **");
 		logger.debug("*************************");
-		
+
 		try
 		{
 			Common.emailqueue.processQueue();
@@ -255,7 +255,7 @@ public class Core
 		{
 
 		}
-		
+
 		running = false;
 
 		return result;
