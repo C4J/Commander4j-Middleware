@@ -131,7 +131,7 @@ public class RemoteShareChecker
 	private boolean isFileLocked(Path path)
 	{
 		// Attempt to open the file with exclusive access
-		try (FileChannel channel = FileChannel.open(path, StandardOpenOption.WRITE))
+		try (FileChannel _ = FileChannel.open(path, StandardOpenOption.WRITE))
 		{
 			// File is not locked if we successfully open it
 			return false;
