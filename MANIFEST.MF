@@ -19,18 +19,18 @@ Class-Path: lib/Saxon-HE-12.9-xqj.jar
  lib/commons-text-1.15.0.jar 
  lib/curvesapi-1.08.jar 
  lib/fontbox-3.0.7.jar 
- lib/httpclient5-5.6.jar 
+ lib/httpclient5-5.6.1.jar 
  lib/httpcore5-5.4.2.jar 
  lib/httpcore5-h2-5.4.2.jar 
  lib/icu4j-78.2.jar 
  lib/jakarta.activation-api-2.1.4.jar 
  lib/jakarta.mail-api-2.1.5.jar 
  lib/jline-2.14.6.jar 
- lib/log4j-api-2.25.3.jar 
- lib/log4j-core-2.25.3.jar 
+ lib/log4j-api-2.25.4.jar 
+ lib/log4j-core-2.25.4.jar 
  lib/opencsv-5.12.0.jar 
  lib/org.eclipse.paho.client.mqttv3-1.2.5.jar 
- lib/pdfbox-3.0.5.jar 
+ lib/pdfbox-3.0.7.jar 
  lib/pdfbox-io-3.0.7.jar 
  lib/poi-5.5.1.jar 
  lib/poi-excelant-5.5.1.jar 
