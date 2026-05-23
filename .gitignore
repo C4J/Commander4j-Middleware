@@ -7,6 +7,9 @@
 # install4j file
 *.install4j
 
+# Macos file
+*.DS_Store
+
 # BlueJ files
 *.ctxt
 
