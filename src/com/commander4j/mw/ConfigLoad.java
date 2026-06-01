@@ -169,6 +169,12 @@ public class ConfigLoad
 		String statusReportTime = doc.findXPath("//config/statusReportTime");
 
 		qa.setValue(Common.props,qa.getRootURL()+"//description",jPropString.getValue(description));
+		Core.description = jPropString.getValue(description);
+		
+		Core.description = Core.description.replace("Middleware4j","");
+		Core.description = Core.description.replace("c4jMiddleware","");
+		Core.description = Core.description.trim();
+		
 		qa.setValue(Common.props,qa.getRootURL()+"//version",jPropString.getValue(version));
 		qa.setValue(Common.props,qa.getRootURL()+"//XSLTPath",jPropString.getValue(XSLTPath),jPropString.getValue(XSLTPath));
 		qa.setValue(Common.props,qa.getRootURL()+"//enableEmailNotifications",jPropBoolean.getValue(enableEmailNotifications));

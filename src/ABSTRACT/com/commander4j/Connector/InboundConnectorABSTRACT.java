@@ -14,6 +14,7 @@ import org.w3c.dom.Text;
 import com.commander4j.Interface.Inbound.InboundInterface;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.RemoteShareChecker;
@@ -26,7 +27,6 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 	private boolean enabled = true;
 	private String type = "";
 	private String filename = "";
-	private String destination = "";
 	private Logger logger = org.apache.logging.log4j.LogManager.getLogger((InboundConnectorABSTRACT.class));
 	private Long inboundConnectorMessageCount = (long) 0;
 	protected Utility util = new Utility();
@@ -103,14 +103,15 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			ept.clear();
 			ept.addRow(new ExceptionMsg("Host Name", util.getClientName()));
 			ept.addRow(new ExceptionMsg("Map Id", getInboundInterface().getMap().getId()));
+			ept.addRow(new ExceptionMsg("Map Description", getInboundInterface().getMap().getDescription()));
 			ept.addRow(new ExceptionMsg("Connector Id", getInboundInterface().getId()));
 			ept.addRow(new ExceptionMsg("Source", sourceFile));
-			ept.addRow(new ExceptionMsg("Destination", destination));
+			ept.addRow(new ExceptionMsg("Destination", destinationFile));
 			ept.addRow(new ExceptionMsg("Retry Delay", String.valueOf(delay)));
 			ept.addRow(new ExceptionMsg("Retries", String.valueOf(retries)));
 			ept.addRow(new ExceptionMsg("Exception", getErrorMessage()));
 
-			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error backing up file", ept.getHTML(), "");
+			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", Core.appName+" "+ Core.appVersion + " Error backing up file in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
 		}
 
 		return result;
@@ -272,10 +273,11 @@ public abstract class InboundConnectorABSTRACT implements InboundConnectorINTERF
 			ept.addRow(new ExceptionMsg("Connector Id", getInboundInterface().getId()));
 			ept.addRow(new ExceptionMsg("Connector Description", qa.getString(Common.props, qa.getMapInputURL(getInboundInterface().getMapId(), getInboundInterface().getId()) + "//description")));
 			ept.addRow(new ExceptionMsg("Source", filename));
-			ept.addRow(new ExceptionMsg("Destination", destination));
+			ept.addRow(new ExceptionMsg("Destination", source.getPath()));
 			ept.addRow(new ExceptionMsg("Exception", errorMessage));
+			
+			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", Core.appName + " "+ Core.appVersion + " Error deleting file in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
 
-			Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error deleting file", ept.getHTML(), "");
 		}
 
 		return result;

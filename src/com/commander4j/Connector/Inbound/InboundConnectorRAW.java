@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import com.commander4j.Interface.Inbound.InboundInterface;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 
@@ -75,7 +76,8 @@ public class InboundConnectorRAW extends InboundConnectorABSTRACT
 				}
 				ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
 				
-				Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing " + getType(),ept.getHTML(), "");
+				Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", Core.appName + " "+  Core.appVersion + " Error Processing Message in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
+
 
 			}
 			finally

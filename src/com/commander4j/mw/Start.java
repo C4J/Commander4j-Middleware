@@ -27,10 +27,11 @@ public class Start
 		{
 
 			Common.runMode = param;
-
+			
 			Common.core.init();
+			
 			Common.core.loadMaps();
-
+		
 			switch (param)
 			{
 			case "Service":

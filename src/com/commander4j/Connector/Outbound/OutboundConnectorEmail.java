@@ -9,6 +9,7 @@ import com.commander4j.Interface.Outbound.OutboundInterface;
 import com.commander4j.email.EmailHTML;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JXMLDocument;
@@ -90,7 +91,7 @@ public class OutboundConnectorEmail extends OutboundConnectorABSTRACT
 			}
 			ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 			
-			Common.emailqueue.addToQueue(getOutboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+			Common.emailqueue.addToQueue(getOutboundInterface().getMap().isMapEmailEnabled(), "Error", " Error Processing Message in ["+Core.description+"] on "+ util.getClientName(),ept.getHTML(), "");
 		}
 		finally
 		{

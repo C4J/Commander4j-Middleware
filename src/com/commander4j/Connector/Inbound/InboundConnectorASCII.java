@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import com.commander4j.Interface.Inbound.InboundInterface;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.sys.FixedASCIIColumns;
@@ -207,7 +208,8 @@ public class InboundConnectorASCII extends InboundConnectorABSTRACT
 						ept.addRow(new ExceptionMsg("Exception",ex.getMessage()));
 						ept.addRow(new ExceptionMsg("Renamed",fullFilename+ ".error"));
 						
-						Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+						Common.emailqueue.addToQueue(getInboundInterface().getMap().isMapEmailEnabled(), "Error", Core.appName + " "+  Core.appVersion + " Error Processing Message in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
+
 
 					}
 					else

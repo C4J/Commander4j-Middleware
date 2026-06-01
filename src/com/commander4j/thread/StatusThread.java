@@ -59,6 +59,8 @@ public class StatusThread extends Thread
 					
 					String description = qa.getString(Common.props, qa.getRootURL()+"//description");
 					
+					description = description.replace("c4jMiddleware","").trim();
+					
 					String report = EmailHTML.header + Common.core.cfg.getInterfaceStatistics();
 
 					Common.core.cfg.resetInterfaceStatistics();
@@ -128,7 +130,7 @@ public class StatusThread extends Thread
 					
 					report = report +  EmailHTML.footer;
 					
-					Common.emailqueue.addToQueue(true,"Monitor", "Statistics ["+description+"] "+Core.appVersion+" on "+ util.getClientName(), report, "");
+					Common.emailqueue.addToQueue(true,"Monitor", Core.appName + " "+  Core.appVersion + " Interface Statistics for ["+description+"] " + " on "+ util.getClientName(), report, "");
 					
 					logger.debug(report);
 				}

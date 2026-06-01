@@ -26,8 +26,10 @@ public class Core
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger((Core.class));
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
-	public static String appVersion = "8.01";
+	public static String appName="Middleware4j";
+	public static String appVersion = "8.06";
 	public static int configVersion = 3;
+	public static String description = "";
 	Boolean running = false;
 	LogArchiveThread archiveLog;
 	StatusThread statusthread;
@@ -74,7 +76,7 @@ public class Core
 		logger.debug("*************************");
 		logger.debug("**     MAPS LOADED     **");
 		logger.debug("*************************");
-
+		
 		//check if config.xml has been updated
 
 		try
@@ -98,10 +100,12 @@ public class Core
 			File backup = new File(backupS);
 
 			if (Files.exists(path)==false)
-			{
+			{	
 				FileUtils.copyFile(active, backup, true);
+				
 				String messageContent = EmailHTML.header+"<p>Updated config attached</p><br>Updated : "+util.getISOTimeStampStringFormat(ts).replace("T", " ")+"<br><br>"+EmailHTML.footer;
-				Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Updated config.xml for ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+Core.appVersion+" on "+ util.getClientName(),messageContent, activeS);
+				
+				Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", Core.appName + " "+  Core.appVersion + " Updated config.xml detected for ["+Core.description+"] on "+ util.getClientName(),messageContent, activeS);
 			}
 			else
 			{
@@ -160,9 +164,9 @@ public class Core
 			ept.addRow(new ExceptionMsg("retryOpenFileDelay",qa.getString(Common.props, qa.getRootURL()+"//retryOpenFileDelay")));
 			ept.addRow(new ExceptionMsg("enableEmailNotifications",qa.getString(Common.props, qa.getRootURL()+"//enableEmailNotifications")));
 			ept.addRow(new ExceptionMsg("statusReportTime",qa.getString(Common.props, qa.getRootURL()+"//statusReportTime")));
-
-			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Monitor", "Starting ["+qa.getString(Common.props, qa.getRootURL()+"//description")+"] "+Core.appVersion+" on "+ util.getClientName(),ept.getHTML(), "");
-
+			
+			Common.emailqueue.addToQueue(true,"Monitor", Core.appName + " "+  Core.appVersion + " Started for ["+description+"] " + " on "+ util.getClientName(), ept.getHTML(), "");
+			
 			running = true;
 
 		} else
@@ -181,8 +185,8 @@ public class Core
 				ept.addRow(new ExceptionMsg("Exception",cfg.getMapDirectoryErrors().get(x)));
 				logger.error(cfg.getMapDirectoryErrors().get(x));
 			}
-
-			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Error", "Error during Middleware startup",ept.getHTML(), "");
+			
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"), "Error", Core.appName + " "+  Core.appVersion + " Error during startup on "+ util.getClientName(), ept.getHTML(), "");
 
 			result = false;
 		}
@@ -234,7 +238,8 @@ public class Core
 		{
 			String statistics = EmailHTML.header + cfg.getInterfaceStatistics() + EmailHTML.footer;
 			logger.info(statistics);
-			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"),"Monitor", "Stopping ["+Common.props.getChildById("description").getValueAsString()+"] "+Core.appVersion+" on "+ util.getClientName(), statistics, "");
+			
+			Common.emailqueue.addToQueue(qa.getBoolean(Common.props, qa.getRootURL() +"//enableEmailNotifications"),"Monitor", Core.appName + " "+  Core.appVersion + " Stopped for ["+description+"] on "+ util.getClientName(), statistics, "");
 		}
 
 		logger.debug("*************************");

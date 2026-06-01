@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
@@ -197,8 +198,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 													}
 
 													ept.addRow(new ExceptionMsg("Exception", "Unable to save inbound xml"));
-													Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "] Unable to save inbound xml", ept.getHTML(), "");
-
+													Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", Core.appName + " "+  Core.appVersion + "Error Map [" + map.getId() + "]  Unable to save inbound xml in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
 												}
 
 												if (loadFileResult == false)
@@ -227,7 +227,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 													}
 
 													ept.addRow(new ExceptionMsg("Exception", "Unable to load inbound xml"));
-													Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "] Unable to load inbound xml", ept.getHTML(), "");
+													Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error Map [" + map.getId() + "] Unable to load inbound xml in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
 
 												}
 
@@ -275,7 +275,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 				
 				ept.addRow(new ExceptionMsg("Exception", rsc.getErrorMessage()));
 				
-				Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map [" + map.getId() + "] Exception", ept.getHTML(), "");
+				Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map [" + map.getId() + "] Exception in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
 			}
 
 		}
@@ -308,7 +308,7 @@ public class InboundInterface extends InboundInterfaceABSTRACT
 			}
 			ept.addRow(new ExceptionMsg("Exception", ex.getMessage()));
 			ept.addRow(new ExceptionMsg("Details", ExceptionUtils.getStackTrace(ex)));
-			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map [" + map.getId() + "] Exception", ept.getHTML(), "");
+			Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Inbound Map [" + map.getId() + "] Exception in ["+Core.description+"] on "+ util.getClientName(), ept.getHTML(), "");
 
 		}
 		finally

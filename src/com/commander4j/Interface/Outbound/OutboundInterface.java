@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import com.commander4j.Interface.Mapping.Map;
 import com.commander4j.exception.ExceptionHTML;
 import com.commander4j.exception.ExceptionMsg;
+import com.commander4j.mw.Core;
 import com.commander4j.prop.JPropQuickAccess;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileIO;
@@ -125,7 +126,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 						ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed));
 						ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
 						
-						Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+						Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", Core.appName + " "+  Core.appVersion + " Error processing message in ["+Core.description+"] on "+ util.getClientName(),ept.getHTML(), "");
 					}
 
 				}
@@ -146,7 +147,7 @@ public class OutboundInterface extends OutboundInterfaceABSTRACT
 					ept.addRow(new ExceptionMsg("Destination",Common.props.getChildById("logDir").getValueAsString() + File.separator + filename_outputTransformed));
 					ept.addRow(new ExceptionMsg("Exception",e.getMessage()));
 					
-					Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message",ept.getHTML(), "");
+					Common.emailqueue.addToQueue(map.isMapEmailEnabled(), "Error", "Error processing message in ["+Core.description+"] on "+ util.getClientName(),ept.getHTML(), "");
 
 				}
 			}
