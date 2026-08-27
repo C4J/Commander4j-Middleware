@@ -90,19 +90,19 @@
 
         <library>
             <description>Apache HttpClient 5</description>
-            <version>5.6.1</version>
+            <version>5.6.4</version>
             <type>Apache License 2.0</type>
         </library>
 
         <library>
             <description>Apache HttpCore 5</description>
-            <version>5.4.2</version>
+            <version>5.4.3</version>
             <type>Apache License 2.0</type>
         </library>
 
         <library>
             <description>Apache Log4j</description>
-            <version>2.25.4</version>
+            <version>2.25.5</version>
             <type>Apache License 2.0</type>
         </library>
 
