@@ -27,7 +27,7 @@ public class Core
 	public ConfigLoad cfg;
 	public ConfigUpdate update;
 	public static String appName="Middleware4j";
-	public static String appVersion = "8.06";
+	public static String appVersion = "8.07";
 	public static int configVersion = 3;
 	public static String description = "";
 	Boolean running = false;
